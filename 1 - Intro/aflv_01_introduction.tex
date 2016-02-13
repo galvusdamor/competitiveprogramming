@@ -1132,20 +1132,40 @@ int main(){
 
 
 \begin{frame}[fragile]{STL data structures}
-  The STL has many useful data structures
   \bi
-    \item \texttt{vector} - Listen
-    \item \texttt{set} - Mengen
-    \item \texttt{map} - Assoziativer Speicher
-%     \item \texttt{priority\_queue} - Schlangen mit Priorität
+    \item The STL has several generic container templates
+      \bi
+	\item \texttt{vector} - lists
+	\item \texttt{set}
+	\item \texttt{multiset} - collections of objects
+	\item \texttt{map} - associative memory
+	\item \texttt{queue}
+	\item \texttt{priority\_queue}
+      \ei
+    \item each takes a type parameter (maps take two) determining the content type of the container
+    \item \texttt{vector<int>} $\rightarrow$ \texttt{int[]}
   \ei
+\end{frame}
+
+
+\begin{frame}[fragile]{STL data structures}
+
 \begin{minted}[fontsize=\scriptsize]{cpp}
 vector<int> list; list.clear();
 FOR(i,0,n) {
   int a; cin >> a;
   list.push_back(a);
 }
+sort(all(list));
 FORIT(i,list) cout << *i << endl;
+
+set<int> s;
+FOR(i,0,n) {
+  int a; cin >> a;
+  s.insert(a);
+}
+FORIT(i,s) cout << *i << endl;
+
 
 map<int,int> m; m.clear();
 FOR(i,0,n){
