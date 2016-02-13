@@ -1143,7 +1143,17 @@ int main(){
 	\item \texttt{priority\_queue}
       \ei
     \item each takes a type parameter (maps take two) determining the content type of the container
-    \item \texttt{vector<int>} $\rightarrow$ \texttt{int[]}
+    \bi
+      \item \texttt{vector<int>} $\rightarrow$ \texttt{int[]}
+    \ei
+    \item most containers have iterators
+    \bi
+      \item \texttt{begin}, \texttt{end}
+      \item use \texttt{++} and \texttt{--} to iterate through the container
+      \item use \texttt{*} to access the value the iterator is pointing to
+      \item \texttt{find} returns an iterator
+    \ei
+    \item \texttt{count} is the "contains test"
   \ei
 \end{frame}
 
@@ -1166,13 +1176,11 @@ FOR(i,0,n) {
 }
 FORIT(i,s) cout << *i << endl;
 
-
 map<int,int> m; m.clear();
 FOR(i,0,n){
   int x,y; cin >> x >> y;
   m[y] = x;
 }
-
 FOR(i,0,r){
   int z;  cout << m[z] << endl;
 }
@@ -1191,7 +1199,7 @@ hardwood species - trees that share certain biological characteristics.
 Although oak, maple and cherry all are types of hardwood
 trees, for example, they are different species. Together, all the hardwood species represent 40 percent of the trees in the United States.
 On the other hand, softwoods, or conifers, from the Latin word
-meaning ``cone-bearing", have needles.  Widely available US softwoods include cedar, hemlock, pine, redwood, spruce and cypress.  In a home, the softwoods are used primarily as structural
+meaning "cone-bearing", have needles.  Widely available US softwoods include cedar, hemlock, pine, redwood, spruce and cypress.  In a home, the softwoods are used primarily as structural
 lumber such as 2$\times$4s and 2$\times$6s, with some limited decorative applications.
 Using satellite imaging technology, the Department of Natural Resources has compiled an inventory of every tree standing on a particular day.
 You are to compute the total fraction of the tree population represented by each species.
