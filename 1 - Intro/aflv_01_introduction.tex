@@ -214,7 +214,7 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{C++ for Java Programmer}
+\begin{frame}[fragile]{C++ for Java Programmers}
     C++ looks like Java
     \pause
     \vspace{10pt}
@@ -242,7 +242,7 @@ using namespace std;
     \ei
 \end{frame}
 
-\begin{frame}[fragile]{C++ for Java Programmer}
+\begin{frame}[fragile]{C++ for Java Programmers}
     \bi
         \vspace{20pt}
 
@@ -272,7 +272,7 @@ if (i = j) do_something();
     \ei
 \end{frame}
 
-\begin{frame}{C++ for Java Programmer}
+\begin{frame}{C++ for Java Programmers}
 
     {\scriptsize
         \begin{center}
@@ -317,7 +317,7 @@ if (i = j) do_something();
 \end{frame}
 
 
-\begin{frame}[fragile]{C++ for Java Programmer}
+\begin{frame}[fragile]{C++ for Java Programmers}
     \vspace{10pt}
     \bi
       \item typedefs
@@ -345,7 +345,7 @@ const int oo = 0x3f3f3f3f;
     \ei
 \end{frame}
 
-\begin{frame}[fragile]{C++ for Java Programmer}
+\begin{frame}[fragile]{C++ for Java Programmers}
     \vspace{10pt}
     \bi
       \item two types of input/output methods
@@ -368,7 +368,7 @@ if (cin.eof()) return 0;
     \ei
 \end{frame}
 
-\begin{frame}[fragile]{C++ for Java Programmer}
+\begin{frame}[fragile]{C++ for Java Programmers}
     \vspace{10pt}
     \bi
       \item arrays
@@ -380,7 +380,7 @@ array[7] = 2;
 	\begin{minted}[fontsize=\scriptsize]{cpp}
 array[600] = 6;
 array[-1] = 5;
-5[arr] = 42;
+5[array] = 42;
 	\end{minted}
 	\item initialisation
 	\begin{minted}[fontsize=\scriptsize]{cpp}
@@ -399,7 +399,7 @@ cin >> i,j;
 \end{frame}
 
 
-\begin{frame}[fragile]{C++ for Java Programmer}
+\begin{frame}[fragile]{C++ for Java Programmers}
     \vspace{10pt}
     \bi
       \item you don't need classes
@@ -953,55 +953,27 @@ Case \#{}2: 41\\
 
 \begin{frame}[fragile]{SMS Typing: Solution}
     \begin{minted}[fontsize=\scriptsize]{cpp}
-#include <cstdio>
 #include <iostream>
-#include <string>
+
 using namespace std;
 
-string keys[12] = {
-    "",     "abc", "def",
-    "ghi",  "jkl", "mno",
-    "pqrs", "tuv", "wxyz",
-    "",     " ",   ""
-};
+#define sz(c) int((c).size())
+#define FOR(i,a,b) for (int i = (a); i < (b); i++)
 
-int main() {
-    int T;
-    scanf("%d\n", &T);
+string keys[] = {"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"," "};
 
-    for (int t = 0; t < T; t++) {
-
-        // Each test case is handled here
+int main(){
+    int tc; cin >> tc;
+    string line; getline(cin,line);
+    FOR(ctc,1,tc+1){
+        getline(cin,line);
+        if (cin.eof()) return 0;
+        int n = 0;
+        FOR(i,0,sz(line)) FOR(j,0,9) FOR(k,0,sz(keys[j]))
+            if (keys[j][k] == line[i]) n+=k+1;
+        cout << "Case #" << ctc << ": " << n << endl;
     }
-
-    return 0;
 }
-\end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{SMS Typing: Solution}
-    \begin{minted}[fontsize=\scriptsize]{cpp}
-
-    // Each test case:
-
-    string line;
-    getline(cin, line);
-
-    int cnt = 0;
-    for (int i = 0; i < line.size(); i++) {
-        int cur;
-        for (int j = 0; j < 12; j++) {
-            for (int k = 0; k < keys[j].size(); k++) {
-                if (line[i] == keys[j][k]) {
-                    cur = k + 1;
-                }
-            }
-        }
-
-        cnt += cur;
-    }
-
-    printf("Case #%d: %d\n", t + 1, cnt);
 \end{minted}
 \end{frame}
 
