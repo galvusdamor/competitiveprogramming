@@ -392,7 +392,7 @@ if (x & (1<<i)) {
     text width=1.8em},% arbre rouge noir, noeud noir
 }
 
-\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5cm/#1,
+\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5.5cm/#1,
   level distance = 1.8cm},scale=0.6] 
 \node [vertex] {33}
     child{ node [vertex] {15}
@@ -446,29 +446,29 @@ if (x & (1<<i)) {
     text width=1.8em},% arbre rouge noir, noeud noir
 }
 
-\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5cm/#1,
+\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5.5cm/#1,
   level distance = 1.8cm},scale=0.6] 
-\node [vertex] {33, 14}
-    child{ node [vertex] {15, 5}
-            child{ node [vertex] {10, 2} 
-            	child{ node [vertex] {5, 1} } %for a named pointer
+\node [vertex] {\mbox{\ 33, 14}}
+    child{ node [vertex] {\mbox{\ 15, 5}}
+            child{ node [vertex] {\mbox{\ 10, 2}} 
+            	child{ node [vertex] {\mbox{\ 5, 1}} } %for a named pointer
                 % child{ node [vertex] {}}
             }
-            child{ node [vertex] {20, 2}
-							child{ node [vertex] {18, 1}}
+            child{ node [vertex] {\mbox{\ 20, 2}}
+							child{ node [vertex] {\mbox{\ 18, 1}}}
 							% child{ node [vertex] {}}
             }                            
     }
-    child{ node [vertex] {47, 8}
-            child{ node [vertex] {38, 5} 
-							child{ node [vertex] {36, 3}
-                                child { node [vertex] {34, 1} }
-                                child { node [vertex] {37, 1} }
+    child{ node [vertex] {\mbox{\ 47, 8}}
+            child{ node [vertex] {\mbox{\ 38, 5} }
+                            child{ node [vertex] {\mbox{\ 36, 3}}
+                                child { node [vertex] {\mbox{\ 34, 1}} }
+                                child { node [vertex] {\mbox{\ 37, 1}} }
                             }
-							child{ node [vertex] {39, 1}}
+							child{ node [vertex] {\mbox{\ 39, 1}}}
             }
-            child{ node [vertex] {51, 2}
-							child{ node [vertex] {49, 1}}
+            child{ node [vertex] {\mbox{\ 51, 2}}
+							child{ node [vertex] {\mbox{\ 49, 1}}}
 							% child{ node [vertex] {}}
             }
 		}
@@ -502,29 +502,29 @@ if (x & (1<<i)) {
     text width=1.8em},% arbre rouge noir, noeud noir
 }
 
-\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5cm/#1,
+\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5.5cm/#1,
   level distance = 1.8cm},scale=0.6] 
-\node [vertex] {33, 14}
-    child{ node [vertex] {15, 5}
-            child{ node [vertex] {10, 2} 
-            	child{ node [vertex] {5, 1} } %for a named pointer
+\node [vertex] {\mbox{\ 33, 14}}
+    child{ node [vertex] {\mbox{\ 15, 5}}
+            child{ node [vertex] {\mbox{\ 10, 2}} 
+            	child{ node [vertex] {\mbox{\ 5, 1}} } %for a named pointer
                 % child{ node [vertex] {}}
             }
-            child{ node [vertex] {20, 2}
-							child{ node [vertex] {18, 1}}
+            child{ node [vertex] {\mbox{\ 20, 2}}
+							child{ node [vertex] {\mbox{\ 18, 1}}}
 							% child{ node [vertex] {}}
             }                            
     }
-    child{ node [vertex] {47, 8}
-            child{ node [vertex] {38, 5} 
-							child{ node [vertex] {36, 3}
-                                child { node [vertex] {34, 1} }
-                                child { node [vertex] {37, 1} }
+    child{ node [vertex] {\mbox{\ 47, 8}}
+            child{ node [vertex] {\mbox{\ 38, 5} }
+                            child{ node [vertex] {\mbox{\ 36, 3}}
+                                child { node [vertex] {\mbox{\ 34, 1}} }
+                                child { node [vertex] {\mbox{\ 37, 1}} }
                             }
-							child{ node [vertex] {39, 1}}
+							child{ node [vertex] {\mbox{\ 39, 1}}}
             }
-            child{ node [vertex] {51, 2}
-							child{ node [vertex] {49, 1}}
+            child{ node [vertex] {\mbox{\ 51, 2}}
+							child{ node [vertex] {\mbox{\ 49, 1}}}
 							% child{ node [vertex] {}}
             }
 		}
@@ -560,29 +560,29 @@ if (x & (1<<i)) {
   rvertex/.style = {treenode, circle, black, font=\sffamily\bfseries\tiny, draw=red, text width=1.8em},% arbre rouge noir, noeud noir
 }
 
-\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5cm/#1,
+\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5.5cm/#1,
   level distance = 1.8cm},scale=0.6] 
-\node [rvertex] {33, 14}
-    child{ node [vertex] {15, {\color{red}5}}
-            child{ node [vertex] {10, 2} 
-            	child{ node [vertex] {5, 1} } %for a named pointer
+\node [rvertex] {\mbox{\ 33, 14}}
+    child{ node [vertex] {\mbox{\ 15, {\color{red}5}}}
+            child{ node [vertex] {\mbox{\ 10, 2}} 
+            	child{ node [vertex] {\mbox{\ 5, 1}} } %for a named pointer
                 % child{ node [vertex] {}}
             }
-            child{ node [vertex] {20, 2}
-							child{ node [vertex] {18, 1}}
+            child{ node [vertex] {\mbox{\ 20, 2}}
+							child{ node [vertex] {\mbox{\ 18, 1}}}
 							% child{ node [vertex] {}}
             }                            
     }
-    child{ node [rvertex] {47, 8}
-            child{ node [rvertex] {38, 5} 
-                            child{ node [vertex] {36, {\color{red}3}}
-                                child { node [vertex] {34, 1} }
-                                child { node [vertex] {37, 1} }
+    child{ node [rvertex] {\mbox{\ 47, 8}}
+            child{ node [rvertex] {\mbox{\ 38, 5} }
+                            child{ node [vertex] {\mbox{\ 36, {\color{red}3}}}
+                                child { node [vertex] {\mbox{\ 34, 1}} }
+                                child { node [vertex] {\mbox{\ 37, 1}} }
                             }
-							child{ node [vertex] {39, 1}}
+							child{ node [vertex] {\mbox{\ 39, 1}}}
             }
-            child{ node [vertex] {51, 2}
-							child{ node [vertex] {49, 1}}
+            child{ node [vertex] {\mbox{\ 51, 2}}
+							child{ node [vertex] {\mbox{\ 49, 1}}}
 							% child{ node [vertex] {}}
             }
 		}
@@ -618,29 +618,29 @@ if (x & (1<<i)) {
   rvertex/.style = {treenode, circle, black, font=\sffamily\bfseries\tiny, draw=red, text width=1.8em},% arbre rouge noir, noeud noir
 }
 
-\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5cm/#1,
+\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5.5cm/#1,
   level distance = 1.8cm},scale=0.6] 
-\node [vertex] {33, 14}
-    child{ node [vertex] {15, 5}
-            child{ node [vertex] {10, 2} 
-            	child{ node [vertex] {5, 1} } %for a named pointer
+\node [vertex] {\mbox{\ 33, 14}}
+    child{ node [vertex] {\mbox{\ 15, 5}}
+            child{ node [vertex] {\mbox{\ 10, 2}} 
+            	child{ node [vertex] {\mbox{\ 5, 1}} } %for a named pointer
                 % child{ node [vertex] {}}
             }
-            child{ node [vertex] {20, 2}
-							child{ node [vertex] {18, 1}}
+            child{ node [vertex] {\mbox{\ 20, 2}}
+							child{ node [vertex] {\mbox{\ 18, 1}}}
 							% child{ node [vertex] {}}
             }                            
     }
-    child{ node [vertex] {47, 8}
-            child{ node [vertex] {38, 5} 
-                            child{ node [vertex] {36, 3}
-                                child { node [vertex] {34, 1} }
-                                child { node [vertex] {37, 1} }
+    child{ node [vertex] {\mbox{\ 47, 8}}
+            child{ node [vertex] {\mbox{\ 38, 5} }
+                            child{ node [vertex] {\mbox{\ 36, 3}}
+                                child { node [vertex] {\mbox{\ 34, 1}} }
+                                child { node [vertex] {\mbox{\ 37, 1}} }
                             }
-							child{ node [vertex] {39, 1}}
+							child{ node [vertex] {\mbox{\ 39, 1}}}
             }
-            child{ node [vertex] {51, 2}
-							child{ node [vertex] {49, 1}}
+            child{ node [vertex] {\mbox{\ 51, 2}}
+							child{ node [vertex] {\mbox{\ 49, 1}}}
 							% child{ node [vertex] {}}
             }
 		}
@@ -661,7 +661,7 @@ if (x & (1<<i)) {
                         \item We're on a vertex whose left subtree is of size $m$
                         \item If $k = m+1$, we found it
                         \item If $k \leq m$, look for the $k$th smallest element in the left subtree
-                        \item If $k > m+1$, look for the $m-k-1$st smallest element in the right subtree
+                        \item If $k > m+1$, look for the $k-m-1$st smallest element in the right subtree
                     \ei
                 \item Example: $k=11$
             \ei
@@ -676,29 +676,29 @@ if (x & (1<<i)) {
   rvertex/.style = {treenode, circle, black, font=\sffamily\bfseries\tiny, draw=red, text width=1.8em},% arbre rouge noir, noeud noir
 }
 
-\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5cm/#1,
+\begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5.5cm/#1,
   level distance = 1.8cm},scale=0.6] 
-\node [rvertex] {33, 14}
-    child{ node [vertex] {15, 5}
-            child{ node [vertex] {10, 2} 
-            	child{ node [vertex] {5, 1} } %for a named pointer
+\node [rvertex] {\mbox{\ 33, 14}}
+    child{ node [vertex] {\mbox{\ 15, 5}}
+            child{ node [vertex] {\mbox{\ 10, 2}} 
+            	child{ node [vertex] {\mbox{\ 5, 1}} } %for a named pointer
                 % child{ node [vertex] {}}
             }
-            child{ node [vertex] {20, 2}
-							child{ node [vertex] {18, 1}}
+            child{ node [vertex] {\mbox{\ 20, 2}}
+							child{ node [vertex] {\mbox{\ 18, 1}}}
 							% child{ node [vertex] {}}
             }                            
     }
-    child{ node [rvertex] {47, 8}
-            child{ node [rvertex] {38, 5} 
-                            child{ node [vertex] {36, 3}
-                                child { node [vertex] {34, 1} }
-                                child { node [vertex] {37, 1} }
+    child{ node [rvertex] {\mbox{\ 47, 8}}
+            child{ node [rvertex] {\mbox{\ 38, 5} }
+                            child{ node [vertex] {\mbox{\ 36, 3}}
+                                child { node [vertex] {\mbox{\ 34, 1}} }
+                                child { node [vertex] {\mbox{\ 37, 1}} }
                             }
-							child{ node [rvertex] {39, 1}}
+							child{ node [rvertex] {\mbox{\ 39, 1}}}
             }
-            child{ node [vertex] {51, 2}
-							child{ node [vertex] {49, 1}}
+            child{ node [vertex] {\mbox{\ 51, 2}}
+							child{ node [vertex] {\mbox{\ 49, 1}}}
 							% child{ node [vertex] {}}
             }
 		}
@@ -712,8 +712,8 @@ if (x & (1<<i)) {
 \begin{frame}[fragile]{Example}
 
     \bi
-      \item 11991 -- only construct the tree
-      \item 10909 -- remove elements
+      \item 11991 - only construct the tree
+      \item 10909 - remove elements
     \ei
 \end{frame}
 
