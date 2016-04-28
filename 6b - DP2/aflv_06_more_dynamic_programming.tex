@@ -33,7 +33,7 @@
 
 % use those colors
 \setbeamercolor{titlelike}{fg=title}
-\setbeamercolor{subtitle}{fg=title}
+\setbeamercolor{subtitle}{fg=subtitle}
 \setbeamercolor{institute}{fg=gray}
 \setbeamercolor{normal text}{fg=foreground,bg=background}
 \setbeamercolor{item}{fg=foreground} % color of bullets
@@ -105,7 +105,7 @@
 \begin{frame}{Today we're going to cover}
     \vspace{40pt}
     \bi
-        \item Dynamic Programming \pause -- part I
+        \item Dynamic Programming
     \ei
 \end{frame}
 
@@ -132,16 +132,17 @@
     \ei
 \end{frame}
 
-\begin{frame}[fragile]{Top-Down dynamic programming}
+% TODO: Dynamic programming formulation
+\begin{frame}[fragile]{Dynamic programming formulation}
     \vspace{30pt}
     \be
-        \item Formulate the problem in terms of smaller versions of the problem
+        \item Formulate the problem in terms of smaller versions of the problem (recursively)
         \item Turn this formulation into a recursive function
         \item Memoize the function (remember results that have been computed)
     \ee
 \end{frame}
 
-\begin{frame}[fragile]{Top-Down dynamic programming}
+\begin{frame}[fragile]{Dynamic programming formulation}
     \begin{minted}[fontsize=\footnotesize]{cpp}
 map<problem, value> memory;
 
@@ -159,60 +160,11 @@ value dp(problem P) {
         result = combine(result, dp(Q));
     }
 
-    memory[P] = result;
+    memory[Q] = result;
     return result;
 }
     \end{minted}
 \end{frame}
-
-\begin{frame}[fragile]{Bottom-Up dynamic programming}
-    \vspace{30pt}
-    \be
-        \item Formulate the problem in terms of smaller versions of the problem
-        \item Turn this formulation into an \textit{non-recursive} function
-        \item \textit{Compute all values by applying the formula iteratively}
-    \ee
-\end{frame}
-
-\begin{frame}[fragile]{Top-Down dynamic programming}
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-map<state, value> memory;
-
-...
-for (state S : base_case)
-    memory[S] = base_case_value(S);
-
-for (state S : ordering_of_ordinary_cases){
-    value result = some value;
-    for (problem Q in subproblems(P)) {
-        result = combine(result, memory(Q));
-    }
-    memory[S] = result;
-}
-...
-    \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Top-Down vs Bottom-Up DP}
-    \vspace{30pt}
-	\bi
-		\item Top-Down
-		\bi
-			\item is easier to understand (for beginners)
-			\item run-time efficient if not all states are necessary
-		\ei
-		\item Bottom-Up
-		\bi
-			\item more difficult to think about (for beginners)
-			\item run-time efficient if all states are necessary (no recursive function calls)
-			\item often shorter code
-		\ei
-	\ei
-\end{frame}
-
-
-
-
 
 % TODO: Fibonacci example
 \begin{frame}{The Fibonacci sequence}
@@ -420,7 +372,7 @@ int fibonacci(int n) {
 
 \end{frame}
 
-\begin{frame}[fragile]{The Top-Down Fibonacci sequence}
+\begin{frame}[fragile]{The Fibonacci sequence}
     \vspace{5pt}
 
     \begin{minted}[fontsize=\footnotesize]{cpp}
@@ -462,23 +414,6 @@ int fibonacci(int n) {
         \item Total time complexity is $O(n)$
     \ei
 \end{frame}
-
-\begin{frame}[fragile]{The Bottom-Up Fibonacci sequence}
-    \vspace{5pt}
-
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-int mem[1000];
-
-mem[1] = 1;
-mem[2] = 1;
-
-for (int i = 3; i < 1000; i++)
-    mem[i] = mem[i-1] + mem[i-2];
-    
-    \end{minted}
-\end{frame}
-
-
 
 % TODO: Maximum sum
 \begin{frame}{Maximum sum}
@@ -611,12 +546,12 @@ printf("%d\n", maximum);
     \end{minted}
 \end{frame}
 
-%\begin{frame}[fragile]{Maximum sum}
-%    \vspace{40pt}
-%    \bi
-%        \item If you want to find the maximum sum interval in multiple arrays, remember to clear the memory in between
-%    \ei
-%\end{frame}
+\begin{frame}[fragile]{Maximum sum}
+    \vspace{40pt}
+    \bi
+        \item If you want to find the maximum sum interval in multiple arrays, remember to clear the memory in between
+    \ei
+\end{frame}
 
 \begin{frame}{Maximum sum}
     \vspace{20pt}
@@ -638,11 +573,11 @@ printf("%d\n", maximum);
             and some amount $x$: What is minimum number of coins needed to
             represent the value $x$?
 
-        %\item Remember the greedy algorithm for Coin change?
-        %\item It didn't always give the optimal solution, and sometimes it didn't even give a solution at all...
+        \item Remember the greedy algorithm for Coin change?
+        \item It didn't always give the optimal solution, and sometimes it didn't even give a solution at all...
 
-        %\vspace{10pt}
-        %\item What about dynamic programming?
+        \vspace{10pt}
+        \item What about dynamic programming?
     \ei
 \end{frame}
 
@@ -727,66 +662,296 @@ int opt(int i, int x) {
     \ei
 \end{frame}
 
-
-
-\begin{frame}{Wedding Shopping}
-    \vspace{20pt}
+% TODO: Longest increasing subsequence
+\begin{frame}{Longest increasing subsequence}
     \bi
-    	\item Given a set of garments $G$ where each garment has a (integer) price $p_i$ and a type $t_i$.
-        \item We have to by one garment of each type and spend as much as possible, but not more than $M$.
-    \ei
-    \pause
-    An example ($M = \only<2-3>{20}\only<4>{\mathbf{17}}$ and $C = 3$)
-    \bi
-    	\item 1. type: 6 \only<2-3>{4}\only<4>{\textbf{4}} \only<2,4>{8}\only<3>{\textbf{8}}
-    	\item 2. type: 5 \only<2>{10}\only<3-4>{\textbf{10}}
-    	\item 3. type: \only<2,4>{1}\only<3>{\textbf{1}} 5 \only<2-3>{3}\only<4>{\textbf{3}} 5
+\item Given an array $a[0]$, $a[1]$, \ldots, $a[n-1]$ of integers, what is the length of the longest increasing subsequence?
+    \vspace{15pt}
+\item First, what is a subsequence?
+\item If we delete zero or more elements from $a$, then we have a subsequence of $a$
+    \vspace{5pt}
+\item Example: $a = [5,1,8,1,9,2]$
+    \vspace{5pt}
+\item $[5,8,9]$ is a subsequence
+\item $[1,1]$ is a subsequence
+\item $[5,1,8,1,9,2]$ is a subsequence
+\item $[]$ is a subsequence
+\item $[8,5]$ is \textbf{not} a subsequence
+\item $[10]$ is \textbf{not} a subsequence
     \ei
 \end{frame}
 
-\begin{frame}{Wedding Shopping}
-    \vspace{20pt}
-    \bi[<+->]
-    	\item Let $max\_spent(i)$ be the max amount we can spend to buy the first $i$ garments
-    	\item $max\_spent(i) = $\\$\max_{g} max\_spent(i-1) + p_g$ and not $\geq M$
-    	\item \dots essentially greedy \only<4->{...  and not correct}
-    	\item<5-> add the amount of spend money as a dimension
-    	\item<5-> the DP-value is now a bool
-    	\item<5-> $spent(i,v) = \bigwedge_g spend(i-1,v-p_g)$
-    	\item<6->[$\Rightarrow$] similar to 0-1 Knapsack
-    \ei
-    \visible<4>{
-    $M = 10$ and $C = 3$
+\begin{frame}{Longest increasing subsequence}
     \bi
-    	\item 1. type: 1 2 10
-    	\item 2. type: 4
-    	\item 3. type: 4
+\item Given an array $a[0]$, $a[1]$, \ldots, $a[n-1]$ of integers, what is the length of the longest increasing subsequence?
+    \vspace{5pt}
+\item An increasing subsequence of $a$ is a subsequence of $a$ such that the elements are in (strictly) increasing order
+    \vspace{5pt}
+\item $[5,8,9]$ and $[1,8,9]$ are the longest increasing subsequences of $a = [5,1,8,1,9,2]$
+
+    \vspace{5pt}
+\item How do we compute the length of the longest increasing subsequence?
+\item There are $2^n$ subsequences, so we can go through all of them
+\item That would result in an $O(n2^n)$ algorithm, which can only handle $n\leq 23$
+    \vspace{5pt}
+\item What about dynamic programming?
+
     \ei
-    }
 \end{frame}
 
+\begin{frame}{Longest increasing subsequence}
+    \vspace{20pt}
+    \bi
+\item Let $\mathrm{lis}(i)$ denote the length of the longest increasing subsequence of the array $a[0]$, $\ldots$, $a[i]$
+    \vspace{5pt}
+\item Base case: $\mathrm{lis}(0) = 1$
+\item What about $\mathrm{lis}(i)$?
+    \vspace{10pt}
+\item We have the same issue as in the maximum sum problem, so let's try changing perspective
+    \ei
+\end{frame}
 
-\begin{frame}[fragile]{Wedding Shopping}
+\begin{frame}{Longest increasing subsequence}
+    \vspace{40pt}
+    \bi
+\item Let $\mathrm{lis}(i)$ denote the length of the longest increasing subsequence of the array $a[0]$, $\ldots$, $a[i]$, \textit{that ends at $i$}
+    \vspace{5pt}
+\item Base case: we don't need one
+\item $\mathrm{lis}(i) = \mathrm{max}(1, \mathrm{max}_{j \textrm{ s.t. } a[j] < a[i]} \{ 1 + \mathrm{lis}(j) \})$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Longest increasing subsequence}
     \begin{minted}[fontsize=\footnotesize]{cpp}
-vi garms[20];
-bool dp[21][201];
+int a[1000];
+int mem[1000];
+memset(mem, -1, sizeof(mem));
 
-FOR(i,0,m) dp[0][i] = false;
-dp[0][m] = true;
-	
-FOR(gt,1,c+1) FOR(a,0,m+1){
-    dp[gt][a] = false;
-    FORIT(g,garms[gt-1])
-        if (a + *g <= m && dp[gt-1][a+*g]) dp[gt][a] = true;
+int lis(int i) {
+    if (mem[i] != -1) {
+        return mem[i];
+    }
+
+    int res = 1;
+    for (int j = 0; j < i; j++) {
+        if (a[j] < a[i]) {
+            res = max(res, 1 + lis(j));
+        }
+    }
+
+    mem[i] = res;
+    return res;
 }
-bool found = false;
-FOR(i,0,m+1) if (dp[c][i]) {
-    cout << m-i << endl;
-    found = true;
-    break;
-}
-if (!found) cout << "no solution" << endl;
     \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Longest increasing subsequence}
+    \vspace{30pt}
+
+    \bi
+        \item And then the longest increasing subsequence can be found by checking all endpoints:
+    \ei
+
+    \begin{minted}{cpp}
+int mx = 0;
+for (int i = 0; i < n; i++) {
+    mx = max(mx, lis(i));
+}
+
+printf("%d\n", mx);
+    \end{minted}
+\end{frame}
+
+\begin{frame}{Longest increasing subsequence}
+    \vspace{30pt}
+    \bi
+        \item Time complexity?
+            \vspace{10pt}
+        \item There are $n$ possible inputs
+        \item Each input is computed in $O(n)$ time, assuming recursive calls are $O(1)$
+        \item Total time complexity is $O(n^2)$
+            \vspace{10pt}
+        \item This will be fast enough for $n \leq 10\ 000$, much better than the brute force method!
+    \ei
+\end{frame}
+
+
+% TODO: Longest common subsequence
+\begin{frame}{Longest common subsequence}
+    \vspace{20pt}
+    \bi
+\item Given two strings (or arrays of integers) $a[0]$, \ldots, $a[n-1]$ and $b[0]$, \ldots, $b[m-1]$, find the length of the longest subsequence that they have in common.
+
+    \vspace{10pt}
+\item $a = $\texttt{"b\underline{an}an\underline{inn}"}
+\item $b = $\texttt{"k\underline{anin}a\underline{n}"}
+    \vspace{5pt}
+\item The longest common subsequence of $a$ and $b$, \texttt{"aninn"}, has length 5
+    \ei
+\end{frame}
+
+\begin{frame}{Longest common subsequence}
+    \vspace{20pt}
+    \bi
+\item Let $\mathrm{lcs}(i, j)$ be the length of the longest common subsequence of the strings $a[0]$, \ldots, $a[i]$ and $b[0]$, \ldots, $b[j]$
+
+    \vspace{10pt}
+\item Base case: $\mathrm{lcs}(-1, j) = 0$
+\item Base case: $\mathrm{lcs}(i, -1) = 0$
+    \vspace{10pt}
+\item $\mathrm{lcs}(i, j) = \mathrm{max} \left\{
+	\begin{array}{ll}
+        \mathrm{lcs}(i,j-1) & \\
+        \mathrm{lcs}(i-1,j) & \\
+        1 + \mathrm{lcs}(i-1,j-1) & \textrm{if } a[i] = b[j] \\
+	\end{array}
+\right.$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Longest common subsequence}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+string a = "bananinn",
+       b = "kaninan";
+int mem[1000][1000];
+memset(mem, -1, sizeof(mem));
+
+int lcs(int i, int j) {
+    if (i == -1 || j == -1) {
+        return 0;
+    }
+    if (mem[i][j] != -1) {
+        return mem[i][j];
+    }
+
+    int res = 0;
+    res = max(res, lcs(i, j - 1));
+    res = max(res, lcs(i - 1, j));
+
+    if (a[i] == b[j]) {
+        res = max(res, 1 + lcs(i - 1, j - 1));
+    }
+
+    mem[i][j] = res;
+    return res;
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}{Longest common subsequence}
+    \vspace{40pt}
+    \bi
+        \item Time complexity?
+            \vspace{10pt}
+        \item There are $n\times m$ possible inputs
+        \item Each input is processed in $O(1)$, assuming recursive calls are $O(1)$
+        \item Total time complexity is $O(n\times m)$
+    \ei
+\end{frame}
+
+% TODO: Bitmasks
+\begin{frame}{DP over bitmasks}
+    \vspace{40pt}
+    \bi
+        \item Remember the bitmask representation of subsets?
+        \item Each subset of $n$ elements are mapped to an integer in the range $0$, \ldots, $2^{n} - 1$
+        \item This makes it easy to do dynamic programming over subsets
+    \ei
+\end{frame}
+
+% TODO: Traveling salesman problem
+\begin{frame}{Traveling salesman problem}
+    \vspace{10pt}
+
+    \bi
+        \item We have a graph of $n$ vertices, and a cost $c_{i,j}$ between each pair of vertices $i, j$. We want to find a cycle through all vertices in the graph so that the sum of the edge costs in the cycle is minimal.
+
+        \vspace{5pt}
+        \item This problem is NP-Hard, so there is no known deterministic polynomial time algorithm that solves it
+
+        \vspace{10pt}
+        \item Simple to do in $O(n!)$ by going through all permutations of the vertices, but that's too slow if $n > 11$
+
+        \vspace{10pt}
+        \item Can we go higher if we use dynamic programming?
+    \ei
+\end{frame}
+
+\begin{frame}{Traveling salesman problem}
+    \vspace{20pt}
+    \bi
+\item Without loss of generality, assume we start and end the cycle at vertex $0$
+    \vspace{10pt}
+
+\item Let $\mathrm{tsp}(i, S)$ represent the cheapest way to go through all vertices in the graph and back to vertex $0$, if we're currently at vertex $i$ and we've already visited the vertices in the set $S$
+
+    \vspace{20pt}
+\item Base case: $\mathrm{tsp}(i, \textrm{all vertices}) = c_{i,0}$
+\item Otherwise $\mathrm{tsp}(i, S) = \mathrm{min}_{\ j \not\in S\ } \{\ c_{i,j} + \mathrm{tsp}(j, S \cup \{j\})\ \}$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Traveling salesman problem}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+const int N = 20;
+const int INF = 100000000;
+int c[N][N];
+int mem[N][1<<N];
+memset(mem, -1, sizeof(mem));
+
+int tsp(int i, int S) {
+    if (S == ((1 << N) - 1)) {
+        return c[i][0];
+    }
+    if (mem[i][S] != -1) {
+        return mem[i][S];
+    }
+
+    int res = INF;
+    for (int j = 0; j < N; j++) {
+        if (S & (1 << j))
+            continue;
+
+        res = min(res, c[i][j] + tsp(j, S | (1 << j)));
+    }
+
+    mem[i][S] = res;
+    return res;
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Traveling salesman problem}
+    \vspace{30pt}
+    \bi
+\item Then the optimal solution can be found as follows:
+    \ei
+
+    \vspace{20pt}
+    \begin{minted}{cpp}
+printf("%d\n", tsp(0, 1<<0));
+    \end{minted}
+\end{frame}
+
+\begin{frame}{Traveling salesman problem}
+    \vspace{30pt}
+    \bi
+        \item Time complexity?
+        \vspace{10pt}
+        \item There are $n \times 2^n$ possible inputs
+        \item Each input is computed in $O(n)$ assuming recursive calls are $O(1)$
+        \item Total time complexity is $O(n^2 2^n)$
+            \vspace{10pt}
+        \item Now $n$ can go up to about $20$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Traveling salesman problem}
+    % http://xkcd.com/399/
+    \vspace{40pt}
+    \begin{center}
+    \ig[scale=0.4]{travelling_salesman_problem.png}
+    \end{center}
 \end{frame}
 
 \end{document}
