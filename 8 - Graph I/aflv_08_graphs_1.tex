@@ -19,19 +19,21 @@
 
 % named colors
 \definecolor{offwhite}{RGB}{249,242,215}
-\definecolor{foreground}{RGB}{255,255,255}
-\definecolor{background}{RGB}{24,24,24}
+% \definecolor{foreground}{RGB}{255,255,255}
+\definecolor{foreground}{RGB}{0,0,0}
+% \definecolor{background}{RGB}{24,24,24}
+\definecolor{background}{RGB}{255,255,255}
 \definecolor{title}{RGB}{107,174,214}
-\definecolor{gray}{RGB}{155,155,155}
+\definecolor{gray}{RGB}{100,100,100}
 \definecolor{subtitle}{RGB}{102,255,204}
-\definecolor{hilight}{RGB}{102,255,204}
+\definecolor{hilight}{RGB}{20,180,204}
 \definecolor{vhilight}{RGB}{255,111,207}
 \definecolor{lolight}{RGB}{155,155,155}
 %\definecolor{green}{RGB}{125,250,125}
 
 % use those colors
 \setbeamercolor{titlelike}{fg=title}
-\setbeamercolor{subtitle}{fg=subtitle}
+\setbeamercolor{subtitle}{fg=title}
 \setbeamercolor{institute}{fg=gray}
 \setbeamercolor{normal text}{fg=foreground,bg=background}
 \setbeamercolor{item}{fg=foreground} % color of bullets
@@ -58,10 +60,11 @@
 
 % title info
 \title{Graphs}
-\subtitle{Unweighted Graphs}
-\author{Bjarki Ágúst Guðmundsson \\ Tómas Ken Magnússon}
-\institute{\href{http://ru.is/td}{School of Computer Science} \\[2pt] \href{http://ru.is}{Reykjavík University}}
-\date{Árangursrík forritun og lausn verkefna}
+\subtitle{Part 1}
+% \subtitle{Theory, Representation, and Algorithms}
+\author{Gregor Behnke}
+\institute{Institute of Artificial Intelligence\\ Ulm University}
+\date{\tiny based on Bjarki Ágúst Guðmundsson's and Tómas Ken Magnússon's\\Competitive Programming}
 % \date{\href{http://www.biostat.wisc.edu/~kbroman}{\tt \scriptsize biostat.wisc.edu/{\textasciitilde}kbroman}
 % \\[-4pt]
 % \href{http://github.com/kbroman}{\tt \scriptsize github.com/kbroman}
@@ -74,17 +77,27 @@
 
 % Minted
 \usepackage{minted}
-\usemintedstyle{monokai}
+\usemintedstyle{tango}
 \newminted{cpp}{fontsize=\footnotesize}
 
 % Graph styles
 \tikzstyle{vertex}=[circle,fill=black!50,minimum size=15pt,inner sep=0pt, font=\small]
-\tikzstyle{selected vertex} = [vertex, fill=red!24]
+\tikzstyle{selected vertex} = [vertex, fill=vhilight]
+\tikzstyle{selected2 vertex} = [vertex, fill=hilight!50, text=black]
+\tikzstyle{vertex1} = [vertex, fill=red]
+\tikzstyle{vertex2} = [vertex, fill=blue]
+\tikzstyle{vertex3} = [vertex, fill=green, text=black]
+\tikzstyle{vertex4} = [vertex, fill=yellow, text=black]
+\tikzstyle{vertex5} = [vertex, fill=pink, text=black]
+\tikzstyle{vertex6} = [vertex, fill=purple]
 \tikzstyle{edge} = [draw,thick,-]
 \tikzstyle{dedge} = [draw,thick,->]
 \tikzstyle{weight} = [font=\scriptsize,pos=0.5]
 \tikzstyle{selected edge} = [draw,line width=2pt,-,red!50]
 \tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
+
+
+
 
 
 \begin{document}
@@ -102,11 +115,17 @@
     \bi
         \item Graph basics
         \item Graph representation (recap)
+        \item Special graphs
+            \bi
+                \item Trees
+                \item Directed acyclic graphs
+                \item Bipartite graphs
+            \ei
+
         \item Depth-first search
-        % \item Flood-fill
         \item Connected components
         \item DFS tree
-        \item Bridges
+        \item Bridges and Articulation
         \item Strongly connected components
         \item Topological sort
         \item Breadth-first search
@@ -120,7 +139,7 @@
         \begin{column}{.6\textwidth}
             \bi
                 \onslide<2->{
-                    \item Vertices
+                    \item Vertices $V$ ($|V| = n$)
                         \bi
                             \item Road intersections
                             \item Computers
@@ -129,7 +148,7 @@
                         \ei
                 }
                 \onslide<3->{
-                    \item Edges
+                    \item Edges $E \subset V \times V$ ($|E| = n$)
                         \bi
                             \item Roads
                             \item Ethernet cables
@@ -452,13 +471,13 @@ adj[3].size() // 1
         \begin{column}{.6\textwidth}
             \bi
                 \onslide<1->{
-                    \item Outdegree of a vertex
+                    \item Outdegree of a vertex $deg^+(v)$
                         \bi
                             \item Number of outgoing edges
                         \ei
                 }
                 \onslide<3->{
-                    \item Indegree of a vertex
+                    \item Indegree of a vertex $deg^-(v)$
                         \bi
                             \item Number of incoming edges
                         \ei
@@ -682,10 +701,6 @@ adj[3].size() // 0
 
 \item It traverses the graph in depth-first order, starting from the initial vertex $u$
 \item We don't actually have to specify a $v$, since we can just let it visit all reachable vertices from $u$ (and still same time complexity)
-    \vspace{10pt}
-\item But what is the time complexity?
-\item Each vertex is visited once, and each edge is traversed once
-\item $O(n + m)$
     \ei
 \end{frame}
 
@@ -840,7 +855,7 @@ void dfs(int u) {
 
     visited[u] = true;
 
-    for (int i = 0; i < adj[u].size(); i++) {
+    FOR(i,0,sz(adj[u])) {
         int v = adj[u][i];
         dfs(v);
     }
@@ -848,374 +863,14 @@ void dfs(int u) {
     \end{minted}
 \end{frame}
 
-% TODO: Flood fill
-
-% TODO: Connected components
-\begin{frame}{Connected components}
-    \vspace{30pt}
-    \bi
-        \item An undirected graph can be partitioned into connected components
-        \item A connected component is a maximal subset of the vertices such that each pair of vertices is reachable from each other
-
-        \vspace{10pt}
-
-        \item We've already seen this in a couple of problems, but we've been using Union-Find to keep track of the components
-    \ei
-\end{frame}
-
-\begin{frame}{Connected components}
-    \begin{tikzpicture}[scale=1.8,auto,swap]
-
-        \node[vertex] (1) at (-0.8,1.9) {1};
-        \node[vertex] (2) at (3,1.7) {2};
-        \node[vertex] (3) at (0.4,0.5) {3};
-        \node[vertex] (4) at (-1.2,1.2) {4};
-        \node[vertex] (5) at (1,1.1) {5};
-        \node[vertex] (6) at (1.4,0.4) {6};
-        \node[vertex] (7) at (-1.9,1.7) {7};
-
-        \path[edge] (1) -- (4);
-        \path[edge] (4) -- (7);
-        \path[edge] (3) -- (5);
-        \path[edge] (5) -- (6);
-        \path[edge] (6) -- (3);
-
-        \onslide<2->{
-            \draw[color=vhilight] (-1.3,1.55) ellipse (0.9cm and 0.9cm);
-            \draw[color=vhilight] (0.9,0.7) ellipse (0.9cm and 0.9cm);
-            \draw[color=vhilight] (3,1.7) ellipse (0.3cm and 0.3cm);
-        }
-
-        \pgfresetboundingbox
-        \path [use as bounding box] (-2.3,1.0) rectangle (1,3.0);
-    \end{tikzpicture}
-\end{frame}
-
-\begin{frame}{Connected components}
-    \vspace{30pt}
-    \bi
-        \item Also possible to find these components using depth-first search
-        \item Pick some vertex we don't know anything about, and do a depth-first search out from it
-        \item All vertices reachable from that starting vertex are in the same component
-        \item Repeat this process until you have all the components
-        \item Time complexity is $O(n + m)$
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{Connected components}
-    \begin{minted}[fontsize=\scriptsize]{cpp}
-vector<int> adj[1000];
-vector<int> component(1000, -1);
-
-void find_component(int cur_comp, int u) {
-    if (component[u] != -1) {
-        return;
-    }
-
-    component[u] = cur_comp;
-
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        find_component(cur_comp, v);
-    }
-}
-
-int components = 0;
-for (int u = 0; u < n; u++) {
-    if (component[u] == -1) {
-        find_component(components, u);
-        components++;
-    }
-}
-    \end{minted}
-\end{frame}
-
-% TODO: DFS tree
-\begin{frame}{Depth-first search tree}
-    \vspace{30pt}
-
-    \bi
-        \item When we do a depth-first search from a certain vertex, the path
-            that we take forms a tree
-        \item When we go from a vertex to another vertex that we haven't visited before, the edge that we take is called a \textit{forward edge}
-        \item When we go from a vertex to another vertex that we've already visited before, the edge that we take is called a \textit{backward edge}
-        \item To be more specific: the forward edges form a tree
-        \vspace{20pt}
-        \item \textit{see example}
-    \ei
-\end{frame}
-
-\begin{frame}{Depth-first search tree}
-    \vspace{30pt}
-
-    \bi
-        \item This tree of forward edges, along with the backward edges, can be analyzed to get a lot of information about the original graph
-        \vspace{10pt}
-        \item For example: a backward edge represents a cycle in the original graph
-        \item If there are no backward edges, then there are no cycles in the original graph (i.e.\ the graph is acyclic)
-    \ei
-\end{frame}
-
-\begin{frame}{Analyzing the DFS tree}
-    \vspace{20pt}
-    \bi
-        \item Let's take a closer look at the depth-first search tree
-        \vspace{10pt}
-        \item First, let's number each of the vertices in the order that we visit them in the depth-first search
-        \item For each vertex, we want to know the smallest number of a vertex that we visited when exploring the subtree rooted at the current vertex
-        \vspace{10pt}
-        \item Why? We'll see in a bit..
-        \vspace{10pt}
-        \item \textit{see example}
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{Analyzing the DFS tree}
-    \begin{minted}[fontsize=\scriptsize]{cpp}
-const int n = 1000;
-vector<int> adj[n];
-vector<int> low(n), num(n, -1);
-int curnum = 0;
-
-void analyze(int u, int p) {
-    low[u] = num[u] = curnum++;
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        if (v == p) continue;
-        if (num[v] == -1) {
-            analyze(v, u);
-            low[u] = min(low[u], low[v]);
-        } else {
-            low[u] = min(low[u], num[v]);
-        }
-    }
-}
-
-for (int u = 0; u < n; u++) {
-    if (num[u] == -1) {
-        analyze(u, -1);
-    }
-}
-    \end{minted}
-\end{frame}
-
-\begin{frame}{Analyzing the DFS tree}
-    \vspace{30pt}
-    \bi
-        \item Time complexity of this is just $O(n + m)$, since this is basically just one depth-first search
-        \vspace{20pt}
-        \item Now, as promised, let's see some applications of this
-    \ei
-\end{frame}
-
-% TODO: Articulation points/bridges
-\begin{frame}{Bridges}
-    \vspace{20pt}
-    \bi
-        \item We have an undirected graph
-        \item Without loss of generality, assume it is connected (i.e.\ one big connected component)
-        \item Find an edge, so that if you remove that edge the graph is no longer connected
-        \vspace{10pt}
-        \item Naive algorithm: Try removing edges, one at a time, and finding the connected components of the resulting graph
-        \item That's pretty inefficient, $O(m(n + m))$
-    \ei
-\end{frame}
-
-\begin{frame}{Bridges}
-    \vspace{20pt}
-    \bi
-        \item Let's take a look at the values that we computed in the DFS tree
-        \vspace{10pt}
-        \item We see that a forward edge $(u,v)$ is a bridge if and only if \texttt{low[v]} >\texttt{num[u]}
-        \vspace{10pt}
-        \item Simple to extend our analyze function to return all bridges
-        \item Again, this is just $O(n + m)$
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{Bridges}
-    \begin{minted}[fontsize=\tiny]{cpp}
-const int n = 1000;
-vector<int> adj[n];
-vector<int> low(n), num(n, -1);
-int curnum = 0;
-
-vector<pair<int, int> > bridges;
-
-void find_bridges(int u, int p) {
-    low[u] = num[u] = curnum++;
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        if (v == p) continue;
-        if (num[v] == -1) {
-            find_bridges(v, u);
-            low[u] = min(low[u], low[v]);
-        } else {
-            low[u] = min(low[u], num[v]);
-        }
-
-        if (low[v] > num[u]) {
-            bridges.push_back(make_pair(u, v));
-        }
-    }
-}
-
-for (int u = 0; u < n; u++) {
-    if (num[u] == -1) {
-        find_bridges(u, -1);
-    }
-}
-    \end{minted}
-\end{frame}
-
-% TODO: Strongly connected components
-\begin{frame}{Strongly connected components}
+\begin{frame}{Depth-first search}
     \vspace{10pt}
     \bi
-        \item We know how to find connected components in undirected graphs
-        \item But what about directed graphs?
-        \vspace{10pt}
-        \item Such components behave a bit differently in directed graphs, especially since if $v$ is reachable from $u$, it doesn't mean that $u$ is reachable from $v$
-        \vspace{10pt}
-        \item The definition remains the same, though
-        \item A strongly connected component is a maximal subset of the vertices such that each pair of vertices is reachable from each other
-    \ei
-\end{frame}
-
-\begin{frame}{Strongly connected components}
-    \vspace{40pt}
-    \bi
-        \item The connected components algorithm won't work here
-        \vspace{10pt}
-        \item Instead we can use the depth-first search tree of the graph to find these components
-        \vspace{10pt}
-        \item \textit{see example}
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{Strongly connected components}
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-vector<int> adj[100];
-vector<int> low(100), num(100, -1);
-vector<bool> incomp(100, false);
-int curnum = 0;
-
-stack<int> comp;
-
-void scc(int u) {
-
-    // scc code...
-}
-
-for (int i = 0; i < n; i++) {
-    if (num[i] == -1) {
-        scc(i);
-    }
-}
-    \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Strongly connected components}
-    \begin{minted}[fontsize=\tiny]{cpp}
-void scc(int u) {
-
-    comp.push(u);
-    incomp[u] = true;
-
-    low[u] = num[u] = curnum++;
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        if (num[v] == -1) {
-            scc(v);
-            low[u] = min(low[u], low[v]);
-        } else if (incomp[v]) {
-            low[u] = min(low[u], num[v]);
-        }
-    }
-
-    if (num[u] == low[u]) {
-        printf("comp: ");
-        while (true) {
-            int cur = comp.top();
-            comp.pop();
-            incomp[cur] = false;
-            printf("%d, ", cur);
-            if (cur == u) {
-                break;
-            }
-        }
-
-        printf("\n");
-    }
-}
-    \end{minted}
-\end{frame}
-
-\begin{frame}{Strongly connected components}
-    \vspace{30pt}
-    \bi
-        \item Time complexity?
-        \item Basically just the DFS analyze function (which was $O(n + m)$), with one additional loop to construct the component
-        \item But each vertex is only in one component...
-        \item Time complexity still just $O(n + m)$
-    \ei
-\end{frame}
-
-\begin{frame}{Example problem: Come and Go}
-    \bi
-        \item http://uva.onlinejudge.org/external/118/11838.html
-    \ei
-\end{frame}
-
-% TODO: Topological sort
-\begin{frame}{Topological sort}
-    \vspace{5pt}
-    \bi
-        \item We have $n$ tasks
-        \item Each task $i$ has a list of tasks that must be finished before we can start task $i$
-        \item Find an order in which we can process the tasks
-        \vspace{5pt}
-        \item Can be represented as a directed graph
-            \bi
-                \item Each task is a vertex in the graph
-                \item If task $j$ should be finished before task $i$, then we add a directed edge from vertex $i$ to vertex $j$
-            \ei
-        \vspace{5pt}
-        \item Notice that this can't be solved if the graph contains a cycle
-        \vspace{5pt}
-        \item A modified depth-first search can be used to find an ordering in $O(n + m)$ time, or determine that one does not exist
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{Topological sort}
-    \begin{minted}[fontsize=\scriptsize]{cpp}
-vector<int> adj[1000];
-vector<bool> visited(1000, false);
-vector<int> order;
-
-void topsort(int u) {
-    if (visited[u]) {
-        return;
-    }
-
-    visited[u] = true;
-    for (int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
-        topsort(v);
-    }
-
-    order.push_back(u);
-}
-
-for (int u = 0; u < n; u++) {
-    topsort(u);
-}
-    \end{minted}
-\end{frame}
-
-\begin{frame}{Example problem: Ordering Tasks}
-    \bi
-        \item http://uva.onlinejudge.org/external/103/10305.html
+\item But what is the time complexity?
+\item Each vertex is visited once, and each edge is traversed once
+\item $O(n + m)$
+    \vspace{10pt}
+\item Set of edges visited by DFS form a ``spanning'' tree
     \ei
 \end{frame}
 
@@ -1382,7 +1037,7 @@ visited[start] = true;
 while (!Q.empty()) {
     int u = Q.front(); Q.pop();
 
-    for (int i = 0; i < adj[u].size(); i++) {
+    FOR(i,0,sz(adj[u])) {
         int v = adj[u][i];
         if (!visited[v]) {
             Q.push(v);
@@ -1421,7 +1076,7 @@ dist[A] = 0;
 while (!Q.empty()) {
     int u = Q.front(); Q.pop();
 
-    for (int i = 0; i < adj[u].size(); i++) {
+    FOR(i,0,sz(adj[u])) {
         int v = adj[u][i];
         if (dist[v] == -1) {
             Q.push(v);
@@ -1435,7 +1090,959 @@ printf("%d\n", dist[B]);
 
 \end{frame}
 
+
+% TODO: Flood fill
+
+% TODO: Connected components
+\begin{frame}{Connected components}
+    \vspace{30pt}
+    \bi
+        \item An undirected graph can be partitioned into connected components
+        \item A connected component is a maximal subset of the vertices such that each pair of vertices is reachable from each other
+
+        \vspace{10pt}
+
+        \item We've already seen this in a couple of problems, but we've been using Union-Find to keep track of the components
+    \ei
+\end{frame}
+
+\begin{frame}{Connected components}
+    \begin{tikzpicture}[scale=1.8,auto,swap]
+
+        \node[vertex] (1) at (-0.8,1.9) {1};
+        \node[vertex] (2) at (3,1.7) {2};
+        \node[vertex] (3) at (0.4,0.5) {3};
+        \node[vertex] (4) at (-1.2,1.2) {4};
+        \node[vertex] (5) at (1,1.1) {5};
+        \node[vertex] (6) at (1.4,0.4) {6};
+        \node[vertex] (7) at (-1.9,1.7) {7};
+
+        \path[edge] (1) -- (4);
+        \path[edge] (4) -- (7);
+        \path[edge] (3) -- (5);
+        \path[edge] (5) -- (6);
+        \path[edge] (6) -- (3);
+
+        \onslide<2->{
+            \draw[color=vhilight] (-1.3,1.55) ellipse (0.9cm and 0.9cm);
+            \draw[color=vhilight] (0.9,0.7) ellipse (0.9cm and 0.9cm);
+            \draw[color=vhilight] (3,1.7) ellipse (0.3cm and 0.3cm);
+        }
+
+        \pgfresetboundingbox
+        \path [use as bounding box] (-2.3,1.0) rectangle (1,3.0);
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Connected components}
+    \vspace{30pt}
+    \bi
+        \item Also possible to find these components using depth-first search
+        \item Pick some vertex we don't know anything about, and do a depth-first search out from it
+        \item All vertices reachable from that starting vertex are in the same component
+        \item Repeat this process until you have all the components
+        \item Time complexity is $O(n + m)$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Connected components}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+vector<int> adj[1000];
+vector<int> component(1000, -1);
+
+void find_component(int cur_comp, int u) {
+    if (component[u] != -1) {
+        return;
+    }
+
+    component[u] = cur_comp;
+
+    for (int i = 0; i < adj[u].size(); i++) {
+        int v = adj[u][i];
+        find_component(cur_comp, v);
+    }
+}
+
+int components = 0;
+for (int u = 0; u < n; u++) {
+    if (component[u] == -1) {
+        find_component(components, u);
+        components++;
+    }
+}
+    \end{minted}
+\end{frame}
+
+% TODO: DFS tree
+\begin{frame}{Depth-first search tree}
+    \vspace{30pt}
+
+    \bi
+        \item When we do a depth-first search from a certain vertex, the path
+            that we take forms a tree
+        \item When we go from a vertex to another vertex that we haven't visited before, the edge that we take is called a \textit{forward edge}
+        \item When we go from a vertex to another vertex that we've already visited before, the edge that we take is called a \textit{backward edge}
+        \item To be more specific: the forward edges form a tree
+%         \vspace{20pt}
+%         \item \textit{see example}
+    \ei
+\end{frame}
+
+\begin{frame}{Depth-first search tree}
+    \vspace{30pt}
+
+    \bi
+        \item This tree of forward edges, along with the backward edges, can be analyzed to get a lot of information about the original graph
+        \vspace{10pt}
+        \item For example: a backward edge represents a cycle in the original graph
+        \item If there are no backward edges, then there are no cycles in the original graph (i.e.\ the graph is acyclic)
+    \ei
+\end{frame}
+
+\begin{frame}{Analyzing the DFS tree}
+    \vspace{20pt}
+    \bi
+        \item Let's take a closer look at the depth-first search tree
+        \vspace{10pt}
+        \item First, let's number each of the vertices in the order that we visit them in the depth-first search
+        \item For each vertex, we want to know the smallest number of a vertex that we visited when exploring the subtree rooted at the current vertex ($\rightarrow$ Low-Link number)
+        \vspace{10pt}
+        \item Why? We'll see in a bit..
+%         \vspace{10pt}
+%         \item \textit{see example}
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Analyzing the DFS tree}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+const int n = 1000;
+vector<int> adj[n];
+vector<int> low(n), num(n, -1);
+int curnum = 0;
+
+void analyze(int u, int p) {
+    low[u] = num[u] = curnum++;
+    for (int i = 0; i < adj[u].size(); i++) {
+        int v = adj[u][i];
+        if (v == p) continue;
+        if (num[v] == -1) {
+            analyze(v, u);
+            low[u] = min(low[u], low[v]);
+        } else {
+            low[u] = min(low[u], num[v]);
+        }
+    }
+}
+
+for (int u = 0; u < n; u++) {
+    if (num[u] == -1) {
+        analyze(u, -1);
+    }
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}{Analyzing the DFS tree}
+    \vspace{30pt}
+    \bi
+        \item Time complexity of this is just $O(n + m)$, since this is basically just one depth-first search
+        \vspace{20pt}
+        \item Now, as promised, let's see some applications of this
+    \ei
+\end{frame}
+
+% TODO: Articulation points/bridges
+\begin{frame}{Bridges and Articulation points}
+    \vspace{20pt}
+    \bi
+        \item We have an undirected graph
+        \item Without loss of generality, assume it is connected (i.e.\ one big connected component)
+        \item Find an edge -- a bridge, so that if you remove that edge the graph is no longer connected
+        \item Find a vertex -- an articulation point, so that if you remove that vertex the graph is no longer connected
+        \pause
+        \vspace{10pt}
+        \item Naive algorithm: Try removing edges, one at a time, and finding the connected components of the resulting graph
+        \item That's pretty inefficient, $O(m(n + m))$
+    \ei
+\end{frame}
+
+\begin{frame}{Bridges and Articulation points}
+    \vspace{20pt}
+    \bi
+        \item Let's take a look at the values that we computed in the DFS tree
+        \vspace{10pt}
+        \item We see that a forward edge $(u,v)$ is a bridge if and only if \texttt{low[v]} > \texttt{num[u]}
+        \vspace{10pt}
+        \item Similarly a vertex is an articulation point if for all its successors $u$ \texttt{low[v]} $\leq$ \texttt{num[u]}
+        \vspace{10pt}
+        \item Simple to extend our analyze function to return all bridges
+        \item Again, this is just $O(n + m)$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Bridges}
+    \begin{minted}[fontsize=\tiny]{cpp}
+const int n = 1000;
+vector<int> adj[n];
+vector<int> low(n), num(n, -1);
+int curnum = 0;
+
+vector<pair<int, int> > bridges;
+
+void find_bridges(int u, int p) {
+    low[u] = num[u] = curnum++;
+    for (int i = 0; i < adj[u].size(); i++) {
+        int v = adj[u][i];
+        if (v == p) continue;
+        if (num[v] == -1) {
+            find_bridges(v, u);
+            low[u] = min(low[u], low[v]);
+        } else {
+            low[u] = min(low[u], num[v]);
+        }
+
+        if (low[v] > num[u]) {
+            bridges.push_back(make_pair(u, v));
+        }
+    }
+}
+
+for (int u = 0; u < n; u++) {
+    if (num[u] == -1) {
+        find_bridges(u, -1);
+    }
+}
+    \end{minted}
+\end{frame}
+
+% TODO: Strongly connected components
+\begin{frame}{Strongly connected components}
+    \vspace{10pt}
+    \bi
+        \item We know how to find connected components in undirected graphs
+        \item But what about directed graphs?
+        \vspace{10pt}
+        \item Such components behave a bit differently in directed graphs, especially since if $v$ is reachable from $u$, it doesn't mean that $u$ is reachable from $v$
+        \vspace{10pt}
+        \item The definition remains the same, though
+        \item A strongly connected component is a maximal subset of the vertices such that each pair of vertices is reachable from each other
+    \ei
+\end{frame}
+
+\begin{frame}{Strongly connected components}
+    \vspace{40pt}
+    \bi
+        \item The connected components algorithm won't work here
+        \vspace{10pt}
+        \item Instead we can use the depth-first search tree of the graph to find these components
+       % \vspace{10pt}
+       % \item \textit{see example}
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Strongly connected components}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+vector<int> adj[100];
+vector<int> low(100), num(100, -1);
+vector<bool> incomp(100, false);
+int curnum = 0;
+
+stack<int> comp;
+
+void scc(int u) {
+
+    // scc code...
+}
+
+for (int i = 0; i < n; i++) {
+    if (num[i] == -1) {
+        scc(i);
+    }
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Strongly connected components}
+    \begin{minted}[fontsize=\tiny]{cpp}
+void scc(int u) {
+
+    comp.push(u);
+    incomp[u] = true;
+
+    low[u] = num[u] = curnum++;
+    for (int i = 0; i < adj[u].size(); i++) {
+        int v = adj[u][i];
+        if (num[v] == -1) {
+            scc(v);
+            low[u] = min(low[u], low[v]);
+        } else if (incomp[v]) {
+            low[u] = min(low[u], num[v]);
+        }
+    }
+
+    if (num[u] == low[u]) {
+        printf("comp: ");
+        while (true) {
+            int cur = comp.top();
+            comp.pop();
+            incomp[cur] = false;
+            printf("%d, ", cur);
+            if (cur == u) {
+                break;
+            }
+        }
+
+        printf("\n");
+    }
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}{Strongly connected components}
+    \vspace{30pt}
+    \bi
+        \item Time complexity?
+        \item Basically just the DFS analyze function (which was $O(n + m)$), with one additional loop to construct the component
+        \item But each vertex is only in one component...
+        \item Time complexity still just $O(n + m)$
+    \ei
+\end{frame}
+
+% \begin{frame}{Example problem: Come and Go}
+%     \bi
+%         \item http://uva.onlinejudge.org/external/118/11838.html
+%     \ei
+% \end{frame}
+
+% TODO: Topological sort
+\begin{frame}{Topological sort}
+    \vspace{5pt}
+    \bi
+        \item We have $n$ tasks
+        \item Each task $i$ has a list of tasks that must be finished before we can start task $i$
+        \item Find an order in which we can process the tasks
+        \vspace{5pt}
+        \item Can be represented as a directed graph
+            \bi
+                \item Each task is a vertex in the graph
+                \item If task $j$ should be finished before task $i$, then we add a directed edge from vertex $i$ to vertex $j$
+            \ei
+        \vspace{5pt}
+        \item Notice that this can't be solved if the graph contains a cycle (i.e. is not a DAG)
+        \vspace{5pt}
+        \item A modified depth-first search can be used to find an ordering in $O(n + m)$ time, or determine that one does not exist
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Topological sort}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+vector<int> adj[1000];
+vector<bool> visited(1000, false);
+vector<int> order;
+
+void topsort(int u) {
+    if (visited[u]) {
+        return;
+    }
+
+    visited[u] = true;
+    for (int i = 0; i < adj[u].size(); i++) {
+        int v = adj[u][i];
+        topsort(v);
+    }
+
+    order.push_back(u);
+}
+
+for (int u = 0; u < n; u++) {
+    topsort(u);
+}
+    \end{minted}
+\end{frame}
+
+% \begin{frame}{Example problem: Ordering Tasks}
+%     \bi
+%         \item http://uva.onlinejudge.org/external/103/10305.html
+%     \ei
+% \end{frame}
+
+
 % TODO: Example problem
+% TODO: Some common graph problems
+\begin{frame}{Known graph problems}
+    \vspace{30pt}
+    \bi
+        \item The problems we're dealing with very often ask us to solve some well known graph problem
+        \item But usually it's well hidden in the problem statement
+        \vspace{10pt}
+        \item Let's take a look at a few examples
+    \ei
+\end{frame}
+
+% TODO: Minimum vertex cover
+\begin{frame}{Maximum clique}
+    \bi
+        \item We have an unweighted undirected graph
+        \item A clique is a subset of the vertices $S$, such that for all $u,v \in S$ with $u \neq v$, there is an edge $(u,v)$
+    \ei
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \onslide<1>{
+                \node[vertex] (0) at (0,0.5) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<2-4>{
+                \node[selected vertex] (0) at (0,0.5) {0};
+                \node[selected vertex] (1) at (0.8,1) {1};
+                \node[selected vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+
+            \path[edge] (0) -- (1);
+            \path[edge] (0) -- (2);
+            \path[edge] (1) -- (2);
+            \path[edge] (1) -- (3);
+            \path[edge] (1) -- (4);
+            \path[edge] (1) -- (5);
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (0.8,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{10pt}
+    \bi
+        \item<3-> We want to find a clique of maximum size
+        \vspace{10pt}
+        \item<4-> NP-hard problem in general graphs
+    \ei
+\end{frame}
+
+
+% TODO: Minimum vertex cover
+\begin{frame}{Minimum vertex cover}
+    \bi
+        \item We have an unweighted undirected graph
+        \item A vertex cover is a subset of the vertices $S$, such that for each edge $(u, v)$ in the graph, either $u$ or $v$ (or both) are in $S$
+    \ei
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \onslide<1>{
+                \node[vertex] (0) at (0,0.5) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<2-3>{
+                \node[selected vertex] (0) at (0,0.5) {0};
+                \node[selected vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[selected vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<4->{
+                \node[vertex] (0) at (0,0.5) {0};
+                \node[selected vertex] (1) at (0.8,1) {1};
+                \node[selected vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+
+            \path[edge] (0) -- (1);
+            \path[edge] (0) -- (2);
+            \path[edge] (1) -- (2);
+            \path[edge] (1) -- (3);
+            \path[edge] (1) -- (4);
+            \path[edge] (1) -- (5);
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (0.8,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{10pt}
+    \bi
+        \item<3-> We want to find a vertex cover of minimum size
+        \vspace{10pt}
+        \item<5-> NP-hard problem in general graphs
+    \ei
+\end{frame}
+
+% TODO: Maximum independent set
+\begin{frame}{Maximum independent set}
+    \bi
+        \item We have an unweighted undirected graph
+        \item An independent set is a subset of the vertices $S$, such that no two vertices $u,v$ in $S$ are adjacent in the graph
+    \ei
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \onslide<1>{
+                \node[vertex] (0) at (0,0.5) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<2-3>{
+                \node[vertex] (0) at (0,0.5) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[selected vertex] (2) at (0.8,0) {2};
+                \node[selected vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[selected vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<4->{
+                \node[selected vertex] (0) at (0,0.5) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[selected vertex] (3) at (2,1) {3};
+                \node[selected vertex] (4) at (1.8,0.5) {4};
+                \node[selected vertex] (5) at (1.6,0) {5};
+            }
+
+            \path[edge] (0) -- (1);
+            \path[edge] (0) -- (2);
+            \path[edge] (1) -- (2);
+            \path[edge] (1) -- (3);
+            \path[edge] (1) -- (4);
+            \path[edge] (1) -- (5);
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (0.8,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{10pt}
+    \bi
+        \item<3-> We want to find an independent set of maximum size
+        \vspace{10pt}
+        \item<5-> NP-hard problem in general graphs
+    \ei
+\end{frame}
+
+\begin{frame}{Relation between MVC and MIS}
+    \bi
+        \item The previous two problems are very related
+        \item A subset of the vertices is a vertex cover if and only if the complement of the set is an independent set
+    \ei
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \onslide<1>{
+                \node[vertex] (0) at (0,0.5) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<2>{
+                \node[selected2 vertex] (0) at (0,0.5) {0};
+                \node[selected2 vertex] (1) at (0.8,1) {1};
+                \node[selected vertex] (2) at (0.8,0) {2};
+                \node[selected vertex] (3) at (2,1) {3};
+                \node[selected2 vertex] (4) at (1.8,0.5) {4};
+                \node[selected vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<3->{
+                \node[selected vertex] (0) at (0,0.5) {0};
+                \node[selected2 vertex] (1) at (0.8,1) {1};
+                \node[selected2 vertex] (2) at (0.8,0) {2};
+                \node[selected vertex] (3) at (2,1) {3};
+                \node[selected vertex] (4) at (1.8,0.5) {4};
+                \node[selected vertex] (5) at (1.6,0) {5};
+            }
+
+            \path[edge] (0) -- (1);
+            \path[edge] (0) -- (2);
+            \path[edge] (1) -- (2);
+            \path[edge] (1) -- (3);
+            \path[edge] (1) -- (4);
+            \path[edge] (1) -- (5);
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (0.8,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{10pt}
+    \bi
+        \item<4-> The size of a minimum vertex cover plus the size of a maximum independent set is equal to the number of vertices
+    \ei
+\end{frame}
+
+% TODO: Matching
+\begin{frame}{Maximum matching}
+    \bi
+        \item We have an unweighted undirected graph
+        \item A matching is a subset of the edges such that each vertex is adjacent to at most one edge in the subset
+    \ei
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \node[vertex] (0) at (0,0.5) {0};
+            \node[vertex] (1) at (0.8,1) {1};
+            \node[vertex] (2) at (0.8,0) {2};
+            \node[vertex] (3) at (2,1) {3};
+            \node[vertex] (4) at (1.8,0.5) {4};
+            \node[vertex] (5) at (1.6,0) {5};
+            \node[vertex] (6) at (2.4,0) {6};
+
+            \onslide<1>{
+                \path[edge] (0) -- (1);
+                \path[edge] (0) -- (2);
+                \path[edge] (1) -- (2);
+                \path[edge] (1) -- (3);
+                \path[edge] (1) -- (4);
+                \path[edge] (1) -- (5);
+                \path[edge] (5) -- (6);
+            }
+            \onslide<2-3>{
+                \path[selected edge] (0) -- (1);
+                \path[edge] (0) -- (2);
+                \path[edge] (1) -- (2);
+                \path[edge] (1) -- (3);
+                \path[edge] (1) -- (4);
+                \path[edge] (1) -- (5);
+                \path[selected edge] (5) -- (6);
+            }
+            \onslide<4->{
+                \path[edge] (0) -- (1);
+                \path[selected edge] (0) -- (2);
+                \path[edge] (1) -- (2);
+                \path[selected edge] (1) -- (3);
+                \path[edge] (1) -- (4);
+                \path[edge] (1) -- (5);
+                \path[selected edge] (5) -- (6);
+            }
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (1.5,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{10pt}
+    \bi
+        \item<3-> We want to find a matching of maximum size
+        \vspace{10pt}
+    \item<5-> There exists an $O(V^4)$ algorithm for general graphs, but is pretty complex (Hungarian algorithm)
+    \ei
+\end{frame}
+
+% TODO: Coloring
+\begin{frame}{Graph coloring}
+    \bi
+        \item We have an unweighted undirected graph
+        \item A coloring of the graph is an assignment of colors to the vertices such that adjacent vertices have different colors
+    \ei
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \onslide<1>{
+                \node[vertex] (0) at (0,0.5) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+            \onslide<2-3>{
+                \node[vertex1] (0) at (0,0.5) {0};
+                \node[vertex2] (1) at (0.8,1) {1};
+                \node[vertex3] (2) at (0.8,0) {2};
+                \node[vertex4] (3) at (2,1) {3};
+                \node[vertex5] (4) at (1.8,0.5) {4};
+                \node[vertex6] (5) at (1.6,0) {5};
+            }
+            \onslide<4->{
+                \node[vertex1] (0) at (0,0.5) {0};
+                \node[vertex2] (1) at (0.8,1) {1};
+                \node[vertex3] (2) at (0.8,0) {2};
+                \node[vertex1] (3) at (2,1) {3};
+                \node[vertex1] (4) at (1.8,0.5) {4};
+                \node[vertex1] (5) at (1.6,0) {5};
+            }
+
+            \path[edge] (0) -- (1);
+            \path[edge] (0) -- (2);
+            \path[edge] (1) -- (2);
+            \path[edge] (1) -- (3);
+            \path[edge] (1) -- (4);
+            \path[edge] (1) -- (5);
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (1.5,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{10pt}
+    \bi
+        \item<3-> We want to find a coloring that uses the minimum number of distinct colors
+        \vspace{10pt}
+        \item<5-> NP-hard in general graphs
+    \ei
+
+\end{frame}
+
+\begin{frame}{Special graphs}
+    \vspace{30pt}
+    \bi
+\item All of these problems are hard (in some sense) in general graphs
+\item But what if we're working with special kinds of graphs?
+    \vspace{10pt}
+\item Let's look at a few examples
+    \ei
+\end{frame}
+
+\begin{frame}{Bipartite graphs}
+    \bi
+\item A graph is bipartite if the vertices can be partitioned into two sets such that for each edge $(u,v)$ $u$ and $v$ are in different sets
+% \item Bipartite graphs are the \textbf{$C_{2x+1}$-free} graphs
+    \ei
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \only<-1>{
+                \node[vertex] (0) at (0,0.5) {0};
+            }
+            \only<2->{
+                \node[vertex] (0) at (0,0) {0};
+            }
+            \node[vertex] (1) at (0.8,1) {1};
+            \node[vertex] (2) at (0.8,0) {2};
+            \only<-3>{
+                \node[vertex] (3) at (2,1) {3};
+                \node[vertex] (4) at (1.8,0.5) {4};
+                \node[vertex] (5) at (1.6,0) {5};
+            }
+            \only<4->{
+                \node[vertex] (3) at (2,0) {3};
+                \node[vertex] (4) at (1.6,0) {4};
+                \node[vertex] (5) at (1.2,0) {5};
+            }
+            \only<-2>{
+                \node[vertex] (6) at (0,-0.5) {6};
+            }
+            \only<3->{
+                \node[vertex] (6) at (0,1) {6};
+            }
+
+            \path[edge] (0) -- (1);
+            \path[edge] (0) -- (6);
+            \path[edge] (6) -- (2);
+            \path[edge] (1) -- (2);
+            \path[edge] (1) -- (3);
+            \path[edge] (1) -- (4);
+            \path[edge] (1) -- (5);
+
+            \onslide<5->{
+                \draw[color=vhilight] (0.4,1) ellipse (0.7cm and 0.3cm);
+                \draw[color=vhilight] (1.0,0) ellipse (1.5cm and 0.3cm);
+            }
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (1.5,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{20pt}
+    \bi
+        \item How do we check if a graph is bipartite?
+    \ei
+\end{frame}
+
+\begin{frame}{Bipartite graphs}
+    \vspace{10pt}
+    \bi
+        \item We want to check if we can split the vertices into these two groups
+        \item Take any vertex, and assume that it's in the first group
+        \item Then all of his neighbors must be in the second group
+        \item And then all of their neighbors must be in the first group
+        \item And so on...
+        \vspace{10pt}
+        \item We can do this with a simple depth-first search
+        \item If we ever find a contradiction (i.e.\ a vertex must both be in the first and second set), then the graph is not bipartite
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Bipartite graphs}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+vector<int> adj[1000];
+vector<int> side(1000, -1);
+bool is_bipartite = true;
+
+void check_bipartite(int u) {
+    for (int i = 0; i < adj[u].size(); i++) {
+        int v = adj[u][i];
+        if (side[v] == -1) {
+            side[v] = 1 - side[u];
+            check_bipartite(v);
+        } else if (side[u] == side[v]) {
+            is_bipartite = false;
+        }
+    }
+}
+
+for (int u = 0; u < n; u++) {
+    if (side[u] == -1) {
+        side[u] = 0;
+        check_bipartite(u);
+    }
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}{Cliques in bipartite graphs}
+    \bi
+        \item ... well all maximum cliques have size 2
+    \ei
+\end{frame}
+
+\begin{frame}{Coloring bipartite graphs}
+    \bi
+        \item What if we want to find the minimum graph coloring of a bipartite graph?
+    \ei
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=1.8,auto,swap]
+            \onslide<-1>{
+                \node[vertex] (0) at (0,0) {0};
+                \node[vertex] (1) at (0.8,1) {1};
+                \node[vertex] (2) at (0.8,0) {2};
+                \node[vertex] (3) at (2,0) {3};
+                \node[vertex] (4) at (1.6,0) {4};
+                \node[vertex] (5) at (1.2,0) {5};
+                \node[vertex] (6) at (0,1) {6};
+            }
+            \onslide<2->{
+                \node[vertex1] (0) at (0,0) {0};
+                \node[vertex3] (1) at (0.8,1) {1};
+                \node[vertex1] (2) at (0.8,0) {2};
+                \node[vertex1] (3) at (2,0) {3};
+                \node[vertex1] (4) at (1.6,0) {4};
+                \node[vertex1] (5) at (1.2,0) {5};
+                \node[vertex3] (6) at (0,1) {6};
+            }
+
+            \path[edge] (0) -- (1);
+            \path[edge] (0) -- (6);
+            \path[edge] (6) -- (2);
+            \path[edge] (1) -- (2);
+            \path[edge] (1) -- (3);
+            \path[edge] (1) -- (4);
+            \path[edge] (1) -- (5);
+
+            \pgfresetboundingbox
+            \path [use as bounding box] (1.5,0) rectangle (1,1.2);
+        \end{tikzpicture}
+    \end{figure}
+
+    \vspace{20pt}
+    \bi
+        \item<2-> Simple, one side can be colored with one color, and the second side can be colored with a second color
+    \ei
+\end{frame}
+
+\begin{frame}{Bipartite matching}
+    \vspace{30pt}
+    \bi
+        \item Finding a maximum matching in bipartite graphs is very common
+      %  \item \textit{see example}
+      %      \vspace{10pt}
+        \item Next time we'll see an efficient algorithm for finding the maximum matching in a bipartite graph
+        \item Remember that an efficient algorithm (runtime $\leq O(n^3)$) for finding maximum matchings in large general graphs is not known
+    \ei
+\end{frame}
+
+\begin{frame}{König's theorem}
+    \vspace{10pt}
+    \bi
+        \item König's theorem states that the size of a minimum vertex cover in a bipartite graph is equal to the size of the maximum matching in that graph
+        \vspace{10pt}
+        \item So to find the minimum vertex cover in a bipartite graph, we just find the maximum matching with our efficient algorithm, and we have our answer
+        \item And since the size of the maximum independent set is just the number of vertices minus the size of the minimum vertex cover, we can also compute the maximum independent set for a bipartite graph efficiently
+    \ei
+\end{frame}
+
+\begin{frame}{Trees}
+    \vspace{20pt}
+    \bi
+\item An undirected graph is a tree if it has no cycles
+    \vspace{10pt}
+\item Easy to check if a graph is a tree by checking if there are any backward edges in the depth-first search tree (see previous lecture)
+\vspace{10pt}
+\item A connected tree with $n$ vertices has exactly $n-1$ edges
+\vspace{10pt}
+\item Between each pair of vertices $u,v$ in the tree, there exists exactly one simple path, which can be found with depth-first search (or breadth-first search)
+    \ei
+\end{frame}
+
+\begin{frame}{Trees}
+    \vspace{10pt}
+    \bi
+\item What if we look at these problems for trees?
+    \vspace{10pt}
+\item How do we find the minimum number of colors needed to color a tree?
+
+    \onslide<2->{
+        \vspace{10pt}
+        \item Well, trees are actually bipartite graphs...
+        \item Why? Pick some vertex and make it the root of the tree. Then vertices at even heights in the tree can be put on one side, and vertices at odd heights can be put on the other side
+        \vspace{10pt}
+        \item So all the efficient algorithms for bipartite graphs also work for trees
+    }
+    \ei
+\end{frame}
+
+\begin{frame}{Trees}
+    \vspace{30pt}
+    \bi
+        \item Trees are also well suited for dynamic programming, so many problems become simpler here because of that
+        \item Base case: a leaf (only one connected edge)
+        \item Recursive case: inner nodes (more then one connected edge)
+    \ei
+\end{frame}
+
+\begin{frame}{Directed acyclic graphs}
+    \vspace{20pt}
+    \bi
+        \item A directed graph is a directed acyclic graph if it doesn't contain any cycles
+    \vspace{10pt}
+\item Easy to check if a graph is a DAG by checking if there are any backward edges in the depth-first search tree (see previous lecture)
+    \vspace{10pt}
+\item Many problems are simple on DAGs, since it's easy to do dynamic programming over DAGs
+        \bi
+            \item counting number of simple paths from $u$ to $v$
+            \item longest simple path from $u$ to $v$
+        \ei
+    \ei
+\end{frame}
+
+
+% \begin{frame}{Cordal graphs}
+%     \bi
+% \item Cordal graphs are the \textbf{induced $C_i$-free} ($i \geq 4$) graphs
+%     \ei
+% 
+%     \vspace{20pt}
+%     \bi
+%         \item How do we check if a graph is bipartite?
+%     \ei
+% \end{frame}
+
 
 \end{document}
 
