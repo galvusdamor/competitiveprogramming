@@ -19,16 +19,16 @@
 
 % named colors
 \definecolor{offwhite}{RGB}{249,242,215}
-\definecolor{foreground}{RGB}{255,255,255}
-\definecolor{background}{RGB}{24,24,24}
+% \definecolor{foreground}{RGB}{255,255,255}
+\definecolor{foreground}{RGB}{0,0,0}
+% \definecolor{background}{RGB}{24,24,24}
+\definecolor{background}{RGB}{255,255,255}
 \definecolor{title}{RGB}{107,174,214}
-\definecolor{gray}{RGB}{155,155,155}
+\definecolor{gray}{RGB}{100,100,100}
 \definecolor{subtitle}{RGB}{102,255,204}
-\definecolor{hilight}{RGB}{102,255,204}
+\definecolor{hilight}{RGB}{20,180,204}
 \definecolor{vhilight}{RGB}{255,111,207}
 \definecolor{lolight}{RGB}{155,155,155}
-\definecolor{hilightlight}{RGB}{102,255,204}
-\definecolor{vhilightlight}{RGB}{255,111,207}
 %\definecolor{green}{RGB}{125,250,125}
 
 % use those colors
@@ -83,14 +83,14 @@
 
 % title info
 \title{Geometry}
-%\subtitle{Part 2}
-\author{Tómas Ken Magnússon\\Bjarki Ágúst Guðmundsson}
-\institute{\href{http://ru.is/td}{School of Computer Science} \\[2pt] \href{http://ru.is}{Reykjavík University}}
-\date{Árangursrík forritun og lausn verkefna}
+\author{Gregor Behnke}
+\institute{Institute of Artificial Intelligence\\ Ulm University}
+\date{\tiny based on Bjarki Ágúst Guðmundsson's and Tómas Ken Magnússon's\\Competitive Programming}
 % \date{\href{http://www.biostat.wisc.edu/~kbroman}{\tt \scriptsize biostat.wisc.edu/{\textasciitilde}kbroman}
 % \\[-4pt]
 % \href{http://github.com/kbroman}{\tt \scriptsize github.com/kbroman}
 % }
+
 
 
 % Tikz
@@ -285,20 +285,17 @@
 
 \begin{frame}[fragile]
   \begin{minted}{cpp}
-struct point {
-    double x, y;
-    point(double _x, double _y) { 
-        x = _x, y = _y;
-    }
+typedef double coord;
 
-    point operator+(const point &oth){
-        return point(x + oth.x, y + oth.y);
-    }
+struct pt{
+    coord x,y;
+    pt():x(0),y(0){};
+    pt(coord _x,coord _y):x(_x),y(_y){};
 
-    point operator-(const point &oth){
-        return point(x - oth.x, y - oth.y);
-    }
+    pt operator+(const pt& p) { return pt(x+p.x,y+p.y); }
+    pt operator-(const pt& p) { return pt(x-p.x,y-p.y); }
 };
+
   \end{minted}
 \end{frame}
 
@@ -400,14 +397,10 @@ typedef complex<double> point;
 \begin{frame}[fragile]
   \vspace{30pt}
   \begin{minted}{cpp}
-struct point {
-    ...
-    double distance(point oth = point(0,0)) const {
-        return sqrt(pow(x - oth.x, 2.0)
-                  + pow(y - oth.y, 2.0));
-    }
-    ...
+struct pt {
+    coord operator*(const pt& p) { return x*p.x+y*p.y; }
 }
+double len(pt p) { return sqrt(double(p*p)); }
   \end{minted}
   \onslide<2->
   \vspace{20pt}
@@ -654,24 +647,19 @@ pair<point,double>
 
 \begin{frame}[fragile]
   \vspace{20pt}
-  Rest of the code will use the \texttt{complex} class.
-  \footnotesize
+%   Rest of the code will use the \texttt{complex} class.
+%   \footnotesize
   \begin{minted}{cpp}
-#define P(p) const point &p
-#define L(p0, p1) P(p0), P(p1)
-double dot(P(a), P(b)) { 
-    return real(a) * real(b) + imag(a) * imag(b);
+
+struct pt {
+    ....
+    coord operator*(const pt& p) { return x*p.x+y*p.y; }
+    ....
 }
-double angle(P(a), P(b), P(c)) {
-    return acos(dot(b - a, c - b) / abs(b - a) / abs(c - b)); 
-}
-point closest_point(L(a, b), P(c), bool segment = false) {
-    if (segment) {
-        if (dot(b - a, c - b) > 0) return b;
-        if (dot(a - b, c - a) > 0) return a;
-    }
-    double t = dot(c - a, b - a) / norm(b - a);
-    return a + t * (b - a);
+
+pt closestpt(pt a0, pt a1, pt p) {
+    pt d=a1-a0;
+    return a0+(d*(d*(p-a0))/(d*d));
 }
   \end{minted}
 \end{frame}
@@ -846,11 +834,12 @@ point closest_point(L(a, b), P(c), bool segment = false) {
 double cross(P(a), P(b)) {
     return real(a)*imag(b) - imag(a)*real(x);
 }
-double ccw(P(a), P(b), P(c)) {
-    return cross(b - a, c - b);
-}
-bool collinear(P(a), P(b), P(c)) {
-    return abs(ccw(a, b, c)) < EPS;
+
+// 1=ccw, 0=straight, -1=cw
+int ccw(pt p0, pt p1, pt p2) {
+	coord d1 =(p1.x-p0.x)*(p2.y-p0.y);
+	coord d2 =(p2.x-p0.x)*(p1.y-p0.y);
+	return (d1-d2>eps)-(d2-d1>eps);
 }
   \end{minted}
 \end{frame}
@@ -1081,16 +1070,12 @@ int intersect(C(A, rA), C(B, rB), point & res1, point & res2) {
   %Very simple code.
   \footnotesize
   \begin{minted}{cpp}
-double polygon_area_signed(const vector<point> &p) {
-    double area = 0;
-    int cnt = size(p);
-    for (int i = 1; i + 1 < cnt; i++){
-        area += cross(p[i] - p[0], p[i + 1] - p[0])/2;
-    }
-    return area;
-}
-double polygon_area(vector<point> &p) {
-    return abs(polygon_area_signed(p));
+coord twoarea(vector<pt>& poly) {
+    int n = sz(poly);
+    coord ret = 0;
+    FOR(i,0,n)
+        ret += (poly[(i+1)%n].x-poly[i].x)*(poly[(i+1)%n].y+poly[i].y);
+    return abs(ret);
 }
   \end{minted}
 \end{frame}
@@ -1357,26 +1342,21 @@ double polygon_area(vector<point> &p) {
 \begin{frame}[fragile]
   \scriptsize
   \begin{minted}{cpp}
-point hull[MAXN];
-int convex_hull(vector<point> p) {
-    int n = size(p), l = 0;
-    sort(p.begin(), p.end(), cmp);
-    for (int i = 0; i < n; i++) {
-        if (i > 0 && p[i] == p[i - 1]) 
-            continue;
-        while (l >= 2 && ccw(hull[l - 2], hull[l - 1], p[i]) >= 0)
-            l--;
-        hull[l++] = p[i];
+vector<pt> convexhull(vector<pt> poly) {
+    int n = sz(poly), k = 0;
+    vector<pt> h(2*n);
+    sort(all(poly));
+    FOR(i,0,n) {
+        while (k > 1 && ccw(h[k-2], h[k-1], poly[i]) <= 0) k--;
+        h[k++] = poly[i];
     }
-    int r = l;
-    for (int i = n - 2; i >= 0; i--) {
-        if (p[i] == p[i + 1])
-            continue;
-        while (r - l >= 1 && ccw(hull[r - 2], hull[r - 1], p[i]) >= 0)
-            r--;
-        hull[r++] = p[i];
+    int t=k;
+    FORD(i,0,n-1) {
+        while (k>t && ccw(h[k-2], h[k-1], poly[i]) <= 0) k--;
+        h[k++] = poly[i];
     }
-    return l == 1 ? 1 : r - 1;
+    h.resize(k>1 ? k-1 : k);
+    return h;
 }
   \end{minted}
 \end{frame}
@@ -1632,12 +1612,6 @@ int convex_hull(vector<point> p) {
   \ei
 \end{frame}
 
-\begin{frame}{}
-  \vspace{30pt}
-  Takk fyrir önnina! \\
-  \vspace{15pt}
-  Gangi ykkur vel og góða skemmtun í prófinu á morgun!
-\end{frame}
 
 % TODO: MAYBE Floating point IF NOT COVERED
 % TODO: Point representation
