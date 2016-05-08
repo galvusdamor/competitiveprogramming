@@ -102,7 +102,7 @@
 
 % Minted
 \usepackage{minted}
-\usemintedstyle{monokai}
+\usemintedstyle{tango}
 \newminted{cpp}{fontsize=\footnotesize}
 
 % Graph styles
@@ -145,7 +145,8 @@
     %\tableofcontents[hideallsubsections]
     \bi
       \item Geometry
-      \item Computational geometry
+      \item Computational geometry \pause
+      \item Only 2D-Geometry, 3D is similar just with one more dimension
     \ei
 \end{frame}
 
@@ -286,17 +287,45 @@
 \begin{frame}[fragile]
   \begin{minted}{cpp}
 typedef double coord;
-
 struct pt{
     coord x,y;
     pt():x(0),y(0){};
     pt(coord _x,coord _y):x(_x),y(_y){};
-
-    pt operator+(const pt& p) { return pt(x+p.x,y+p.y); }
-    pt operator-(const pt& p) { return pt(x-p.x,y-p.y); }
+    pt operator+(const pt& p) {
+        return pt(x+p.x,y+p.y);
+    }
+    pt operator-(const pt& p) {
+        return pt(x-p.x,y-p.y);
+    }
+    coord operator*(const pt& p) {
+        return x*p.x+y*p.y;
+    }
 };
-
+double len(pt p) { return sqrt(double(p*p)); }
   \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+  \bi
+  	\item Points and vectors can also be represented by \emph{polar coordinates}
+  	$(r,\phi)$
+  	\bi
+  		\item $r$ -- distance of the point from $(0,0)$
+  		\item $\phi$ -- angle of the point from the positive x-axis
+  	\ei
+  	\item computing $r$ is easy -- \texttt{len(x)}
+  	\item what abount $\phi$? \pause
+  	\[\phi = \begin{cases}
+  			\arctan \frac{y}{x} &\text{für } x > 0 \\
+  			\arctan \frac{y}{x} + \pi &\text{für } x < 0, y \geq 0 \\
+  			\arctan \frac{y}{x} -\pi &\text{für } x > 0, y < 0\\
+  			\frac{\pi}{2} &\text{für } x = 0, y > 0 \\
+  			-\frac{\pi}{2} &\text{für } x = 0, y < 0 \\
+  			0 &\text{für } x = 0, y = 0 \\
+  		\end{cases}\]
+  		\pause
+  	\item $\phi = \texttt{atan2}(x,y)$
+  \ei
 \end{frame}
 
 \begin{frame}[fragile]
@@ -334,205 +363,6 @@ typedef complex<double> point;
     \item \mintinline{cpp}{double sin(p)}, \mintinline{cpp}{double cos(p)}, \mintinline{cpp}{double tan(p)}, trigonometric
       functions.
   \ei
-\end{frame}
-
-\subsection{Lines and line segments}
-\begin{frame}[fragile]
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      \begin{figure}
-        \footnotesize
-        \begin{tikzpicture}
-          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
-          \draw[thick, ->] (1,1) -- (0,1);
-          \draw[thick, ->] (1,1) -- (5,1);
-          \draw[thick, ->] (1,1) -- (1,0);
-          \draw[thick, ->] (1,1) -- (1,5);
-          \visible<1>{
-            \draw[hilight,fill] (1.5,3) circle[radius=2pt];
-            %\draw (1.5,3) node[anchor=south] {\scriptsize$(1,4)$};
-            \draw[hilight,fill] (4,2) circle[radius=2pt];
-            %\draw (4,2) node[anchor=north west] {\scriptsize$(6,2)$};
-            \draw[hilight,thick] (1.5,3) -- (4,2);
-          }
-
-          \visible<1-2>{
-            \draw[hilight,fill] (2.5,1.5) circle[radius=2pt];
-            \draw[hilight,fill] (4.5,4.5) circle[radius=2pt];
-            \draw[hilight,thick] (2.5,1.5) -- (4.5,4.5);
-          }
-
-          \visible<2>{
-            \draw (2.5,1.5) node[anchor=north west] {{\color{hilight}$p_0$}};
-            \draw (4.5,4.5) node[anchor=north west] {{\color{hilight}$p_1$}};
-            \draw[vhilight,very thick,->] (1,1) -- (3,4);
-            \draw (3,4) node[anchor=south east] {{\color{vhilight}$p_1 - p_0$}};
-          }
-
-          \visible<3>{
-            \draw[title,very thick] (1,1) -- (3,1);
-            \draw[title,very thick] (3,1) -- (3,4);
-            \draw[vhilight,very thick,->] (1,1) -- (3,4);
-            \draw (3,4) node[anchor=south east] {{\color{vhilight}$p_1 - p_0$}};
-          }
-        \end{tikzpicture}
-      \end{figure}
-    \end{column}
-    \begin{column}{0.55\textwidth}
-      \bi
-        \item Line segments are represented by a pair of points, $((x_0,y_0), (x_1,y_1))$.
-        \onslide<2->
-        \item Distance between two points is the length of the line segment or vector between the points.
-          \onslide<3->
-          \begin{align*}
-            d((x_0, &y_0), (x_1,y_1)) \\
-            &= \lvert(x_1 - x_0, y_1 - y_0)\rvert \\
-            &= \sqrt{(x_1 - x_0)^2 + (y_1 - y_0)^2}
-          \end{align*}
-      \ei
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]
-  \vspace{30pt}
-  \begin{minted}{cpp}
-struct pt {
-    coord operator*(const pt& p) { return x*p.x+y*p.y; }
-}
-double len(pt p) { return sqrt(double(p*p)); }
-  \end{minted}
-  \onslide<2->
-  \vspace{20pt}
-  Or use the \texttt{abs} function with \texttt{complex<double>}.
-\end{frame}
-
-\begin{frame}[fragile]
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      \begin{figure}
-        \footnotesize
-        \begin{tikzpicture}
-          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
-          \draw[thick, ->] (1,1) -- (0,1);
-          \draw[thick, ->] (1,1) -- (5,1);
-          \draw[thick, ->] (1,1) -- (1,0);
-          \draw[thick, ->] (1,1) -- (1,5);
-
-          \draw[hilight,fill] (2,3) circle[radius=2pt];
-          \draw[hilight,fill] (4,2) circle[radius=2pt];
-          \draw[hilight,thick] (2,3) -- (4,2);
-
-          \draw[hilight,fill] (2.5,1.5) circle[radius=2pt];
-          \draw[hilight,fill] (4,4.5) circle[radius=2pt];
-          \draw[hilight,thick] (2.5,1.5) -- (4,4.5);
-
-          \visible<2>{
-            \draw (4,2) node[anchor=north east] {{\color{vhilight}$q_1$}};
-            \draw (4,4.5) node[anchor=north west] {{\color{vhilight}$p_1$}};
-            \draw (2,3) node[anchor=south] {{\color{vhilight}$q_0$}};
-            \draw (2.5,1.5) node[anchor=north west] {{\color{vhilight}$p_0$}};
-          }
-          \visible<2->{
-            \draw[hilight,thick] (5,1.5) -- (0,4);
-            \draw[hilight,thick] (1.75,0) -- (4.25,5);
-
-            \draw[vhilight,fill] (2,3) circle[radius=2pt];
-            \draw[vhilight,fill] (4,2) circle[radius=2pt];
-
-            \draw[vhilight,fill] (2.5,1.5) circle[radius=2pt];
-            \draw[vhilight,fill] (4,4.5) circle[radius=2pt];
-          }
-
-          \visible<3->{
-            \draw[vhilight,fill] (4,2) circle[radius=2pt];
-            \draw[title,very thick,->] (2,3) -- (4,2);
-            \draw[vhilight,fill] (2,3) circle[radius=2pt];
-
-            \draw[vhilight,fill] (4,4.5) circle[radius=2pt];
-            \draw[title,very thick,->] (2.5,1.5) -- (4,4.5);
-            \draw[vhilight,fill] (2.5,1.5) circle[radius=2pt];
-
-            \draw (2,3) node[anchor=south] {{\color{vhilight}$p_1$}};
-            \draw (2.5,1.5) node[anchor=north west] {{\color{vhilight}$p_0$}};
-
-            \draw (3.5,3.5) node[anchor=west] {{\color{title}$\vec{r_0}$}};
-            \draw (4,2.3) node[anchor=south east] {{\color{title}$\vec{r_1}$}};
-          }
-        \end{tikzpicture}
-      \end{figure}
-    \end{column}
-    \begin{column}{0.6\textwidth}
-      %\vspace{20pt}
-      \bi
-        \item Line representation same as line segments.
-        \onslide<2->
-        \item Treat them as lines passing through the two points.
-        \onslide<3->
-        \item Or as a point and a direction vector.
-          \[
-            {\color{vhilight!70}p} + {\color{hilight!70}t} \cdot {\color{title!80}\vec{r}}
-          \]
-        \onslide<4->
-        \vspace{-10pt}
-        \item Either way
-          \begin{minted}{cpp}
-pair<point,point>
-          \end{minted}
-      \ei
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\subsection{Circles}
-\begin{frame}[fragile]
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      \begin{figure}
-        \footnotesize
-        \begin{tikzpicture}
-          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
-          \draw[thick, ->] (1,1) -- (0,1);
-          \draw[thick, ->] (1,1) -- (5,1);
-          \draw[thick, ->] (1,1) -- (1,0);
-          \draw[thick, ->] (1,1) -- (1,5);
-
-          \draw[hilight,thick] (2,2) circle[radius=1.5cm];
-          \draw[hilight,thick] (4,2.5) circle[radius=0.9cm];
-          %\draw (3,4) node[anchor=north west] {\scriptsize$(3,6)$};
-
-          \visible<2->{
-            \draw[title,fill] (2,2) circle[radius=2pt];
-            \draw (2,2) node[anchor=north] {$p_0$};
-            \draw[title,fill] (4,2.5) circle[radius=2pt];
-            \draw (4,2.5) node[anchor=north] {$p_1$};
-          }
-
-          \visible<3->{
-            %\draw (2,2) -- (0,10);
-            \draw[vhilight,very thick] (2,2) --  +(117:1.5cm) ;
-            \draw[vhilight,very thick] (4,2.5) --  +(117:0.9cm) ;
-            \draw (2,2.5) node[anchor=south] {$r_0$};
-            \draw (4,2.8) node[anchor=south] {$r_1$};
-          }
-        \end{tikzpicture}
-      \end{figure}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \vspace{20pt}
-      \bi
-        \item Circles are very easy to represent.
-        \onslide<2->
-        \item Center point ${\color{title!80}p = (x,y)}$.
-        \onslide<3->
-        \item And the radius ${\color{vhilight!70}r}$.
-        \onslide<4->
-        \begin{minted}{cpp}
-pair<point,double>
-        \end{minted}
-      \ei
-    \end{column}
-  \end{columns}
 \end{frame}
 
 \subsection{Dot product}
@@ -650,18 +480,15 @@ pair<point,double>
 %   Rest of the code will use the \texttt{complex} class.
 %   \footnotesize
   \begin{minted}{cpp}
-
-struct pt {
-    ....
-    coord operator*(const pt& p) { return x*p.x+y*p.y; }
-    ....
-}
-
 pt closestpt(pt a0, pt a1, pt p) {
     pt d=a1-a0;
     return a0+(d*(d*(p-a0))/(d*d));
 }
-  \end{minted}
+  \end{minted} 
+  \ \\ \pause
+  \bi
+ 	\item \textbf{Not} integer-safe
+  \ei
 \end{frame}
 \subsection{Cross product}
 \begin{frame}
@@ -831,20 +658,273 @@ pt closestpt(pt a0, pt a1, pt p) {
 \begin{frame}[fragile]
   \vspace{20pt}
   \begin{minted}{cpp}
-double cross(P(a), P(b)) {
-    return real(a)*imag(b) - imag(a)*real(x);
+double cross(pt a, pt b) {
+    return a.x*b.y - a.y*b.x;
 }
 
 // 1=ccw, 0=straight, -1=cw
 int ccw(pt p0, pt p1, pt p2) {
-	coord d1 =(p1.x-p0.x)*(p2.y-p0.y);
-	coord d2 =(p2.x-p0.x)*(p1.y-p0.y);
-	return (d1-d2>eps)-(d2-d1>eps);
+    coord d1 =(p1.x-p0.x)*(p2.y-p0.y);
+    coord d2 =(p2.x-p0.x)*(p1.y-p0.y);
+    return (d1-d2>eps)-(d2-d1>eps);
 }
-  \end{minted}
+  \end{minted} 
+  \ \\ \pause
+  \bi
+ 	\item Integer-safe
+  \ei
 \end{frame}
 
-\subsection{Intersections}
+\subsection{Lines and line segments}
+\begin{frame}[fragile]
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \footnotesize
+        \begin{tikzpicture}
+          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
+          \draw[thick, ->] (1,1) -- (0,1);
+          \draw[thick, ->] (1,1) -- (5,1);
+          \draw[thick, ->] (1,1) -- (1,0);
+          \draw[thick, ->] (1,1) -- (1,5);
+          \visible<1>{
+            \draw[hilight,fill] (1.5,3) circle[radius=2pt];
+            %\draw (1.5,3) node[anchor=south] {\scriptsize$(1,4)$};
+            \draw[hilight,fill] (4,2) circle[radius=2pt];
+            %\draw (4,2) node[anchor=north west] {\scriptsize$(6,2)$};
+            \draw[hilight,thick] (1.5,3) -- (4,2);
+          }
+
+          \visible<1-2>{
+            \draw[hilight,fill] (2.5,1.5) circle[radius=2pt];
+            \draw[hilight,fill] (4.5,4.5) circle[radius=2pt];
+            \draw[hilight,thick] (2.5,1.5) -- (4.5,4.5);
+          }
+
+          \visible<2>{
+            \draw (2.5,1.5) node[anchor=north west] {{\color{hilight}$p_0$}};
+            \draw (4.5,4.5) node[anchor=north west] {{\color{hilight}$p_1$}};
+            \draw[vhilight,very thick,->] (1,1) -- (3,4);
+            \draw (3,4) node[anchor=south east] {{\color{vhilight}$p_1 - p_0$}};
+          }
+
+          \visible<3>{
+            \draw[title,very thick] (1,1) -- (3,1);
+            \draw[title,very thick] (3,1) -- (3,4);
+            \draw[vhilight,very thick,->] (1,1) -- (3,4);
+            \draw (3,4) node[anchor=south east] {{\color{vhilight}$p_1 - p_0$}};
+          }
+        \end{tikzpicture}
+      \end{figure}
+    \end{column}
+    \begin{column}{0.55\textwidth}
+      \bi
+        \item Line segments are represented by a pair of points, $((x_0,y_0), (x_1,y_1))$.
+        \onslide<2->
+        \item Distance between two points is the length of the line segment or vector between the points.
+          \onslide<3->
+          \begin{align*}
+            d((x_0, &y_0), (x_1,y_1)) \\
+            &= \lvert(x_1 - x_0, y_1 - y_0)\rvert \\
+            &= \texttt{len(x-y)}
+          \end{align*}
+      \ei
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \footnotesize
+        \begin{tikzpicture}
+          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
+          \draw[thick, ->] (1,1) -- (0,1);
+          \draw[thick, ->] (1,1) -- (5,1);
+          \draw[thick, ->] (1,1) -- (1,0);
+          \draw[thick, ->] (1,1) -- (1,5);
+            \draw[hilight,fill] (1.5,3) circle[radius=2pt];
+            \draw[hilight,fill] (2.75,2.5) circle[radius=2pt];
+            %\draw (1.5,3) node[anchor=south] {\scriptsize$(1,4)$};
+            \draw[hilight,fill] (4,2) circle[radius=2pt];
+            %\draw (4,2) node[anchor=north west] {\scriptsize$(6,2)$};
+            \draw[hilight,thick] (1.5,3) -- (4,2);
+        \end{tikzpicture}
+      \end{figure}
+    \end{column}
+    \begin{column}{0.55\textwidth}
+      \bi
+        \item Given a segment $(\vec{x_1},\vec{x_2})$ and a point $\vec p$.
+        Is the point on the segment? \pause
+        \item Only possible if $\texttt{ccw} = 0$
+        \item $\vec{p}$'s x-Coordinate must be between $\vec{x_1}$'s and $\vec{x_2}$'s
+        \item Same for the y-Coodinate
+      \ei
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \vspace{20pt}
+  \begin{minted}{cpp}
+// 0 = no, 1= on-end-point, 2=strict
+int isPointOnSegment(pt p, pt a0, pt a1) {
+    if(ccw(a0,a1,p)) return 0;
+    coord cx = (p.x-a0.x)*(p.x-a1.x);
+    coord cy = (p.y-a0.y)*(p.y-a1.y);
+    if(cx > eps || cy > eps) return 0;
+    if(cx < -eps || cy < -eps) return 2;
+    return 1;
+}
+  \end{minted} 
+  \ \\ \pause
+  \bi
+ 	\item Integer-safe
+  \ei
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \footnotesize
+        \begin{tikzpicture}
+          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
+          \draw[thick, ->] (1,1) -- (0,1);
+          \draw[thick, ->] (1,1) -- (5,1);
+          \draw[thick, ->] (1,1) -- (1,0);
+          \draw[thick, ->] (1,1) -- (1,5);
+          
+          \draw[hilight,fill] (2,3) circle[radius=2pt];
+          \draw[hilight,fill] (4,2) circle[radius=2pt];
+          \draw[hilight,thick] (2,3) -- (4,2);
+
+          \draw[hilight,fill] (2.5,1.5) circle[radius=2pt];
+          \draw[hilight,fill] (4,4.5) circle[radius=2pt];
+          \draw[hilight,thick] (2.5,1.5) -- (4,4.5);        \end{tikzpicture}
+      \end{figure}
+    \end{column}
+    \begin{column}{0.55\textwidth}
+      \bi
+        \item Given two segments $(\vec{x_1},\vec{x_2})$ and $(\vec{y_1},\vec{y_2})$.
+        Do they intersect?
+        \item Use \texttt{isPointOnSegment} and \texttt{ccw}
+      \ei
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+  \vspace{20pt}
+  \begin{minted}{cpp}
+// 0 = none, 1=on-end-point, 2=strict
+bool isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
+    int c1=ccw(a0,a1,b0);
+    int c2=ccw(a0,a1,b1);
+    int c3=ccw(b0,b1,a0);
+    int c4=ccw(b0,b1,a1);
+    if(c1*c2>0 || c3*c4>0) return 0;
+    if(!c1 && !c2 && !c3 && !c4) {
+        c1=isPointOnSegment(a0,b0,b1);
+        c2=isPointOnSegment(a1,b0,b1);
+        c3=isPointOnSegment(b0,a0,a1);
+        c4=isPointOnSegment(b1,a0,a1);
+        if(c1 && c2 && c3 && c4) return 1+(a0.x!=a1.x || a0.y!=a1.y);
+        return max(max(c1,c2),max(c3,c4));
+    }
+    return 1+(!min(c1,c2) || !min(c3,c4));
+}
+  \end{minted} 
+  \ \\ \pause
+  \bi
+ 	\item Integer-safe
+  \ei
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \footnotesize
+        \begin{tikzpicture}
+          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
+          \draw[thick, ->] (1,1) -- (0,1);
+          \draw[thick, ->] (1,1) -- (5,1);
+          \draw[thick, ->] (1,1) -- (1,0);
+          \draw[thick, ->] (1,1) -- (1,5);
+
+          \draw[hilight,fill] (2,3) circle[radius=2pt];
+          \draw[hilight,fill] (4,2) circle[radius=2pt];
+          \draw[hilight,thick] (2,3) -- (4,2);
+
+          \draw[hilight,fill] (2.5,1.5) circle[radius=2pt];
+          \draw[hilight,fill] (4,4.5) circle[radius=2pt];
+          \draw[hilight,thick] (2.5,1.5) -- (4,4.5);
+
+          \visible<2>{
+            \draw (4,2) node[anchor=north east] {{\color{vhilight}$q_1$}};
+            \draw (4,4.5) node[anchor=north west] {{\color{vhilight}$p_1$}};
+            \draw (2,3) node[anchor=south] {{\color{vhilight}$q_0$}};
+            \draw (2.5,1.5) node[anchor=north west] {{\color{vhilight}$p_0$}};
+          }
+          \visible<2->{
+            \draw[hilight,thick] (5,1.5) -- (0,4);
+            \draw[hilight,thick] (1.75,0) -- (4.25,5);
+
+            \draw[vhilight,fill] (2,3) circle[radius=2pt];
+            \draw[vhilight,fill] (4,2) circle[radius=2pt];
+
+            \draw[vhilight,fill] (2.5,1.5) circle[radius=2pt];
+            \draw[vhilight,fill] (4,4.5) circle[radius=2pt];
+          }
+
+          \visible<3->{
+            \draw[vhilight,fill] (4,2) circle[radius=2pt];
+            \draw[title,very thick,->] (2,3) -- (4,2);
+            \draw[vhilight,fill] (2,3) circle[radius=2pt];
+
+            \draw[vhilight,fill] (4,4.5) circle[radius=2pt];
+            \draw[title,very thick,->] (2.5,1.5) -- (4,4.5);
+            \draw[vhilight,fill] (2.5,1.5) circle[radius=2pt];
+
+            \draw (2,3) node[anchor=south] {{\color{vhilight}$p_1$}};
+            \draw (2.5,1.5) node[anchor=north west] {{\color{vhilight}$p_0$}};
+
+            \draw (3.5,3.5) node[anchor=west] {{\color{title}$\vec{r_0}$}};
+            \draw (4,2.3) node[anchor=south east] {{\color{title}$\vec{r_1}$}};
+          }
+        \end{tikzpicture}
+      \end{figure}
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      %\vspace{20pt}
+      \bi
+        \item Line representation same as line segments.
+        \onslide<2->
+        \item Treat them as lines passing through the two points.
+        \onslide<3->
+        \item Or as a point and a direction vector.
+          \[
+            {\color{vhilight!70}p} + {\color{hilight!70}t} \cdot {\color{title!80}\vec{r}}
+          \]
+        \onslide<4->
+        \vspace{-10pt}
+        \item Either way
+          \begin{minted}{cpp}
+pair<point,point>
+          \end{minted}
+      \ei
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
 \begin{frame}
   Very common task is to find the intersection of two lines or line segments.
   \bi
@@ -881,6 +961,79 @@ int ccw(pt p0, pt p1, pt p2) {
     D = A_0 \cdot B_1 - A_1 \cdot B_0
   \]
 \end{frame}
+
+\begin{frame}[fragile]
+  \vspace{20pt}
+  \begin{minted}{cpp}
+// (oo,0)=same, (oo,_)=parallel, (x,y)=point
+pt lineIntersect(pt a0, pt a1, pt b0, pt b1) {
+    pt d13=a0-b0;
+    pt d43=b1-b0;
+    pt d21=a1-a0;
+    coord un = d43.x*d13.y - d43.y*d13.x;
+    coord ud = d43.y*d21.x - d43.x*d21.y;
+    if(abs(ud)<eps) return pt(oo,un);
+    return pt(a0.x + un*d21.x/ud, a0.y + un*d21.y/ud);
+}
+  \end{minted} 
+  \ \\ \pause
+  \bi
+ 	\item \textbf{Not} integer-safe
+  \ei
+\end{frame}
+
+
+\subsection{Circles}
+\begin{frame}[fragile]
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \footnotesize
+        \begin{tikzpicture}
+          \draw[step=.5cm, very thin, foreground, opacity=0.2] (0,0) grid (5,5);
+          \draw[thick, ->] (1,1) -- (0,1);
+          \draw[thick, ->] (1,1) -- (5,1);
+          \draw[thick, ->] (1,1) -- (1,0);
+          \draw[thick, ->] (1,1) -- (1,5);
+
+          \draw[hilight,thick] (2,2) circle[radius=1.5cm];
+          \draw[hilight,thick] (4,2.5) circle[radius=0.9cm];
+          %\draw (3,4) node[anchor=north west] {\scriptsize$(3,6)$};
+
+          \visible<2->{
+            \draw[title,fill] (2,2) circle[radius=2pt];
+            \draw (2,2) node[anchor=north] {$p_0$};
+            \draw[title,fill] (4,2.5) circle[radius=2pt];
+            \draw (4,2.5) node[anchor=north] {$p_1$};
+          }
+
+          \visible<3->{
+            %\draw (2,2) -- (0,10);
+            \draw[vhilight,very thick] (2,2) --  +(117:1.5cm) ;
+            \draw[vhilight,very thick] (4,2.5) --  +(117:0.9cm) ;
+            \draw (2,2.5) node[anchor=south] {$r_0$};
+            \draw (4,2.8) node[anchor=south] {$r_1$};
+          }
+        \end{tikzpicture}
+      \end{figure}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \vspace{20pt}
+      \bi
+        \item Circles are very easy to represent.
+        \onslide<2->
+        \item Center point ${\color{title!80}p = (x,y)}$.
+        \onslide<3->
+        \item And the radius ${\color{vhilight!70}r}$.
+        \onslide<4->
+        \begin{minted}{cpp}
+pair<point,double>
+        \end{minted}
+      \ei
+    \end{column}
+  \end{columns}
+\end{frame}
+
 
 \begin{frame}[fragile]
   Quite similar problem is to find the intersections of two circles.
@@ -1074,10 +1227,21 @@ coord twoarea(vector<pt>& poly) {
     int n = sz(poly);
     coord ret = 0;
     FOR(i,0,n)
-        ret += (poly[(i+1)%n].x-poly[i].x)*(poly[(i+1)%n].y+poly[i].y);
+        ret += (poly[(i+1)%n].x-poly[i].x)*
+               (poly[(i+1)%n].y+poly[i].y);
     return abs(ret);
 }
-  \end{minted}
+  \end{minted} 
+  \ \\ \pause
+  \bi
+  	\item Integer safe, returns double of the polygons area 
+  	\item Pick's theorem
+  	\bi
+  		\item $A = i + \frac{b}{2}-1$
+  		\item $i$ -- number of integer points inside the polygon
+  		\item $b$ -- number of integer points on the polygons perimeter
+  	\ei
+  \ei
 \end{frame}
 
 \subsection{Convex hull}
@@ -1142,7 +1306,7 @@ coord twoarea(vector<pt>& poly) {
     \item Otherwise, add the current point to the convex set.
   \ei
   \onslide<7->
-  Time complexity $O(N \log N)$.
+  Time complexity: \onslide<8-> $O(N \log N)$.
 \end{frame}
 
 \begin{frame}
@@ -1359,6 +1523,11 @@ vector<pt> convexhull(vector<pt> poly) {
     return h;
 }
   \end{minted}
+   \ \\ \pause \normalsize
+  \bi
+  	\item Integer-safe
+  	\item Uses Andrew's algorithm, which does not compute angles
+  \ei
 \end{frame}
 
 \begin{frame}
@@ -1591,6 +1760,73 @@ vector<pt> convexhull(vector<pt> poly) {
     \end{column}
   \end{columns}
 \end{frame}
+
+\begin{frame}[fragile]
+  \vspace{20pt}
+  \begin{minted}{cpp}
+// 0=outside, 1=edge, 2=inside
+int isInside(pt p, vector<pt>& poly) {
+    int numAbove = 0;
+    int numIntersects = 0;
+    FOR(i,0,sz(poly)) {
+        pt p0 = poly[i];
+        pt p1 = poly[(i+1)%sz(poly)];
+        if(isPointOnSegment(p,p0,p1)) return 1;
+        if(p0.y-p.y<=eps && p1.y-p.y<=eps) continue;
+        if(p0.y-p.y>eps && p1.y-p.y>eps) continue;
+        pt d=p-p0;
+        pt d1=p1-p0;
+        if(d1.y < 0) d1.y*=-1, d.y*=-1;
+        if(d.y*d1.x > d.x*d1.y) {
+            if((p0.y-p.y) * (p1.y-p.y) < 0) numIntersects++;
+            else  numAbove++;
+        }
+    }
+    return (((numIntersects+(numAbove%2))%2) != 0 ? 2 : 0);
+}
+  \end{minted}
+  \ \\
+  \bi
+  	\item \textbf{Not} integer-safe
+  \ei
+\end{frame}
+
+
+\subsection{Polygon intersection}
+\begin{frame}
+  \vspace{40pt}
+  \bi
+    \item The intersection of two convex polygons is always convex
+  \ei
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \scriptsize
+  \begin{minted}{cpp}
+vector<pt> intersect(vector<pt>& p1, vector<pt>& p2) {
+    vector<pt> tmp;
+    FORIT(it,p1) if(isInside(*it,p2))
+        tmp.push_back(*it);
+    FORIT(it,p2) if(isInside(*it,p1))
+        tmp.push_back(*it);
+    FOR(i,0,sz(p1)) FOR(j,0,sz(p2))
+        if(isSegmentIntersect(p1[i],p1[(i+1)%sz(p1)],
+             p2[j],p2[(j+1)%sz(p2)])) {
+        pt in = lineIntersect(p1[i],p1[(i+1)%sz(p1)],
+                              p2[j],p2[(j+1)%sz(p2)]);
+        if(abs(in.x-oo)>eps) tmp.push_back(in);
+    }
+    return convexhull(tmp); // strict
+}
+  \end{minted}
+  \ \\ \pause \normalsize
+  \bi
+  	\item \textbf{Not} integer-safe
+  \ei
+\end{frame}
+
+
 
 \subsection{Closest pair of points}
 \begin{frame}
