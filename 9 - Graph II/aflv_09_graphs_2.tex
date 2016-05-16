@@ -115,7 +115,7 @@
         \item Shortest paths
         % \item Transitive closure
         % \item Minimax/maximin
-        \item Some known graph problems
+       % \item Some known graph problems
         \item Maximum flow
       
         % - Minimum spanning tree (and variants)
@@ -267,14 +267,9 @@ vector<edge> mst(int n, vector<edge> edges) {
     sort(edges.begin(), edges.end(), edge_cmp);
 
     vector<edge> res;
-    for (int i = 0; i < edges.size(); i++) {
-        int u = edges[i].u,
-            v = edges[i].v;
-
-        if (uf.find(u) != uf.find(v)) {
-            uf.unite(u, v);
-            res.push_back(edges[i]);
-        }
+    FORIT(e,edges) if (uf.find(e->u) != uf.find(e->v)) {
+        uf.unite(e->u, e->v);
+        res.push_back(*e);
     }
 
     return res;
@@ -319,28 +314,48 @@ vector<edge> mst(int n, vector<edge> edges) {
 
 \begin{frame}[fragile]{Dijkstra's algorithm}
     \begin{minted}[fontsize=\scriptsize]{cpp}
-vector<edge> adj[100];
-vector<int> dist(100, INF);
+vector<edge> adj[1000];
+int dist[1000];
 
 void dijkstra(int start) {
+    FOR(i,0,1000) dist[i] = oo;
     dist[start] = 0;
-    priority_queue<pair<int, int>,
-                   vector<pair<int, int> >,
-                   greater<pair<int, int> > > pq;
+    
+    priority_queue<pii, vector<pii>, greater<pii> > pq;
     pq.push(make_pair(dist[start], start));
 
     while (!pq.empty()) {
         int u = pq.top().second;
         pq.pop();
 
-        for (int i = 0; i < adj[u].size(); i++) {
-            int v = adj[u][i].v;
-            int w = adj[u][i].weight;
+        FORIT(i,adj[u]) if (i->weight + dist[u] < dist[i->v]) {
+            dist[i->v] = i->weight + dist[u];
+            pq.push(make_pair(dist[i->v], i->v));
+        }
+    }
+}
+    \end{minted}
+\end{frame}
 
-            if (w + dist[u] < dist[v]) {
-                dist[v] = w + dist[u];
-                pq.push(make_pair(dist[v], v));
-            }
+\begin{frame}[fragile]{Dijkstra's algorithm}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+vector<edge> adj[1000];
+int dist[1000];
+
+void dijkstra(int start) {
+    FOR(i,0,1000) dist[i] = oo;
+    dist[start] = 0;
+    
+    priority_queue<pii> pq;
+    pq.push(make_pair(-dist[start], start));
+
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+
+        FORIT(i,adj[u]) if (i->weight + dist[u] < dist[i->v]) {
+            dist[i->v] = i->weight + dist[u];
+            pq.push(make_pair(-dist[i->v], i->v));
         }
     }
 }
@@ -360,18 +375,9 @@ void dijkstra(int start) {
 \begin{frame}[fragile]{Bellman-Ford algorithm}
     \begin{minted}[fontsize=\footnotesize]{cpp}
 void bellman_ford(int n, int start) {
-
     dist[start] = 0;
-
-    for (int i = 0; i < n - 1; i++) {
-        for (int u = 0; u < n; u++) {
-            for (int j = 0; j < adj[u].size(); j++) {
-                int v = adj[u][j].v;
-                int w = adj[u][j].weight;
-                dist[v] = min(dist[v], w + dist[u]);
-            }
-        }
-    }
+    FOR(round,0,n-1) FOR(u,0,n) FORIT(e, adj[u])
+        dist[e->v] = min(dist[e->v], e->weight + dist[u]);
 }
     \end{minted}
 \end{frame}
@@ -412,19 +418,10 @@ int dist[1000][1000];
 int weight[1000][1000];
 
 void floyd_warshall(int n) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            dist[i][j] = i == j ? 0 : weight[i][j];
-        }
-    }
+    FOR(i,0,n) FOR(j,0,n) dist[i][j] = i == j ? 0 : weight[i][j];
 
-    for (int k = 0; k < n; k++) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
-            }
-        }
-    }
+    FOR(k,0,n) FOR(i,0,n) FOR(j,0,n)
+        dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
 }
     \end{minted}
 \end{frame}
@@ -440,24 +437,10 @@ void floyd_warshall(int n) {
     \ei
 \end{frame}
 
-
-\begin{frame}{Floyd-Warshall algorithm}
-    \vspace{40pt}
-    \bi
-\item Computes all-pairs shortest paths
-\item Time complexity is clearly $O(n^3)$
-\item Very simple to code
-    \vspace{10pt}
-\item Can also be used backwards to remove transitive edges
-    \ei
-\end{frame}
-
-
-
 \begin{frame}{Maximum Flow}
     \bi
-\item Given a weighted graph $G = (V,E,c)$ and two vertices $s,t$, how much can be ''transported'' from $s$ to $t$
-\item Weights are called capacities
+\item Given a weighted graph $G = (V,E,c)$, two vertices $s,t$ and a capacity function $c$
+\item How much can be ''transported'' from $s$ to $t$?
 \item Solution is a flow function $f : E \rightarrow \mathbb R_{\geq 0}$ where
   \bi
     \item $c((u,v)) \geq f((u,v)) \quad \quad\quad\quad \quad \forall (u,v) \in E$
@@ -467,7 +450,7 @@ void floyd_warshall(int n) {
   \vspace{10pt} \pause
   \item Min-cut:
   \bi
-    \item Find a subset $C'\subset E$ with minimum weight (summed capacity) such that $s$ and $t$ are not connected any more
+    \item Find a subset $C'\subseteq E$ with minimum weight (summed capacity) such that $s$ and $t$ are not connected any more
   \ei
   \vspace{10pt} \pause
   \item Max-Flow = Min-Cut
@@ -723,6 +706,60 @@ void floyd_warshall(int n) {
 	  \item Disjoint Paths
 	\ei
        \ei
+\end{frame}
+
+\begin{frame}{Bipartite Matching}
+	\bi
+		\item<3-> Max Flow $=$ Max Matching
+	\ei
+   \begin{figure}
+                \begin{tikzpicture}[scale=1.2,auto,swap]
+                    \node[vertex] (1) at (1,4) {1};
+                    \node[vertex] (2) at (1,3) {2};
+                    \node[vertex] (3) at (1,2) {3};
+                    \node[vertex] (4) at (1,1) {4};
+                    \node[vertex] (5) at (3,3) {5};
+                    \node[vertex] (6) at (3,2) {6};
+                    \node[vertex] (7) at (3,1) {7};
+
+                    \only<3>{
+                    	\node[vertex] (s) at (-1,2.5) {s};
+	                    \node[vertex] (t) at (5,2) {t};
+	                }
+
+                    \path[edge] (1) -- node[weight,right] {} (5);
+                    \only<1>{\path[edge] (2) -- node[weight,right] {} (5);}
+                    \only<2>{\path[selected edge] (2) -- node[weight,right] {} (5);}
+                    \path[edge] (2) -- node[weight,above] {} (6);
+                    \only<1>{\path[edge] (3) -- node[weight,left] {} (6);}
+                    \only<2>{\path[selected edge] (3) -- node[weight,left] {} (6);}
+                    \path[edge] (3) -- node[weight,left] {} (7);
+                    \only<1>{\path[edge] (4) -- node[weight,right] {} (7);}
+                    \only<2>{\path[selected edge] (4) -- node[weight,right] {} (7);}
+                    \path[edge] (4) -- node[weight,right] {} (6);
+
+
+					\only<3>{
+						\path[edge,->] (s) -- node[weight,right] {} (1);
+						\path[edge,->] (s) -- node[weight,right] {} (2);
+						\path[edge,->] (s) -- node[weight,right] {} (3);
+						\path[edge,->] (s) -- node[weight,right] {} (4);
+						
+                    	\path[edge,->] (1) -- node[weight,right] {} (5);
+                    	\path[edge,->] (2) -- node[weight,right] {} (5);
+                    	\path[edge,->] (2) -- node[weight,above] {} (6);
+                   		\path[edge,->] (3) -- node[weight,left] {} (6);
+                   		\path[edge,->] (3) -- node[weight,left] {} (7);
+                   		\path[edge,->] (4) -- node[weight,right] {} (7);
+                    	\path[edge,->] (4) -- node[weight,right] {} (6);
+                    	
+                    	\path[edge,->] (5) -- node[weight,right] {} (t);
+                    	\path[edge,->] (6) -- node[weight,right] {} (t);
+                    	\path[edge,->] (7) -- node[weight,right] {} (t);
+                    }
+
+                \end{tikzpicture}
+            \end{figure}      
 \end{frame}
 
 \end{document}
