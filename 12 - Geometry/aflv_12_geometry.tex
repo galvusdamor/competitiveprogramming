@@ -457,7 +457,7 @@ typedef complex<double> point;
         \only<2>{
           \item And the projection of $\vec v$ onto $\vec u$.
             \[
-              \vec{v}_{\vec{u}} = \left(\frac{\vec{u}\cdot\vec{v}}{\lvert u \rvert}\right) \vec{u}
+              \vec{v}_{\vec{u}} = \left(\frac{\vec{u}\cdot\vec{v}}{\lvert \vec u \rvert}\right) \vec{u}
             \]
         }
         \only<3->{
@@ -821,6 +821,7 @@ int isPointOnSegment(pt p, pt a0, pt a1) {
 
 \begin{frame}[fragile]
   \vspace{20pt}
+  \scriptsize
   \begin{minted}{cpp}
 // 0 = none, 1=on-end-point, 2=strict
 bool isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
@@ -834,13 +835,14 @@ bool isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
         c2=isPointOnSegment(a1,b0,b1);
         c3=isPointOnSegment(b0,a0,a1);
         c4=isPointOnSegment(b1,a0,a1);
-        if(c1 && c2 && c3 && c4) return 1+(a0.x!=a1.x || a0.y!=a1.y);
+        if(c1 && c2 && c3 && c4)
+            return 1+(a0.x!=a1.x || a0.y!=a1.y);
         return max(max(c1,c2),max(c3,c4));
     }
     return 1+(!min(c1,c2) || !min(c3,c4));
 }
   \end{minted} 
-  \ \\ \pause
+  \ \\ \pause \normalsize
   \bi
  	\item Integer-safe
   \ei
@@ -1161,39 +1163,31 @@ int intersect(C(A, rA), C(B, rB), point & res1, point & res2) {
           \coordinate(F) at (1,1.5);
           \coordinate(G) at (-1,2);
 
+          \coordinate(Dm) at (2.85,2);
+          \coordinate(Em) at (2.85,4);
+
+          \coordinate(Ap) at (-1,0);
+          \coordinate(Bp) at (-1,0);
+          \coordinate(Cp) at (-1,1.2);
+          \coordinate(Dp) at (-1,2);
+          \coordinate(Ep) at (-1,4);
+          \coordinate(Fp) at (-1,1.5);
+          \coordinate(Gp) at (-1,2);
+
           \tkzDrawPolygon[color=foreground](A,B,C,D,E,F,G);
 
-          \visible<3->{
-            \draw[fill,hilight] (B) circle[radius=2pt];
+          \visible<3-5>{
+            \draw[fill,hilight] (E) circle[radius=2pt];
+            \draw[fill,hilight] (D) circle[radius=2pt];
           }
 
-          \visible<4>{
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](A,B,G);
-          }
-
-          \visible<5>{
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](B,G,F);
-          }
-
-          \visible<6>{
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](B,F,E);
-          }
-
-          \visible<7>{
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](B,E,D);
-          }
-
-          \visible<8>{
-            \tkzDrawPolygon[color=foreground,fill=vhilight,opacity=0.2,thin](B,D,C);
-          }
-
-          \visible<9>{
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](A,B,G);
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](B,G,F);
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](B,F,E);
-            \tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](B,E,D);
-            \tkzDrawPolygon[color=foreground,fill=vhilight,opacity=0.2,thin](B,D,C);
-          }
+          \visible<4>{\tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](E,D,Dp,Ep);}
+          \visible<5>{\tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](Em,Dm,Dp,Ep);}
+          \visible<6>{\tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](D,C,Cp,Dp);}
+          \visible<7>{\tkzDrawPolygon[color=foreground,fill=title,opacity=0.3,thin](C,B,Bp,Cp);}
+          \visible<8>{\tkzDrawPolygon[color=foreground,fill=red!30,opacity=0.3,thin](A,G,Gp,Ap);}
+          \visible<9>{\tkzDrawPolygon[color=foreground,fill=red!30,opacity=0.3,thin](G,F,Fp,Gp);}
+          \visible<10>{\tkzDrawPolygon[color=foreground,fill=red!30,opacity=0.3,thin](F,E,Ep,Fp);}
         \end{tikzpicture}
       \end{figure}
     \end{column}
@@ -1205,18 +1199,17 @@ int intersect(C(A, rA), C(B, rB), point & res1, point & res2) {
         \item To calculate the area
           \bi
             \onslide<3->
-            \item We pick one starting point.
+            \item Go clockwise through all edges of the polygon 
             \onslide<4->
-            \item Go through all the other adjacent pair of points and sum the
-              area of the triangulation.
+            \item Calculate the area of the polygone whose other side is the y-axis\only<5->{, by computing the area of the respective rectangle}
             \onslide<8->
-            \item Even if we sum up area outside the polygon, due to the cross
-              product, it is subtracted later.
+            \item Top-Down and Bottom-Up edges cancel the area outside the polygon out.
           \ei
       \ei
     \end{column}
   \end{columns}
 \end{frame}
+
 
 \begin{frame}[fragile]
   \vspace{20pt}
@@ -1762,7 +1755,8 @@ vector<pt> convexhull(vector<pt> poly) {
 \end{frame}
 
 \begin{frame}[fragile]
-  \vspace{20pt}
+%  \vspace{20pt}
+  \scriptsize
   \begin{minted}{cpp}
 // 0=outside, 1=edge, 2=inside
 int isInside(pt p, vector<pt>& poly) {
@@ -1785,7 +1779,7 @@ int isInside(pt p, vector<pt>& poly) {
     return (((numIntersects+(numAbove%2))%2) != 0 ? 2 : 0);
 }
   \end{minted}
-  \ \\
+  \ \\ \pause \normalsize
   \bi
   	\item \textbf{Not} integer-safe
   \ei
@@ -1828,25 +1822,48 @@ vector<pt> intersect(vector<pt>& p1, vector<pt>& p2) {
 
 
 
-\subsection{Closest pair of points}
+\subsection{3D Geometry}
 \begin{frame}
-  \vspace{20pt}
-  Given a set of points, we want to find the pair of points with the smallest distance between them. \\
-  \vspace{5pt}
-  Divide and conquer algorithm;
-  \bi
-    \onslide<2->
-    \item Sort points by the $x$-coordinate.
-    \onslide<3->
-    \item Split the set into two equal sized sets by the vertical line of the medial $x$ value.
-    \onslide<4->
-    \item Solve the problem recursively in the left and right subset.
-    \onslide<5->
-    \item Sort the two subsets by the $y$-coordinate.
-    \onslide<6->
-    \item Find the smallest distance among the pair of points which lie on different sides of the line.
-  \ei
+	\bi
+		\item Basically like 2D just with an additional dimension
+		\item Planes
+		\bi
+			\item Hesse normal form: $\vec{p}\cdot\vec{d} = r$
+			\item $\vec{d}$ -- normal vector of the plane
+			\item $r$ -- distance of the plane from the origin
+			\item Can also compute the distance to the plane
+		\ei
+		\item Spheres
+		\bi
+			\item Think in terms of polar coordinates ($\phi$,$\lambda$)
+			\item Great-circle distance
+			\[d = r \arccos\left(\sin \phi_1 \sin \phi_2 + \cos \phi_1 \cos \phi_2 \cos |\lambda_1 - \lambda_2|\right)\]
+		\ei
+		\item Euler's polyhedron formula
+			\[V + A - E = 2\]
+	\ei
 \end{frame}
+
+
+%\subsection{Closest pair of points}
+%\begin{frame}
+%  \vspace{20pt}
+%  Given a set of points, we want to find the pair of points with the smallest distance between them. \\
+%  \vspace{5pt}
+%  Divide and conquer algorithm;
+%  \bi
+%    \onslide<2->
+%    \item Sort points by the $x$-coordinate.
+%    \onslide<3->
+%    \item Split the set into two equal sized sets by the vertical line of the medial $x$ value.
+%    \onslide<4->
+%    \item Solve the problem recursively in the left and right subset.
+%    \onslide<5->
+%    \item Sort the two subsets by the $y$-coordinate.
+%    \onslide<6->
+%    \item Find the smallest distance among the pair of points which lie on different sides of the line.
+%  \ei
+%\end{frame}
 
 
 % TODO: MAYBE Floating point IF NOT COVERED

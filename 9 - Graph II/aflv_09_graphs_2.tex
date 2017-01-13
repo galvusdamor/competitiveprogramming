@@ -787,61 +787,61 @@ void floyd_warshall(int n) {
                   	\node[vertex] (s) at (-1,2) {s};
                     \node[vertex] (t) at (5,2) {t};
 
-					\only<1>{
-                    \path[edge] (s) -- node[weight,right] {} (1);
-                    \path[edge] (s) -- node[weight,right] {} (2);
-                    \path[edge] (s) -- node[weight,right] {} (6);
-                    \path[edge] (1) -- node[weight,right] {} (5);
-                    \path[edge] (1) -- node[weight,right] {} (3);
-                    \path[edge] (2) -- node[weight,right] {} (4);
-                    \path[edge] (3) -- node[weight,right] {} (5);
-                    \path[edge] (3) -- node[weight,right] {} (6);
-                    \path[edge] (4) -- node[weight,right] {} (6);
-                    \path[edge] (4) -- node[weight,right] {} (7);
-                    \path[edge] (5) -- node[weight,right] {} (6);
-                    \path[edge] (5) -- node[weight,right] {} (t);
-                    \path[edge] (6) -- node[weight,right] {} (t);
-                    \path[edge] (7) -- node[weight,right] {} (t);
-                    }
+					%\only<1>{
+                    %\path[edge] (s) -- node[weight,right] {} (1);
+                    %\path[edge] (s) -- node[weight,right] {} (2);
+                    %\path[edge] (s) -- node[weight,right] {} (6);
+                    %\path[edge] (1) -- node[weight,right] {} (5);
+                    %\path[edge] (1) -- node[weight,right] {} (3);
+                    %\path[edge] (2) -- node[weight,right] {} (4);
+                    %\path[edge] (3) -- node[weight,right] {} (5);
+                    %\path[edge] (3) -- node[weight,right] {} (6);
+                    %\path[edge] (4) -- node[weight,right] {} (6);
+                    %\path[edge] (4) -- node[weight,right] {} (7);
+                    %\path[edge] (5) -- node[weight,right] {} (6);
+                    %\path[edge] (5) -- node[weight,right] {} (t);
+                    %\path[edge] (6) -- node[weight,right] {} (t);
+                    %\path[edge] (7) -- node[weight,right] {} (t);
+                    %}
 
-					\only<2->{
-                    \only<2>{\path[edge,->] (s) -- node[weight,right] {} (1);}
-                    \only<3->{\path[selected edge,->] (s) -- node[weight,right] {} (1);}
+					\only<1->{
+                    \only<1>{\path[edge,->] (s) -- node[weight,right] {} (1);}
+                    \only<2->{\path[selected edge,->] (s) -- node[weight,right] {} (1);}
 
-                    \only<2>{\path[edge,->] (s) -- node[weight,right] {} (2);}
-                    \only<3->{\path[selected3 edge,->] (s) -- node[weight,right] {} (2);}
+                    \only<1>{\path[edge,->] (s) -- node[weight,right] {} (2);}
+                    \only<2->{\path[selected3 edge,->] (s) -- node[weight,right] {} (2);}
 
-                    \only<2>{\path[edge,->] (s) -- node[weight,right] {} (6);}
-                    \only<3->{\path[selected2 edge,->] (s) -- node[weight,right] {} (6);}
+                    \only<1>{\path[edge,->] (s) -- node[weight,right] {} (6);}
+                    \only<2->{\path[selected2 edge,->] (s) -- node[weight,right] {} (6);}
 
-                    \only<2>{\path[edge,->] (1) -- node[weight,right] {} (5);}
-                    \only<3->{\path[selected edge,->] (1) -- node[weight,right] {} (5);}
+                    \only<1>{\path[edge,->] (1) -- node[weight,right] {} (5);}
+                    \only<2->{\path[selected edge,->] (1) -- node[weight,right] {} (5);}
 
                     \path[edge,->] (1) -- node[weight,right] {} (3);
-                    \only<2>{ \path[edge,->] (2) -- node[weight,right] {} (4);}
-                    \only<3->{ \path[selected3 edge,->] (2) -- node[weight,right] {} (4);}
+                    \only<1>{ \path[edge,->] (2) -- node[weight,right] {} (4);}
+                    \only<2->{ \path[selected3 edge,->] (2) -- node[weight,right] {} (4);}
 
                     \path[edge,->] (3) -- node[weight,right] {} (5);
                     \path[edge,->] (3) -- node[weight,right] {} (6);
                     \path[edge,->] (4) -- node[weight,right] {} (6);
-                    \only<2>{\path[edge,->] (4) -- node[weight,right] {} (7);}
-                    \only<3->{\path[selected3 edge,->] (4) -- node[weight,right] {} (7);}
+                    \only<1>{\path[edge,->] (4) -- node[weight,right] {} (7);}
+                    \only<2->{\path[selected3 edge,->] (4) -- node[weight,right] {} (7);}
 
                     \path[edge,->] (5) edge[bend left=20] node[weight,right] {} (6);
                     \path[edge,->] (6) edge[bend left=20] node[weight,right] {} (5);
-                    \only<2>{\path[edge,->] (5) -- node[weight,right] {} (t);}
-                    \only<3->{\path[selected edge,->] (5) -- node[weight,right] {} (t);}
+                    \only<1>{\path[edge,->] (5) -- node[weight,right] {} (t);}
+                    \only<2->{\path[selected edge,->] (5) -- node[weight,right] {} (t);}
 
-                    \only<2>{\path[edge,->] (6) -- node[weight,right] {} (t);}
-                    \only<3->{\path[selected2 edge,->] (6) -- node[weight,right] {} (t);}
+                    \only<1>{\path[edge,->] (6) -- node[weight,right] {} (t);}
+                    \only<2->{\path[selected2 edge,->] (6) -- node[weight,right] {} (t);}
 
-                    \only<2>{\path[edge,->] (7) -- node[weight,right] {} (t);}
-                    \only<3->{\path[selected3 edge,->] (7) -- node[weight,right] {} (t);}
+                    \only<1>{\path[edge,->] (7) -- node[weight,right] {} (t);}
+                    \only<2->{\path[selected3 edge,->] (7) -- node[weight,right] {} (t);}
                     }
                 \end{tikzpicture}
             \end{figure}      
             \bi
-            	\item<4> Can also be used to find $k$ shortest disjoint paths. 
+            	\item<3> Can also be used to find $k$ shortest disjoint paths. 
             \ei
 \end{frame}
 
