@@ -1,0 +1,13 @@
+=> Contest Tactics
+three team members, only one computer, 5 hours, 8-10 problems
+coding time is crucial, always use the computer
+prepare all algorithms, maybe write pseudo-code to save time implementing it
+assign roles in the team, e.g.:
+-> one team member for coding, two for designing algorithms
+-> topics assigned to an expert
+don't debug in front of the computer, print the source code, debug manually, explain the code to a team member
+present solutions to each other to see bugs early on
+make an overview of the problems, rate difficulty and time consumption, find topics
+bring a team manual, most times ~30 pages
+submit everything in the last 10 minutes, penalties don't matter if problems can be solved
+discuss sample solutions of problems you didn't solve

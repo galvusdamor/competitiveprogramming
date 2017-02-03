@@ -1,0 +1,133 @@
+DATA STRUCTURES II
+
+BigIntegers
+
+. Problem: how to handle integers bigger than Integer.MAX_VALUE/Long.MAX_VALUE?
+. What do we do in real life (digits 0 to 9)?
+	// n = -123
+	n = { 
+	  sign: -1,
+	  digits: [3,2,1] // or [1,2,3] but then leading zeros may be required
+	}
+	number system with base b
+	digits 0 to b-1
+	value of digits a_s, ..., a_0: sign * sum i=0 to s a_i*b^i
+	EXAMPLE
+		12A_16 = 256_10 + 32_10 + 11_10 = 299_10
+. sum of two numbers x_s, ..., x_0, y_s, ..., y_0
+. carry: c_0 = 0, c_i = 1 if x_i-1 + y_i-1 + c_i-1 >= b else c_i = 0
+. sum has digits s_i = x_i + y_i + c_i % b
+. pay attention to the sign and handle special cases
+. product of two numbers sign_x x_s, ..., x_0, sign_y y_s, ..., y_0
+. sign_x*sign_y * sum i=0 to s sum j=0 to s b^(i+j)*x_i*y_j (grade school method)
+	product of digits: hash table, bigger data type or iterated sum
+. this is basically how Java's BigInteger class does it
+. others:
+	Toom-Cook multiplication ('63) [for intermediate-sized numbers, i.e., up to a few ten thousand digits]
+	Schönhage-Strassen algorithm ('71) [for large numbers, pratically best so far]
+	Fast Fourier Transform (FFT)
+	known lower and upper bounds do not match -> still work to do
+	whole conferences on multiplication
+. exponentiation: repeated squaring for large exponents
+	x^8 = x*x*x*x*x*x*x*x = ((x^2)^2)^2
+	-> only ceil(log(n)) multiplications for x^n
+
+. much more functions possible
+. implement as you know them from school
+
+. BigInteger: use b as a big number that fits into the integer data type
+. space optimal: b = maximum integer
+. easy for printing/calculating: b = 10^j as big as possible
+. easy for computing products of digits: use only half of the space available, then there are no overflows
+
+. this is much slower than native data types, use only when needed
+. most times, long is enough
+. Java: use BigInteger, (almost) everything built in
+. C++: write this class yourself or download it
+
+Rationals
+
+. common problem: rounding issues when using floating point numbers
+. avoid this by saving numbers as rationals if possible
+. exact calculations
+
+. rational: numerator/denominator = n/d
+. usual (grade school) calculation rules:
+	sum: a/b+n/m = (a*m+n*b)/(b*m)
+	difference: a/b-n/m = (a*m-n*b)/(b*m)
+	product a/b*n/m = (a*n)/(b*m)
+	quotient (a/b)/(n/m) = (a*m)/(b*n)
+
+. simplify rationals: divide n and d by gcd(n,d)
+. Euclidean Algorithm for gcd(a,b)
+	q1...qk, r0...r{k+1}
+	r0 = a, r1 = b
+	for r>1: find q_i and r_i s.t.
+		r_{i-2} = q_{i-1}*r_{i-1} + r_i until r_{k+1}=0
+	=> gcd(a,b) = r_k
+	EXAMPLE
+		516 = 3*138 + 102
+		138 = 1*102 +  36
+		102 = 2* 36 +  30
+		 36 = 1* 30 +   6
+		 30 = 5* 6  +   0
+		=> gcd(516,138) = 6
+. take care of zeros when using the denominator or gcd function (don't divide by 0)
+. use BigIntegers if needed => BigRational
+
+Decimals
+
+. when calculations involve irrational numbers, but precision is critical
+. similar ideas to BigInteger or BigRational for a BigDecimal class
+
+Tries
+
+. trie is part of retrieval, the origin of the name
+. pronunciation: as in "retrieval", or as in "try" (to distinguish from tree)
+
+. concept to save all kinds of data like a dictionary
+. EXAMPLE: trie, tree, trees, train, trust, try, catch
+		 eps
+	  /		  \
+	c			t
+	|			|
+	a	  		r
+	|	 /	 /	|  \   \
+	t	a	e	i	u	y*
+	|	|	|	|	|
+	c	i	e*	e*	s
+	|	|	|		|
+	h*	n*	s*		t*
+. root node: empty string
+. value of a node: letters along the path to the root
+. children for each letter that follows the current value
+. values of a trie: values of all marked nodes
+. compression: add multiple letters to an edge if there is only one possibility
+	good if trie is static
+	good for only lookups
+	good if set of keys is sparse
+
+. lookup/membership: O(m), m is the length of the word
+. construction: O(mn), n words
+. good at finding prefixes
+. find whether there is a word with a given prefix: O(m)
+. sorting (in a radix way) is easy: pre-order traversal
+	used in Burstsort (the fastest string sorting algorithm in '07)
+. suffix trees as a special case
+
+. implementation
+	naively: a child/pointer for each possibility (e.g. letter)
+		- bad for huge number of possibilities and/or sparse sets
+		- too much space allocated and not needed
+	model nodes as triples: key/symbol, child, next (link to the parent's next child, i.e. the right sibling)
+	model children as a binary search tree -> ternary search tree
+	model letters with bitmask -> longer paths, but smaller node size
+
+. may replace a hash table
+	+ no collision
+	+ no hash function
+	+ provides ordering
+	- some key-chains can be very long (e.g. floats)
+	- may need more space
+
+. may also be done for integers, moves in a game, ...

@@ -1,0 +1,84 @@
+Projective Geometry (Week 10)
+
+How to save a line? m,n ~> special case for vertical lines
+How to intersect lines? How to find a line through points? What about areas, special cases...?
+Easy solution: projective geometry
+
+-> Points
+-> use three-dimensional vectors to save two-dimensional points (not (0, 0, 0))
+draw visualization with plane at z=1, line for equivalent vectors
+-> represent the point (a, b) as the the vector (a, b, 1) (homogenization)
+-> scalar multiples represent the same point
+-> normalization: scale last component to 1
+-> going back (de-homogenization): normalize the vector (multiply (a, b, c) by 1/c), ignore last component
+-> example (4, 6, 2) ~= (2, 3, 1) ~> (2, 3)
+-> not possible if last component is zero!
+there are more points in this representation
+infinite points, make system easier since more complete (later)
+
+-> Lines
+-> represented by three-dimensional vectors, too (not (0, 0, 0))
+-> generate a plane by the line and (0, 0, 0), take a normal vector
+draw visualization with plane at z=1
+-> scalar multiples represent the same line
+-> one line is not contained in the plane R^2
+infinite line, contains exactly the points that are not in R^2, too
+completes the system of lines
+
+Why are we doing this?
+-> Point p is on line l iff <p, l> = 0 (scalar product)
+p has to be orthogonal to the line's normal vector
+
+-> Line through points p and q: p x q (outer product)
+should be orthogonal to both points
+
+-> intersection of two lines l and m: l x m
+shoul be orthogonal to both lines
+
+example: intersection of an arbitrary quadrilateral's diagonals
+draw image, vertices a, b, c, d
+-> diagonals l = a x c, m = b x d
+-> p = l x m = (a x c) x (b x d) = a x c x b x d
+exchange order of all three outer products (e.g. c x a x b x d, a x c x d x b, or b x d x a x c), but take the whole factor
+a x b x c x d and a x d x b x c are something else (draw it)
+sign change, only scalar factor
+
+-> infinite points
+When do infinite points occur?
+-> intersections of parallel lines: infinite points
+example: (1, 0, 1) x (2, 0 ,1) = (0, 1, 0)
+-> interpretation: direction of the lines
+(x, 0, z) are all vertical lines
+-> connection of infinite points: line at infinity
+example: (1, 0, 0) x (0, 1, 0) = (0, 0, 1)
+special cases handle themselves
+
+-> using special cases
+-> parallel line m to line l through point p
+-> infinite point in direction of l: q = l x (0, 0, 1) (line at infinity)
+-> connect p and q: m = p x q = p x l x (0, 0, 1)
+
+-> orthogonal direction to infinite point (a, b, 0) is (b, -a, 0)
+-> projection of point p on line l
+-> infinite point in direction of l: q = l x (0, 0, 1)
+-> infinite point in direction of the perpendicular: r = q^{orthogonal}
+-> perpendicular: m = r x p
+-> projection: m x l
+
+-> area of a triangle through p, q, r
+-> normalize p, q, r
+-> matrix M = |p, q, r|
+-> area: |det M|
+area may be negative, points (counter-)clockwise
+
+-> projective transformations
+-> linear maps on homogeneous coordinates: matrices in R^{3x3}
+-> scalar multiples correspond to the same matrix
+8 dimensions, point has 2 dimensions
+-> given by the image of 4 non-collinear points
+-> computation: a|->a', b|->b', c|->c', d|->d' => Ma=a', Mb=b', Mc=c', Md=d'
+-> solve systems of equations with indeterminates as entries of M
+Solves a lot (draw pictures): shifting, mirroring, rotating, scaling,
+scaling just some directions, combinations of them
+think about the corresponding matrices
+everything that maps collinear points to collinear points

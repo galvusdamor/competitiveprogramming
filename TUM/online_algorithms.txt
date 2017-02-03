@@ -1,0 +1,76 @@
+ONLINE ALGORTIHMS
+
+. Offline algorithm:
+	- whole input is given initially
+	- all decisions can be made with knowledge of all the input data
+. Online algorithm:
+	- does not have whole input initially
+	- input arrives incrementally over time
+	- makes decisions without knowledge of any future input
+	- solution is only an approximation
+. goal: optimize some objective, usually something with x
+	
+. example: Online/offline sorting
+	- Selection sort (offline)
+		of all unsorted elements, choose the minimum and put it the current sorted list
+	- Insertion sort (online)
+		take element and put it in its place in the current sorted list
+
+. formal model:
+				algorithm	A
+							|
+							|	___  invisible to A
+							|  /
+	input x = x1 x2 x3 ... xt | x{t+1} ...
+							   \___
+	
+	- each request xt has to be served without knowing of x{t+1} ...
+. comparison to an optimal offline algorithm
+	- knows the entire input in advance
+	- can serve input optimally with optimum cost
+. worst-case analysis
+	- over all possible distributions of x
+	- generally no assumption about the distribution of x
+. A is c-competitive: exists a>0 (indep. of x): for all x: A(x) <= c*OPT(x)+a
+
+. example: Ski rental problem
+	- actually a whole class of problems
+	- choice between continuing to pay a repeating cost or paying a one-time cost that eliminates the repeating cost
+	- buy/rent problem
+	-> going skiing for an unknown number of days (because reasons!)
+		1 €/day (rent), 10 € one-time (buy)
+		decide every day whether to rent or to buy
+		offline easy: >10 days => buy, <10 days => rent, =10 days => doesn't matter
+	- break-even algorithm (best deterministic algorithm):
+		rent for 9 days
+		buy on 10th day
+		-> for <10 days => optimal
+		-> for >=10 days 19 € => at most 90% worse => 1.9-competitive
+	- randomization
+		flip coin
+			heads => buy on day 8
+			tails => buy on day 10
+		expected cost is at most 80% worse
+		for >=10days: pay 1/2(7+10)+1/2(9+10) € = 18 €
+		1.8-competitive (expected value for competitive ratio)
+	- best randomized algorithm: e/(e-1)-competitive (~1.58)
+	
+. example: Online scheduling
+	- set of n tasks j1,...,jn with processing times p1,...,pn
+	- set of m machines
+	- goal: minimize of completion time of the last task
+	-> greedy algorithm: schedule jobs on the machine with the currently smallest load
+		List scheduling
+		(2-1/m)-competitive
+		
+. example: Online scheduling 2
+	- set of n tasks j1,...,jn
+		processing times p1,...,pn
+		release dates r1,...,rn
+	- 1 machine
+	- goal: minimize total completion time = sum_i C(ji)
+	-> idea: schedule short tasks early, long tasks later
+	-> greedily scheduling the shortest available task can be arbitrarily bad
+		e.g. only one task available (the longest), many small tasks are released shortly after
+	-> randomization?
+		

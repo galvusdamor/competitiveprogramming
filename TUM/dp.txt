@@ -1,0 +1,85 @@
+Dynamic Programming
+
+How to handle a big search space?
+2 weeks ago: brute force
+last week: greedy
+What about problems without greedy solutions?
+
+-> brute force (divide & conquer) - divide problem into independent subproblems
+-> dynamic programming - divide problem into subproblems with similar structure, reuse results
+introduced by Bellmann, secretary of defenses paid the research but didn't
+like mathematics and theoretical computer sciences ~> new name
+
+-> examples we have seen before: Dijkstra, Bellman-Ford, Prim
+        problem: find a shortest path from s to t
+        subproblems: find a shortest path from s to v using only nodes that are not further away, v in V
+        data: distances and predecessors for all nodes
+data structure is an array most of the times
+
+-> easiest type: memoization
+-> example: Fibonacci, a_0=1, a_1=1, a_i=a_{i-1}+a_{i-2}
+-> function f(i)
+->	if i\leq 1 then return 1
+->	return f(i-1)+f(i-2)
+-> exponential running time
+
+-> function f(i)
+->	if i\leq 1 then return 1
+->	if dp[i] == 0 then dp[i]=f(i-1)+f(i-2)
+->	return dp[i]
+-> linear running time
+
+-> How to DP:
+-> 1. define subproblems (array definition)
+-> 2. solve the subproblems (hard-coded for small problems, loop over bigger ones)
+-> 3. assemble solution to the original problem
+
+-> Example Knapsack
+-> n items, values v_i, weights w_i, maximum weight W
+-> max sum_{i\in S} v_i s.t. sum_{i\in S} w_i\leq W, S\subseteq\{1,..,n\}
+all subsets: exponential
+-> int[][] dp = new int[n][W]
+-> dp[i,w] = maximal value of items 1,..,i with maximal weight w
+-> dp[0,w] = 0 for all 0\leq w\leq W
+-> dp[i,w] = max(dp[i-1,w], dp[i-1,w-w_i]+v_i)
+only use when the array indices are non-negative
+-> result: dp[n,W]
+
+-> example: W=10, v=(10, 40, 30, 50), w=(5, 4, 6, 3)
+dp[i][w] 0  1  2  3  4
+0        0  0  0  0  0
+1        0  0  0  0  0
+2        0  0  0  0  0
+3        0  0  0  0 50
+4        0  0 40 40 50
+5        0 10 40 40 50
+6        0 10 40 40 50
+7        0 10 40 40 90
+8        0 10 40 40 90
+9        0 10 50 50 90
+10       0 10 50 70 90
+
+pseudo-polynomial: seems polynomial, but is still exponential in the
+encoding length (problem is NP-complete)
+        good if m is small
+        does not check bigger sets if smaller ones do not fit into the bag
+~> better than brute force
+
+space can be reduced by saving the last two columns only
+nothing else is needed
+this is a widely used technique
+
+Which objects are contained in the optimal subset?
+do not save a list attached to each solution of a subproblem, but rather a pointer to subproblems (like the pred array in Dijkstra's algorithm)
+
+sometimes, the array may have more dimensions
+suppose the items have a weight, bag has a maximum weight
+use a three-dimensional array: size, weight and score
+may be reduced to a two-dimensional array as seen before
+
+other examples:
+        Floyd-Warshall-Algorithm: All Pairs Shortest Paths
+        CYK-Algorithm: word problem for context-free grammars in Chomsky normal form (Cocke-Younger-Kasami)
+        Edit Distance
+        Chain Matrix Multiplication
+        Longest Common Subsequence, Longest Increasing Subsequence

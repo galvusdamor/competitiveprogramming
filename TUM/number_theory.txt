@@ -1,0 +1,124 @@
+NUMBER THEORY
+
+. former: arithmetic (now: elementary calculations)
+. study of integers (im- or explicitly)
+. since around 1800 BC
+	- Pythagorean triples found in Mesopotamia
+. many ideas easy to understand
+. many important/famous problems
+. one of the oldest mathematical interests
+	- classical Greece (500-200 BC): Pythagoras (even started cult), Plato, Euclid, Archimedes
+	- China (300-500 CE): Sun Tzu/Sunzi
+	- India (following centuries)
+	- Fibonacci (late 12th c)
+	- early modern age: Fermat (17th), Euler (18th), Gauss (18/19th)
+. subdivisions
+	- Elementary Tools
+	- Analytic Number Theory
+		uses tools /methods from real/complex analysis
+		e.g. Sieve Theory
+		e.g. Prime Number Theorem, Goldbach Conjecture, Riemann Hypothesis
+	- Algebraic Number Theory
+		uses algebraic objects
+		can (and does) intersect with Analytic N.Th.
+	- Diophantine Geometry
+		polynomial equations with integral solutions
+		e.g. x^2+y^2 = 1 defines a curve
+		rephrase questions in terms of points on curves
+	- Probabilistic Number Theory
+	- Arithmetic Combinatorics
+	- Computations/Algorithms
+		al-Khawarizmi
+		
+. Sieve Theory
+	- techniques to count/estimate size of sifted set of integers
+	- approximate sifted set by simpler superset (e.g. primes by k-almost primes)
+	- Sieve of Eratosthenes (3rd c BC)
+		prime sieve
+		iteratively mark composites
+			. multiples of primes, starting at 2
+			. sequence of multiples with constant difference -> arithmetic progression
+				- main advantage over trial division
+		efficient for smaller primes
+		complexity: exp. in input size (poly-time-algorithms [for primality testing] exist since 2002)
+		
+. Euclidean Algorithm
+	- gcd(a,b)
+	- can be extended to polynomials etc.
+	- a and b coprime : gcd(a,b) = 1
+	- lcm(a,b)
+	- Extended Euclidean Algorithm
+		ax+by = gcd(a,b)
+		useful if coprime:
+			x is modular mult. inv. of a mod b (ax = 1 mod b)
+			y is modular mult. inv. of b mod a (by = 1 mod a)
+			(essential step in the RSA encryption method)
+		standard: compute Euclidean divisors
+		extended: use quotients!
+		standard: q1...q_k, r0...r_{k+1}
+			r0 = a, r1 = b
+			for r>1: find q_i and r_i s.t.
+				r_{i-2} = q_{i-1}*r_{i-1} + r_i until r_{k+1}=0
+			=> gcd(a,b) = r_k
+		extended: s0...s_{k+1}, t0...t_{k+1} Bézout coefficients
+			s0 = 1, s1 = 0
+			t0 = 0, t1 = 1
+			s_{i+1} = s_{i-1} - q_i*s_i
+			t_{i+1} = t_{i-1} - q_i*t_i
+			=> 	gcd(a,b) = a*s_k + b*t_k
+		EXAMPLE (from last time):
+		i		ri	qi	s_i	t_i
+		0	-	516	-	1	0
+		1	516	138	3	0	1		516 = 3*138 + 102
+		2	138	102	1	1	-3		138 = 1*102 +  36
+		3	102	36	2	-1	4		102 = 2* 36 +  30
+		4	36	30	1	3	-11		 36 = 1* 30 +   6
+		5	30	6	5	-4	15		 30 = 5* 6  +   0
+		=> gcd(516,138) = 6	= (-4)*516 + 15*138
+			
+. Chinese Remainder Theorem
+	- 3rd-5th c: Sun Tzu
+	- completed and proved later
+	- determine number x that when divided by given divisors ni leaves given remainders ai
+		n1...nk pairwise coprime
+		a1...ak
+		-> 	exists x: x = ai mod ni
+			and all solutions are congruent mod N = n1*...*nk
+	- existence/uniqueness
+	- example: 	x = 2 mod 3
+				x = 3 mod 4
+				x = 1 mod 5
+	- brute-force
+		convert congruences into sets, write elements mod N = 60
+			{2,5,8,11,14,...,68,71,74,...}
+			{3,7,11,15,...,67,71,75,...}
+			{1,6,11,16,...,66,71,76,...}
+		intersect
+			{11,71,...}
+	- algebraic
+		x = 2+3t
+		x = 3+4s
+		x = 1+5u
+		-> x = 2+3t=3 mod 4
+			=> 3t = 1 mod 4
+			=> t = 3(=3^-1) mod 4
+			=> t = 3+4s
+		-> x = 2+3t = 2+3(3+4s) = 11+12s
+			=> 11+12s = 1 mod 5
+			=> 2s = 0 mod 5
+			=> s = 0+5u
+		-> x = 11+12s = 11+12(5u) = 11+60u
+		-> {11,71,131,...}
+		60 = lcm(3,4,5) = N
+	- constructive
+		-> use extended Euclid: ri*ni+si*N/ni = 1
+			-13*3+2*20 = 1 => e1 = 40
+			-11*4+3*15 = 1 => e2 = 45
+			5*5+(-2)12 = 1 => e3 = -24
+		-> ei := si*N/ni
+			=> ei = 1 mod ni (bc ri*ni+ei = 1),
+			   ei = 0 mod nj (j!=i)
+		-> x = sum ai*ei
+			x = 2*40+3*45+1*(-24) = 191
+			all other solutions are congruent to 191 mod 60 = 11 mod 60
+		different implementations of Euclid will yield different ei's, but the same solution in the end

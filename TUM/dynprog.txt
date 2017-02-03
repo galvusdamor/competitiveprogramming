@@ -1,0 +1,66 @@
+DYNAMIC PROGRAMMING
+
+. How to handle a big search space?
+. brute force may not be possible
+. divide and conquer: split problem into smaller parts
+. use overlapping structure of the subproblems to solve them faster without computing the same things again
+-> dynamic programming: split the problem into subproblems with a similar overlapping structure, solve them and combine the solutions
+. example: Dijkstra
+	problem: find a shortest path from s to t
+	subproblems: find a shortest path from s to v using only nodes that are not further away, v in V
+	data: distances and predecessors for all nodes
+. data structure is an array most of the times
+
+. another approach to dynamic programming
+. easiest implementation: hash intermediate results
+	create a hash table
+	store all results there
+	before computing look whether it is already there
+. example: computing sequences, for instance Fibonacci sequence
+	f(0) = 0, f(1) = 1, f(n) = f(n-1) + f(n-2) for n > 1
+	create an array, save intermediate results
+	example with f(5)
+
+. Knapsack problem
+	bag of size m
+	n items of size a_i and a score b_i
+	find a subset of the items that fit into the bag with maximum score
+	2^n possible subsets => exponential search space
+	dynamic programming approach:
+	subproblem P_{n', m'}: use only the first n' items and at most m' space, 0<=m'<=m, 0<=n'<=n
+	optimal score s[i][j] for problem P_{i,j}
+	example: m=6, a1=2,b1=1, a2=2,b2=3, a3=3,b3=3, a4=5,b4=4
+		matrix: 0 0 0 0 0 0 0
+				0 0 1 1 1 1 1
+				0 0 3 ?
+				0 0 3
+				0 0 3		x <- solution to original problem = s[n][m]
+	initial values: s[0][j] = 0 for all 0<=j<=m (first row)
+	for all 0<i<=n, 0<=j<=m: s[i][j] = max(s[i-1][j-a_i] + b_i, s[i-1][j]) if j>=a_i, otherwise ignore the first term
+	interpretation: take the i-th item (first term) or do not take it (second term)
+	running time: O(nm)
+	pseudo-polynomial: seems polynomial, but is still exponential in the encoding length (problem is NP-complete)
+	good if m is small
+	does not check bigger sets if smaller ones do not fit into the bag ~> better than brute force
+
+	space O(nm)
+	recursion formula uses the lower values of the last column only (draw diagram)
+	-> save only one column of the array
+	iterate from top to bottom
+	-> space may be improved to O(m)
+
+. Which objects are contained in the optimal subset?
+	do not save a list attached to each solution of a subproblem,
+	but rather a pointer to subproblems (like the pred array in Dijkstra's algorithm)
+
+. sometimes, the array may have more dimensions
+. suppose the items have a weight, bag has a maximum weight
+. use a three-dimensional array: size, weight and score
+. may be reduced to a two-dimensional array as seen before
+
+. other examples:
+	Floyd-Warshall-Algorithm: All Pairs Shortest Paths
+	CYK-Algorithm: word problem for context-free grammars in Chomsky normal form (Cocke-Younger-Kasami)
+	Edit Distance
+	Chain Matrix Multiplication
+	Longest Common Subsequence, Longest Increasing Subsequence

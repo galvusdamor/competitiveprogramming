@@ -1,0 +1,122 @@
+BRUTE FORCE
+
+. aka exhaustive search, generate and test
+. generate solutions and test validity
++ simple
++ correct (finds optimum)
+- inefficient
+	combinatorial explosion
+		password safety checkers
+		finding divisors (for primality testing)
+		queens problem
++ good when errors are critical/fatal
++ good when time/computational power is not an issue
+- bad when input is too big (explosion)
+
+. linear search = search sequentially
+	finding divisors from 1 to sqrt(n)
+. pseudocode:
+	x = first()
+	while (x != null)
+		if (valid(x)) then
+			output x
+		x = next()
+	end while
+. basic combinatorics
+	n^k (number of functions from n to k)
+	factorial (number of permutations, e.g. anagrams of a word)
+	binomial coefficient (n choose k, disregarding order, poker hands)
+. estimate the number of (basic) operations used
+	see whether an implementation makes sense
+	take into account speed of (super-)computers: 10^9 flops per second
+	password safety checkers
+		256 chars, length<=5 -> 256^5 > 10^12 possible passwords
+						<=6 -> 256^6 > 2*10^14 (factor of over 200)
+						<=10 -> 256^10 > 10^25
+	finding divisors
+		32-bit number has up to 10 decimal digits
+		sqrt has about 5 -> 10^5 tests
+		64-bit number has up to 20 decimal digits
+		sqrt has about 10 -> 10^10 tests (square of a number of half the size)
+	queens problem
+		64^8 possible configurations (or 64!/56!)
+. reduce search space to speed up algorithm
+	queens problem, isomorphic arrangements
+		64^8 ~ 2,8*10^14 vs. 64 choose 8 ~ 4,4*10^9
+	password safety
+		assume only letters and numbers are allowed: 256->62
+		assume words from a dictionary
+		assume only year numbers
+		...
+. reorder search space to speed up algorithm
+	when only one solution is needed, start with most promising ones
+	
+. look at the constraints
+	problem might be complicated and intractable in general but easy to brute-force because the input data is small
+	
+. how to generate all permutations S_n
+	lexicographically (wikipedia)
+	pseudocode:
+		start with smallest permutation/sequence
+		find largest index k: a[k]<a[k+1]
+		if k does not exist then this is the last permutation
+		find largest index l: a[k]<a[l]
+		swap values a[k] and a[l]
+		reverse sequence from a[k+1] up to a[n] (final element)
+	example: 1234
+
+BACKTRACKING
+
+. consider search space as tree structure
+. build partial solutions (internal nodes)
+	dismiss if cannot be completed (pruning the tree)
+	remove whole subtree (cp. Brute-Force)
+. build solutions recursively (DFS)
+	incrementally
+. concept of partial solution must exist
+
+. EXAMPLES
+	queens problem
+	satisfiability
+		partial solution = truth values assigned to only the first k variables
+		in each level of the recursion assign a truth value to one more variable
+		if current partial solution does not satisfy formula, disregard all solution in its subtree
+
+. in general for constraint satisfaction problems
+	find assignment of variables s.t. some constraints are satisfied
+		puzzles (crosswords, sudoku, ...)
+		coloring
+		combinatorial opt. (knapsack, ...)
+		
+. pseudocode:
+	backtrack(c)
+		if completed(c) then
+			return true
+		for s in Next(c) do
+			if valid(s) and backtrack(s) then
+				return true
+		return false
+	initial call: backtrack(root)
+	
+. example: CSP
+	goal: find integers (x1,...,xn) in [m]^n satisfying some constraint F (boolean function)
+	partial solution = list of integers (y1,...yk) k<=n (first k variables)
+	root solution = ()
+	
+	c.length = k
+	Next(c) = {(c1,...,ck,1), ... ,(c1,...,ck,m)}
+	valid(c): constraint F satisfied for c?
+		this must be efficiently computable for backtracking to be effective
+	completed(c): c.length = n?
+	
+. order list of variables to be more efficient
+	cp Brute-Force
+	most critical ones first
+	
+	
+	
+GENERAL STUFF
+	shuffled scoreboard
+	impossible problems
+	bonus points
+	please no questions and half points clarification in one message !!

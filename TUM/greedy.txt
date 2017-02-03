@@ -1,0 +1,147 @@
+GREEDY ALGORITHMS
+
+. heuristic
+	kind of shortcut: simple, easy
+	short-sighted: may be inaccurate or incomplete
+	mostly: no guarantee
+. makes the locally optimal choice at each stage
+	not dependent on future choices
+	not dependent on solutions to created subproblems
+. never reconsiders choices
+	as opposed to dyn.prog. (more on that next week)
+. works for "optimal substructure" (optimal solution contains optimal subsolutions)
+	-> problem can be reduced to a subproblem via a greedy choice
+. EXAMPLES:
+	Prim/Kruskal for MST, Dijkstra for SSSP (optimal)
+	0-1-Knapsack (suboptimal/approximation)
+		max=4 - items: weight/value: 3/300, 2/190, 2/180
+		greedy acc. to decreasing order of value / ratio of value/weight
+		=> both not optimal: bc a combi of less-valued items may weigh less and still have larger value
+		- maybe as an approximation? is there a guarantee on the approximation ratio?
+	fractional Knapsack (optimal)
+	TSP (suboptimal/approximation)
+	Activity selection: given n activities, represented by start times s_i and finish times t_i, find a maximal set of non-conflicting activities (optimal)
+		BUT: Weighted activity selection is not optimally solved by greedy! -> dyn. prog. or as an approximation
+	
+. very general problem statement
+	set of objects X, function f:2^X->R. Find S subseteq X which maximizes f
+. in general: intractable / check all 2^|X| subsets
+. need restrictions on f and X
+
+. Question: When are greedy algorithms optimal?
+	
+-> Matroids
+. Hassler Whitney 1935 and independently by Takeo Nakasawa, also a little later by Bartel Leendert van der Waerden
+. wanted a general description of independence (both for graph theory and linear algebra)
+. two equivalent problems
+	graph theory: MST
+	linear algebra: matrix A as linear function between two vector spaces V (columns) and W (rows)
+		question: What is the rank(A) = #lin. ind. columns in A?
+		with costs to columns -> find a min-cost max-ind column set
+		(find among the set of vectors spanning the whole column space of A, without "cycles" (lin. dep.), the cheapest one) <- same as MST
+. connection: map: forall e=(i,j) add column with 1 in j-th row, -1 in i-th row
+	=> sum of edges vectors = 0 <=> edges form cycle
+	=> "independence = no cycle"
+	=> "set of edges with no cycle (forest) = set of lin. ind. vectors"
+	
+. Independence System: family I of subsets over X with:
+	exists non-empty indsets (alternatively: empty set is ind.)
+	every subset of an indset is also ind. [hereditary property]
+. a bit too general, one more property is needed
+	-> extension / augmentation / indset exchange property
+. Matroid: M=(X,I), set X, indsys I over X with: A,B in I, |A|=|B|+1 => exists x in A\B: Bu{x} in I
+	meaning: if a set is ind. but not maximally so, you can add one element to form a larger indset
+. many other (equivalent) ways to define a matroid
+. Theorem: Extension property <=> forall Y subseteq X: all max. indsets in Y have equal size
+. maximal indset: base
+. size of any base: rank of the matroid
+. minimal depset: circuit
+
+. EXAMPLE: MST
+	indset = forest
+	extension = have two distinct forests, we can always extend the smaller with an edge from the larger maintaining ind.
+	max indset = spanning tree
+
+. But what about greedy algorithms?
+
+. Given: weight w(x) for each x in X, black box algorithm for checking independence
+	=> greedy maintains a set B, adding min-weight elements in each step maintaining ind.
+	[ cost of a set = sum of weights of its elements ]
+-> Does greedy find a min-weight base of the matroid?
+
+YES! Even better:
+
+Theorem:
+	M=(X,I) indsys, black box for ind. checking. Define greedy as iteratively picking the cheapest element of X that maintains ind. => greedy produces min-cost max-indset forall nonneg. cost functions on X <=> M is matroid
+Proof: clear: set will be max-ind. but is it min-cost?	
+"<=": Let w:X->R_0^+ with picking order {x1,x2,...,xr}=B
+	=> w(x1)<=...<=w(xr)
+	claim: forall ind. y1,...,yk in X, w(y1)<=...<=w(yk) => w(xi)<=w(yi) forall i
+	[ finishes proof bc a base of size r with smaller weight implies a contradiction ]
+	proof of claim: suppose w(xk)>w(yk) for some minimal k>1
+	let S={x1,...x_{k-1}}, T={y1,...,yk}}, |T|=|S|+1
+	M matroid => exists j in {1,...,k}: Su{yj} indset (and yj notin S)
+	=> w(yj)<=w(yk)<w(xk)
+	=> greedy picks yj before xk, a contradiction!
+"=>": indsys without last matroid condition
+	-> approach: construct weight function for greedy to fail
+	let A,B be indsets, |A|=|B|+1, forall a in A\B: Bu{a} is not ind.
+	define	  { w1	x in AnB
+			  { w2	x in B\A
+		w(x)= { w3	x in A\B
+			  {	w4	otherwise
+	to screw up greedy we want:
+		1) w1<w2<w3<w4
+		first picks from AnB, then all from B\A, then none from A\B, but bc B is non-maximal we need at least one expensive element from X\(AuB)
+		2) greedy is worse than any max-indset (size m) containing A (which exists)
+		[ better to pick all elements of A instead of all of B
+		maybe this not optimal, but enough to finish the proof ]
+	want: |AnB|w1+|B\A|w2+(m-|B|)w4 > |AnB|w1+|A\B|w3+(m-|A|)w4
+	<=> w4 > |A\B|w3-|B\A|w2
+	want: w4 large enough ^, but still w2<w3 must hold
+	for 0<eps<1 choose
+		w1 = eps/|X|
+		w2 = eps/|B\A|
+		w3 = (1+eps)/|A\B|
+		w4 = 2
+	=> w1<w2, w3<w4
+	|A\B|=|B\A|+1 => w2<w3
+	and |A\B|,|B\A| != emptyset, otherwise that would be a contradiction to the (extension) propertie of A and B
+	=> w4 = 2 > 1 = |A\B|(1+eps)/|A\B| - |B\A|eps/|B\A|
+																					q.e.d.
+. can also be proven with max-cost (with another clever weight function)
+
+. caveats:
+	black box for ind. might be inefficient
+	size of X might be exponentially larger than the rank of the matroid (=output)
+		-> problem for finding next element
+. naive worst-case: O(n^2) with n=|X| bc we may have to look at each element in each step
+. even if greedy will always find the optimal solution for a matroid, it may not be the fastest/best algorithm
+
+
+/*** [only when there's time left at the end]
+Greedy as an approximation:
+. Submodularity
+	f:2^X->R subm.: forall S subseteq T subseteq X, x in X\T: f(Su{x})-f(S) >= f(Tu{x})-f(T)
+. f(Su{x})-f(S) is called discrete derivative
+. can be seen as marginal benefit
+. EXAMPLE
+	coverage problem / radio tower with different radii
+	diminished benefit when adding overlapping towers
+. f subm. <=> forall A,B subseteq X: f(AnB)+f(AuB) <= f(A)+f(B)
+. f_i subm., a_i>=0 => sum a_i f_i subm.
+
+. Monotonicity
+	f:2^X->R monotonous: forall S subseteq T subseteq X: f(S) <= f(T)
+. f mon. <=> all discrete derivatives are nonneg.
+. f subm., mon. => min{f,c} subm., mon. for some constant c
+
+. Theorem:
+	f nonneg., subm., mon. => greedy algorithm [iteratively picking elements x with maximal marginal benefit f(Su{x})-f(S)] provides an (1-1/e)-approximation
+***/
+
+
+GENERAL STUFF:
+	NWERC on Sunday
+	online contest from 10-15 o'clock
+	bonus points

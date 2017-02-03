@@ -1,0 +1,87 @@
+Lecture Notes - Minimum Spanning Trees
+
+-> Graphs
+-> G = (V, E)
+-> V: nodes/vertices
+-> E: edges
+-> directed: E = {(a, b) | a,b in V} (sometimes called arcs, denoted by A)
+-> undirected: E = {{a, b} | a,b in V}
+-> picture
+
+Representation
+Nodes: List
+Edges: adjacency matrix (space O(V²), find edge in time O(1), find neighbours in time O(V)), adjacency list (space O(E), find edge and neighbours in time O(N), N is the number of neighbours of a node)
+-> adjacency matrix, adjacency list
+-> table with running times
+-> example with four nodes
+
+->Breadth-First Search (BFS)/Depth-First Search (DFS)
+visit all nodes of a graph
+usage: find properties for all nodes, find connected components...
+-> visited[v] = false for all v in V
+-> choose a starting node s in V
+-> add s to queue Q
+-> while Q is not empty
+->	v = Q.pop()
+->	visited[v] = true
+->	for all neighbours w of v
+->		if !visited[w]
+->			add w to Q (DFS: start, BFS: end)
+-> example with some nodes
+
+-> Weight: c: E -> R
+hint: node weights may be implemented via fake edges
+
+-> spanning tree: G'=(V, S) with S \subseteq E s.t. G' is a tree (connected, no cycles)
+-> weight: c(S) = sum e in S: c(e)
+-> minimum spanning tree: MST
+
+Hints
+all spanning trees have the same cardinality
+negative edges: add constant to all weights (not needed for the algorithms)
+maximum spanning tree: mulitply all weights by -1
+
+Algorithms
+Lemma: Let E' subseteq E such that there is a minimum spanning tree T of G containing all edges of E'. Let T' be one of the subtrees induced by E' and let e be an edge having minimal weight of all the edges connecting a node of T' with a node of G\T'. Then, there is a minimum spanning tree of G containing the edges E' u {e}.
+
+Algorithm of Prim
+-> choose a starting node s in V
+-> visited[s] = true, visited[v] = false for all other v in V
+-> add all nodes adjacent to s to a PQ, key: weights of the connecting edges
+-> while not all nodes visited
+-> 		w = PQ.deleteMin() (if PQ is empty: graph is not connected)
+-> 		add edge to w to the MST
+-> 		visited[w] = true
+-> 		add all unvisited neighbours of w to the PQ, if already contained: decreaseKey to minimum value
+hint: decreaseKey in java/C++: remove and insert again
+
+-> Running Time
+-> without PQ: O(n+m)
+-> n insert: O(n)
+-> m decreaseKey: O(m)
+amortized, using Fibonacci heaps
+-> n deleteMin: O(n log n)
+-> total: O(m+n log n)
+
+Algorithm of Kruskal
+-> sort all edges by increasing weight
+-> initialize union-find-datastructure (as seen last week), each node in its own component
+-> iterate through all edges e
+-> 		if nodes incident to e are not in the same component
+-> 			add e to the MST
+-> 			merge components of nodes incident to e
+-> graph was not connected if not all nodes are in the same component
+
+-> Running Time
+-> sorting: O(m log m)
+-> 2m find: O(m alpha(m,n))
+-> n union: O(n alpha(m,n))
+-> total: O(m log m)
+
+Hints
+ask for half points
+use subjects of clarifications
+points overview available
+ask questions to the author of the problem if available
+ask questions: there are no penalties for asking
+it's getting easier this week

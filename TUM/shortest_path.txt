@@ -1,0 +1,94 @@
+SHORTEST PATHS
+
+. directed graph G=(V,E), weights c
+	undirected graph: copy all edges
+. path from u to v: (u,w_1),(w_1,w_2),...,(w_{s-1},w_s),(w_s,v) in E, u, v, w_i in V
+. length: sum of the edge weights
+. problem: find shortest path between nodes
+
+. usages:
+	shortest path in road networks
+	best connection in communication networks
+	scheduling
+	...
+
+. variants:
+	SPSP (single pair shortest path)
+	SSSP (single source shortest path)
+	APSP (all pairs shortest paths): n SSSP
+
+. EXAMPLE
+. positive edge weights
+. given source, draw shortest paths
+. all shortest paths from s to some other node form a tree rooted at s
+. save predecessor of each node and distance
+. easy lookup of all shortest paths (recursive) and distances
+
+. Dijkstra's algorithm
+. approach: manage set V' of processed nodes with already correct shortest paths
+. underlying assumption: adding an edge to a path only prolongs this path (positive edge weights)
+	choose a starting node s in V
+	visited[s] = true, dist[s] = 0, pred[s] = null
+	visited[v] = false, dist[v] = inf, pred[v] = null for all other v in V
+	add all nodes adjacent to s to a PQ, key: (dist[s]=0) + weights of the connecting edges
+	while not all nodes visited
+		w = PQ.deleteMin() (if PQ is empty: graph is not connected)
+		dist[w] = weight in PQ
+		add edge to w to the shortest path tree (pred[w] = other node on edge to w)
+		visited[w] = true
+		add all unvisited neighbours of w to the PQ, weight: distance to current node plus edge length, if already contained and better weight: decreaseKey to minimum value
+		
+. very similar to Prim's algorithm (think of the only difference)
+. add constant to all weights may yield new shortest paths (difference to Prim)
+	EXAMPLE: a -4-> b, b -4-> c, a -9-> c
+. no need for a PQ in small examples (almost everything that fits into your computer memory): use an array (makes theoretic runtime worse, no problem in practice)
+. proof idea: nodes are visited in increasing distance
+. there can't be a shorter path to nodes already visited (no negative edge weights)
+. running time: same as Prim, O(m+n log n)
+. EXAMPLE
+
+. now negative edge weights
+. Dijkstra does not work anymore
+	EXAMPLE: a -5-> b, b -(-6)-> c, a -3-> c
+	-> all nodes may be updated later on
+. if there is a negative cycle paths can be arbitrarily short
+	EXAMPLE: a -5-> b, b -(-6)-> c, a -3-> c, c -(-1)-> a
+. algorithm must terminate when negative cycles are detected!
+
+. Bellman-Ford Algorithm
+	choose a starting node s in V
+	dist[s] = 0, pred[s] = null
+	dist[v] = inf, pred[v] = null for all other v in V
+	add s to a queue
+	while queue is not empty
+		w = queue.pop()
+		for all neighbours v of w
+			if dist[v] > dist[w] + c((w,v))
+				dist[v] > dist[w] + c((w,v))
+				pred[v] = w
+				add v to queue
+
+. positive edge weights: does almost the same as Dijkstra, may visit nodes several times
+. no negative cycles: computes the shortest distance tree
+. negative cycles: infinite loop
+. When should we stop the infinite loop?
+	processing the queue one time = one phase
+	after i phases, all shortest paths from s using i edges are found
+	shortest paths whithout negative cycles are simple -> at most n phases
+	pop at most n^2 times
+. running time per phase: O(n+m)
+	pop n times, call if for each edge
+	at most n phases
+. running time: O(nm)
+
+. find negative cycle: track pred array back from all nodes, find infinite loops
+. early detection: check pred for infinite loops each time it is updated
+	fast in practice, depending on the input (good when there are often negative cycles of short length)
+	theoretic running time O(n²m)
+	can be improved with better data structures to O(nm)
+
+Hints:
+. one usage: visit node if it costs at most x additional time
+	add weight -x to the node
+. longest path efficiently computable? yes for acyclic graphs
+. copy graphs / nodes, e.g. go through the graph twice or similar

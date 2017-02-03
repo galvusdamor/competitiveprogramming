@@ -1,0 +1,95 @@
+Flow Algorithms
+
+example: network of pipes, some source of water
+hole somewhere in the network
+how much water leaks out of the network per second?
+
+-> directed graph G=(V,E), capacity c: E->R, s, t in V (source, target/sink)
+undirected: just copy all edges for both directions
+
+-> flow f: E->R with
+-> 1) capacity constraints: for all e in E: 0 <= f(e) <= c(e)
+-> 2) flow conservation: for all v in V \ {s, t}: e(v) = sum_{e = (u, v) in E} f(e) - sum_{e = (v, w) in E} f(e) = 0 (excess)
+preflow: other color, add "(pre-)" and e(v) ">=" 0
+
+-> value of a flow: v(f) = e(t) = -e(s)
+-> problem: find maximum flow
+example: amount of water that flows through the leak per second
+example: baseball elimination
+
+hints
+* minimum flow: send no flow at all
+* multipe sources: add super-source, edges with weight infinity
+* multiple sinks: same as multiple sources
+* sources with supply constraints: add super-source, edges with corresponding weight
+* sinks with supply constraints: same as sources with supply constraints
+* demands for sinks: same as supply constraints, check whether maximum flow has maximum value
+* node capacities: split nodes up, add capacity on edges between them
+* min-cut-max-flow
+
+-> Residual Network/Algorithm of Dinic
+-> graph G' = (V, E') with capacities c': E'->R
+-> for all e = (v, W) in E
+-> 1) if f(e) < c(e) add e to E' with c'(e) = c(e) - f(e)
+-> 2) if f(e) > 0 add e'=(b,a) to E' with c'(e') = f(e)
+add possibly both
+
+-> example
+residual network describes how much flow may be sent through the network additionally
+
+increment along these edges
+-> example
+-> algorithm of Dinic: increment along shortest s-t-paths, O(V^2*E)
+
+-> Algorithm of Goldberg and Tarjan
+consider a preflow
+push as much flow through the network
+draw back if flow can't be pushed further
+watch flow moving back and forth until it is getting stable
+preflow should be a flow now
+
+-> height/distance function: d: V->N_0
+push flow only downwards, source is on top of the mountain
+-> legal edge (v, w): d(v) = d(w)+1
+-> active node v: e(v) > 0
+
+residual graph also needed
+compute only when needed or explicitly
+
+-> 1. remove all nodes not reachable from s or where t is not reachable
+-> 2. f(e) = c(e) if e = (s,v) for some v in V, else f(e) = 0
+-> 3. initialize queue Q of active nodes
+-> 4. initialize d as the shortest distance (unit length) to d without using s by a BFS, d(s) = |V|
+-> 5. while there are nodes in Q pop the first one, apply push
+d(v)~|V| all the time for nodes close to s,
+nodex v close to t start with d(v)~0 and end with d(v)~2|V|
+if a node has distance greater than |V| it means that overflow flow units will be pushed back to the source 
+
+-> push(v)
+-> 1. while e(v) > 0 and there is a legal edge e = (v, w) in the residual graph
+-> 2.    push delta = min(e(v), c'(e)) from v to w
+-> 3.    adjust excess values and the residual graph, add w to Q if w!=s, w!=t
+-> 4. if e(v) > 0 then relabel(v)
+
+-> relabel(v)
+-> 1. set d(v) = min{d(w)+1 | (v,w) in E'}
+
+-> running time O(V^3)
+
+-> example
+
+Currently best running time: O*(E sqrt(V) log^2 U)
+O*: same as O, but hides polylog(n,m)
+U: capacity ratio
+(Sidford, Lee: Path-Finding Methods for Linear Programming, FOCS 2014)
+
+Even better for special graphs e.g. unit capacity networks, planar graphs, ...
+
+Gap Heuristics
+flow has to be pushed downwards
+if there is no node v with d(v)=x for some 0<x<|V| then nodes with a bigger distance can't push to the sink
+these nodes can be relabelled directly to |V|+1
+-> save an array count with count[x]=#nodes v with d(v)=x for x<=|V|
+-> update array in each step ~> no additional costs
+-> if count[x]=0 at some point, relabel all nodes with distance between x and |V| to distnace |V|+1
+no change in the theoretical runtime bounds, much faster in practice

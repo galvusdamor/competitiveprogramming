@@ -1,0 +1,118 @@
+Binary Search
+
+. find position of specific value in sorted sequence
+. order of sorting does not matter (increasing or decreasing)
+. 'pseudo'code:
+	compare search key with middle element
+	if found: done
+	else: repeat recursively with either left or right subsequence
+. dichotomic search
+	divide-and-conquer selecting between two distinct alternatives at each step
+. halves the number of elements in each step
+	-> log runtime
+. BUT: sequence needs to be sorted
+. can be iterative or recursive, depending on your liking
+. EXAMPLES:
+	dictionary
+	telephone book
+	number guessing game
+. sequence can even be infinite (real-valued): find a specific value of a function
+	finite (search) interval
+	given y, find x with f(x)=y
+	needed when f^{-1} is not known
+	easy when f is easy to calculate
+	
+	expansion(t) = sqrt[a]{ bt^c log_{1+d}(1+t^e)exp(t^f) }
+		-> increasing
+	want to find t with expansion(t)=9999
+	in interval [0,42], with error 10^{-6}
+	a=5,b=c=d=e=f=1
+	start in the middle: f(21) = 165.3242
+	f(31.5) = 1499.34
+	f(36.75) = 4456.11
+	...
+	f(40.663063...) = 9999.00...
+. "Although the basic idea of binary search is comparatively straightforward, the details can be surprisingly tricky" - Donald Knuth
+
+	
+Union-Find
+
+. aka disjoint-set data structure
+. models partitioning of a set, e.g. connected components of a graph
+. EXAMPLE: several objects, some of same class
+	works with equivalence classes, partitions etc
+. two operations on a set of elements X
+. all elements are in singleton sets, initially
+	(trivial third function makeset)
+. union(x,y): merge the sets of x and y
+. find(x): return a _unique_ element in the set of x
+	representative
+. x,y in X are in the same set <=> find(x) = find(y)
+
+. List Implementation
+	linked list for each set
+	head of each list is the representative
+	makeset: list of one element
+	union: append two lists
+	find: traverse the list backwards to the head -> worst case: O(n)
+	-> pointer from each element to head -> worst case O(1)
+	union: update each element in the list -> worst case linear
+	-> append smaller list to the longer
+		weighted-union heuristic
+		need to store the length of each list
+	EXAMPLE
+	=> m ops. O(m + n log n)
+		each element is updated at most log n times (only when it is in the smaller list)
+	But we can do this better!
+
+. Tree/Forest Implementation
+	each element is a node
+	each node has a parent, initially itself,
+		and a size of the subtree rooted at it if it is a root node, initially 1
+	find: follows parent nodes to the root
+		find(x)
+			if(x == x.parent)
+				return x
+			else
+				return find(x.parent)
+		O(depth) = O(log n) [for balanced trees]
+		EXAMPLE
+	union: attaching root of one tree to root of the other
+		union(x,y)
+			fx = find(x)
+			fy = find(y)
+			if fx.size < fy.size
+				fy.size += fx.size
+				fx.parent = fy
+			else
+				union(y,x)
+		O(1) + 2*find
+		EXAMPLE
+	here, attaching smaller tree to bigger one to avoid unbalanced trees
+	=> m ops. O(m log n)
+
+. Path Compression
+	flatten the trees with each find
+	each time you see a node during find, set its parent to the return value
+	representative stays the same => behavior does not change
+	find:
+		find(x)
+			if(x == x.parent)
+				return x
+			else
+				p = find(x.parent)
+				x.parent = p
+				return p
+	same worst case running time O(log n)
+	much better average and amortized running time O(alpha(n))
+		alpha(n) is inverse of Ackermann function A(n,n)
+		Ackermann function is extremely fast-growing
+		i.e. alpha is practically constant (<=5) for all practical values of n
+		/*
+			A(5,5) = 2 ^^^ 8 - 3
+				= 2 ^^ (2 ^^ ( .. ^^ 2)) - 3 [8 copies]
+				2 ^^ x means a exp-tower of x 2's
+			even for A(4,4), wolframalpha says "too large to represent"
+				= 2^(2^(2^65536)))-3
+			and #atoms in the universe ~ 2^(250) 
+		*/

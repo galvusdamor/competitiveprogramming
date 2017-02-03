@@ -1,0 +1,87 @@
+DATA STRUCTURES
+
+
+BigIntegers
+
+. Problem: how to handle integers bigger than Integer.MAX_VALUE?
+. What do we do in real life (digits 0 to 9)?
+. number system with base b
+. digits 0 to b-1
+. value of digits a_s, ..., a_0: sum i=0 to s a_i*b^i
+. example: 12A_16 = 256_10 + 32_10 + 11_10 = 299_10
+
+. sum of two numbers x_s, ..., x_0, y_s, ..., y_0
+. carry: c_0 = 0, c_i = 1 if x_i-1 + y_i-1 + c_i-1 >= b else c_i = 0
+. sum has digits s_i = x_i-1 + y_i-1 + c_i-1 % b
+
+. product of two numbers x_s, ..., x_0, y_s, ..., y_0
+. sum i=0 to s sum j=0 to s b^(i+j)*x_i*y_j
+	product of digits: hash table, bigger data type or iterated sum
+. better: Strassen algorithm, FFT
+	known lower and upper bounds do not match
+
+. much more functions possible
+. implement as you know them from the first grade
+
+. BigInteger: use b as a big number that fits into the integer data type
+. space optimal: b = maximum integer
+. easy for printing: b = 10^j, as big as possible
+. easy for computing products of digits: use only half of the space available
+
+. this is much slower than native data types, use only when needed
+. most times, long is enough
+. Java: use BigInteger, everything built in
+. C++: write this class yourself or download it
+
+Rationals
+
+. Common problem: rounding issues when using floating point numbers
+. Avoid this by saving numbers as rational if possible
+
+. rational: nominator/denominator = n/d
+. sum: a/b+n/m = (a*m+n*b)/(b*m)
+. difference: a/b-n/m = (a*m-n*b)/(b*m)
+. product a/b*n/m = (a*n)/(b*m)
+. quotient (a/b)/(n/m) = (a*m)/(b*n)
+
+. simplify rationals: divide n and d by gcd(n,d)
+. gcd algorithm later, will be provided if needed
+. take care of zeros when using the denominator or gcd function
+. use BigIntegers if needed => BigRational
+
+Binary Search
+
+. find position of specific value in sorted array
+. order of sorting does not matter
+. 'pseudo'code:
+	compare search key with middle element
+	if found: done
+	else: repeat recursively with either left or right subarray
+. dichotomic search
+	divide-and-conquer selecting between two distinct alternatives at each step
+. halves the number of elements in each step
+	-> log runtime
+. con: array needs to be sorted
+. examples:
+	dictionary
+	telephone book
+	number guessing game
+	
+Tries
+
+. trie is part of retrieval, the origin of the name
+
+. idea to save all kinds of data
+. example: trie, tree, trees, train, trust, try, catch
+. root node: empty string
+. value of a node: letters along the path to the root
+. children for each letter that follows the current value
+. values of a trie: values of all marked nodes
+. compression: add multiple letters to an edge if there is only one possibility
+
+. lookup: O(m), m is the length of the word
+. construction: O(mn), n words
+. good at finding prefixes
+. find whether there is a word with a given prefix: O(m)
+
+. may also be done for integers, moves in a game, ...

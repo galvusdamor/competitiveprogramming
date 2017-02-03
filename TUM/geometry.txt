@@ -1,0 +1,84 @@
+Geometry (Week 9)
+
+topics: polygons, convex hull, point in polygon
+
+tools:
+-> sides of a line from point a to point b
+-> 1) if a.x = b.x then M_0 = {p in R² | p.x < a.x}, M_1 = {p in R² | p.x = a.x}, M_2 = {p in R² | p.x > a.x}
+-> 2) else represent line as y = m*x+n, set m = (a.y-b.y)/(a.x-b.x), n = a.y-m*a.x
+-> M_0 = {p in R² | m*p.x+n < p.y}, M_1 = {p in R² | m*p.x+n = p.y}, M_2 = {p in R² | m*p.x+n > p.y}
+-> without divisions: CCW(a,b,p) = det(1,a.x,a.y\\1,b.x,b.y\\1,p.x,p.y)
+-> =(b.x-a.x)(c.y-a.y)-(c.x-a.x)(b.y-a.y)
+-> <0: p is right of ab, =0: c is on ab, >0: c is left of ab
+
+polygon: plane shape bounded by a finite closed chain of line segments
+simple polygon: edges do not intersect except in the corresponding vertices
+-> examples
+
+-> Point in Polygon
+-> given points p_0, ..., p_{n-1}, q, test whether q is inside the polygon defined by p_0 to p_{n-1}
+-> general case: ray casting algorithm
+-> choose a ray starting at q (e.g. a unit vector as direction)
+-> for each edge of the polygon check whether it intersects the ray
+-> count number m of intersection
+-> m odd iff q is in the polygon
+take care with floating point operations, q may be very close to a line
+if you hit a vertex: count only left vertex of each edge or just choose another direction
+
+-> convex set M: for each to points p, q in M the line segment pq is contained in M
+-> convex hull of a set M: the smallest convex set containing M
+-> draw examples
+point in polygon given convex hull: check whether q is on the same side of p_ip_{(i+1)%n} as the other points for each 0 <= i < n
+
+convex hull of a polygon is a polygon
+vertices of the convex hull are vertices of the original polygon ~> remove useless vertices
+not needed, but algorithms also order vertices
+convex hull of the polygon is the same as the convex hull of the vertices
+
+take care of special cases e.g. collinear points
+
+-> one vertex of the convex hull: lexicographically smallest point
+-> smallest x-coordinate, use y-coordinate as tie-breaker
+
+-> Gift Wrapping Algorithm (Jarvis March)
+-> find one vertex p of the convex hull, add it to the convex hull
+-> iterate through all other points: select a point q that is not a vertex of the convex hull yet, but all points are on the same side of the line pq
+-> if this is not possible return the convex hull
+-> add q to the convex hull, set p = q
+multiple possibilities to choose q only if points are collinear or p is the first vertex of the convex hull
+naive algorithm: O(n^3)
+linear runtime for each point: choose rightmost or leftmost neighbour
+-> time O(n^2), n points given
+-> time O(nh), convex hull has h vertices, output-sensitive
+
+-> Graham's Scan
+-> find one vertex p of the convex hull, add it to the convex hull
+-> order all other points q by the angle between the line pq and the y-axis (counter-clockwise)
+-> set the first point to q, add it to the convex hull
+-> iterate through all other points r
+-> if r is on the right of or on the line pq then
+-> 	remove q from the convex hull
+-> 	execute the loop again for r
+-> else
+-> 	add r to the convex hull
+->	set p = q, q = r
+order: arctan or normalize, sort by x-coordinate
+use this for contests, most times good enough, easy to implement
+-> time O(n log n), optimal
+
+-> Andrew's Monotone Chain Algorithm
+same as before, go to both directions to the point with the biggest x-coordinate
+faster in practice
+ 
+-> Quick Hull
+-> draw picture
+-> select leftmost and rightmost points p, q ~> vertices of the convex hull
+-> connect them, select the points r, s with the biggest distance to this line on each side
+-> delete all points in the triangles rpq and spq
+-> iterate with the lines pr, ps, qr, qs
+-> expected time O(n log n), worst case O(n^2)
+
+-> Kirkpatrick–Seidel algorithm, "the ultimate planar convex hull algorithm"
+-> Chan's Algorithm
+-> optimal output-sensitive algorithms, O(n log h)
+
