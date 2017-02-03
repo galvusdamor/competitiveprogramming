@@ -175,7 +175,7 @@
         \item Study common types of problems
         \item Show common applications of algorithms and data structures you already know from
             \bi
-                \item FG (?) and Algo
+                \item FG and Algo
                 \item If you don't we'll talk about them (again)
             \ei
         \item Introduce other common algorithms and data structures
@@ -202,14 +202,14 @@
 	  \item preprocessor
 	  \item no classes
 	  \item easier syntax and operator overloading
-	  \item less restrictive syntax
+	  \item less restrictive (primitives in templates)
         \ei
         \item next: a short introduction to C++
         \bi
 	  \item neither complete
 	  \item nor correct (you'll see if you dive deeper into the language)
         \ei
-        \item only C,C++ and Java (and probably from 2016 on Python) are allowed
+      \item only C, C++, Java, and Python are allowed
     \ei
 \end{frame}
 
@@ -403,7 +403,7 @@ cin >> i,j;
     \vspace{10pt}
     \bi
       \item you don't need classes
-      \item structs
+      \item structs are classes where everything is public
       	\begin{minted}[fontsize=\scriptsize]{cpp}
 struct edge {
   int from,to;
@@ -421,6 +421,79 @@ cout << e.weight << endl;
     \ei
 \end{frame}
 
+\begin{frame}[fragile]{STL data structures}
+  \bi
+    \item The STL has several generic container templates
+      \bi
+	\item \texttt{vector} - lists
+	\item \texttt{set}
+	\item \texttt{multiset} - collections of objects
+	\item \texttt{map} - associative memory
+	\item \texttt{queue}
+	\item \texttt{priority\_queue}
+      \ei
+    \item each takes a type parameter (maps take two) determining the content type of the container
+ \ei
+\end{frame}
+
+\begin{frame}[fragile]{Templates}
+  \bi
+  	\item Do you know that templates are? ($\sim$ Generics in Java)
+	\item If you have lists of \texttt{int}, of \texttt{long}, of \texttt{char}, and of lists of \texttt{int}, you may have to write the code four times ...
+	\item Templates are a way to abstract parameter types
+	\item You write your list code once for an unknown type \texttt{T}
+	\item If someone uses your lists, he has to tell the compiler the actual type \texttt{T}
+	\item You already know one very similar case: Arrays!
+	\item \texttt{int[]} $\rightarrow$ \texttt{vector<int>}
+	\item Array could be read as \texttt{[]<int>}
+  \ei
+\end{frame}
+
+\begin{frame}[fragile]{Templates}
+  \bi
+   \item most containers have iterators to go through their elements
+    \bi
+      \item \texttt{begin}, \texttt{end}
+      \item use \texttt{++} and \texttt{--} to iterate through the container
+      \item use \texttt{*} to access the value the iterator is pointing to
+      \item \texttt{find} returns an iterator
+    \ei
+	\item \texttt{set}, \texttt{map}, and \texttt{multiset} are sorted (criterion can be provided)
+    \item \texttt{count} is the "contains test"
+  \ei
+\end{frame}
+
+
+
+\begin{frame}[fragile]{STL data structures}
+
+\begin{minted}[fontsize=\scriptsize]{cpp}
+vector<int> list; list.clear();
+FOR(i,0,n) {
+  int a; cin >> a;
+  list.push_back(a);
+}
+sort(all(list));
+FORIT(i,list) cout << *i << endl;
+
+set<int> s;
+FOR(i,0,n) {
+  int a; cin >> a;
+  s.insert(a);
+}
+FORIT(i,s) cout << *i << endl;
+
+map<int,int> m; m.clear();
+FOR(i,0,n){
+  int x,y; cin >> x >> y;
+  m[y] = x;
+}
+FOR(i,0,r){
+  int z;  cout << m[z] << endl;
+}
+\end{minted}
+\end{frame}
+
 
 %%%% no AIOOBE
 
@@ -434,7 +507,7 @@ cout << e.weight << endl;
         \end{center}
         \vspace{20pt}
         \begin{center}
-            {\huge\color{title}Introduction and \\ STL data structures}
+            {\huge\color{title}Introduction}
         \end{center}
     }
 }
@@ -652,15 +725,15 @@ int main() {
         \item We also want our solution to be as simple as possible
         \vspace{5pt}
         \item We can use Algorithm Analysis to determine if a solution will run within the time limit
-        \item Rule of thumb: $10^{9}$ operations per second
+        \item Rule of thumb: $\approx 10^{6} - 10^7$ is acceptable
         \vspace{10pt}
-        \item We want to sort $n \leq 10^{6}$ integers, and we have 3 seconds.
+        \item We want to sort $n \leq 10^{6}$ integers.
             \bi
                 \item Can we use a simple $O(n^2)$ bubble sort?
                 \item What about a more complex $O(n\log n)$ merge sort?
             \ei
         \vspace{5pt}
-        \item We want to sort $n \leq 10^{3}$ integers, and we have 3 seconds.
+        \item We want to sort $n \leq 10^{3}$ integers.
             \bi
                 \item Can we now use the simple $O(n^2)$ bubble sort?
             \ei
@@ -697,8 +770,8 @@ int main() {
         $\leq 50$ & $O(n^4)$ & DP with 3 dimensions + $O(n)$ loop\\
         $\leq 10^2$ & $O(n^3)$ & Floyd Warshall's \\
         $\leq 10^3$ & $O(n^2)$ & DP, Bubble/Selection/Insertion sort \\
-        $\leq 10^5$ & $O(n\log_2{n})$ & Merge sort, building a Segment tree \\
-        $\leq 10^6$ & $O(n), O(\log_2{n}), O(1)$ & everything else (greedy, ad hoc) \\
+        $\leq 10^6$ & $O(n\log_2{n})$ & Merge sort, building a Segment tree \\
+        $\leq 10^7$ & $O(n), O(\log_2{n}), O(1)$ & everything else (greedy, ad hoc) \\
     \end{tabular}
     \end{center}
 }
@@ -773,7 +846,8 @@ Company XYZ have been badly hit by recession and is taking a lot of cost cutting
 
 \vspace{10pt}
 
-They have got three (3) employees working in the accounts department and are going to lay-off two (2) of them. After a series of meetings, they have decided to dislodge the person who gets the most salary and the one who gets the least. This is usually the general trend during crisis like this.
+They have got three employees working in the accounts department and are going to lay-off two of them.
+After a series of meetings, they have decided to dislodge the person who gets the most salary and the one who gets the least. This is usually the general trend during crisis like this.
 You will be given the salaries of these 3 employees working in the accounts department. You have to find out the salary of the person who survives.
 }
 
@@ -867,7 +941,8 @@ have limited number of keys. To accommodate all alphabets, letters are
 compacted into single key. Therefore, to type certain characters, a key
 must be repeatedly pressed until that character is shown on the display
 panel.\\
-\vspace{10pt}
+
+		\vspace{10pt}
 In this problem we are interested in finding out the number of times keys on a cell phone must be
 pressed to type a particular message.
 }
@@ -993,171 +1068,115 @@ between them.
 }
 \end{frame}
 
-\begin{frame}{Problem: February 29}
+%\begin{frame}{Problem: February 29}
 
-    \vspace{20pt}
-    {\footnotesize\color{title} Input}\\
-    {\small
-The first line of input will contain $T$ ($\leq 500$) denoting the number of cases.
-Each of the test cases will have two lines. First line represents the first date and second line
-represents the second date. Note that, the second date will not represent a date which arrives earlier
-than the first date. The dates will be in this format — ‘month day, year’. See sample input for exact
-format. You are guaranteed that dates will be valid and the year will be in between $2 \cdot 10^3$ to $2 \cdot 10^9$.
-For your convenience, the month list and the number of days per months are given below.
-    }
+ %   \vspace{20pt}
+ %   {\footnotesize\color{title} Input}\\
+ %   {\small
+%The first line of input will contain $T$ ($\leq 500$) denoting the number of cases.
+%Each of the test cases will have two lines. First line represents the first date and second line
+%represents the second date. Note that, the second date will not represent a date which arrives earlier
+%than the first date. The dates will be in this format — ‘month day, year’. See sample input for exact
+%format. You are guaranteed that dates will be valid and the year will be in between $2 \cdot 10^3$ to $2 \cdot 10^9$.
+%For your convenience, the month list and the number of days per months are given below.
+%    }
 
-    \vspace{20pt}
-    {\footnotesize\color{title} Output}\\
-    {\small
-For each case, print the case number and the number of leap days in between two given dates (inclusive).
-    }
-\end{frame}
+%    \vspace{20pt}
+%    {\footnotesize\color{title} Output}\\
+%    {\small
+%For each case, print the case number and the number of leap days in between two given dates (inclusive).
+%    }
+%\end{frame}
 
-\begin{frame}{Problem: February 29}
-    \vspace{10pt}
+%\begin{frame}{Problem: February 29}
+%    \vspace{10pt}
+%
+%    \begin{center}
+%        \begin{tabular}{|l|l|}
+%            \hline
+%            {\footnotesize Sample input} & {\footnotesize Sample output} \\
+%            \hline
+%            \begin{minipage}{150pt}
+%\vspace{10pt}
+%\ttfamily
+%4\\
+%January 12, 2012\\
+%March 19, 2012\\
+%August 12, 2899\\
+%August 12, 2901\\
+%August 12, 2000\\
+%August 12, 2005\\
+%February 29, 2004\\
+%February 29, 2012\\
+%            \end{minipage}
+%&
+%\begin{minipage}{100pt}
+%\vspace{10pt}
+%\ttfamily
+%Case 1: 1\\
+%Case 2: 0\\
+%Case 3: 1\\
+%Case 4: 3\\
+%\end{minipage}
+%\\
+%            \hline
+%        \end{tabular}
+%    \end{center}
+%\end{frame}
 
-    \begin{center}
-        \begin{tabular}{|l|l|}
-            \hline
-            {\footnotesize Sample input} & {\footnotesize Sample output} \\
-            \hline
-            \begin{minipage}{150pt}
-\vspace{10pt}
-\ttfamily
-4\\
-January 12, 2012\\
-March 19, 2012\\
-August 12, 2899\\
-August 12, 2901\\
-August 12, 2000\\
-August 12, 2005\\
-February 29, 2004\\
-February 29, 2012\\
-            \end{minipage}
-&
-\begin{minipage}{100pt}
-\vspace{10pt}
-\ttfamily
-Case 1: 1\\
-Case 2: 0\\
-Case 3: 1\\
-Case 4: 3\\
-\end{minipage}
-\\
-            \hline
-        \end{tabular}
-    \end{center}
-\end{frame}
 
+%\begin{frame}[fragile]{February 29: Solution}
+%    \begin{minted}[fontsize=\scriptsize]{cpp}
+%string mon[] = {"January", "February", "March", "April", "May", "June",
+%"July", "August", "September", "October", "November", "December"};
 
-\begin{frame}[fragile]{February 29: Solution}
-    \begin{minted}[fontsize=\scriptsize]{cpp}
-string mon[] = {"January", "February", "March", "April", "May", "June",
-"July", "August", "September", "October", "November", "December"};
+%int isleap(int y){
+%    if ((y % 4 == 0) && (y % 100 != 0 || y % 400 == 0)) return 1;
+%    return 0;
+%}
 
-int isleap(int y){
-    if ((y % 4 == 0) && (y % 100 != 0 || y % 400 == 0)) return 1;
-    return 0;
-}
-
-int main(){
-     int tc; cin >> tc;
-     FOR(ctc,1,tc+1){
-          string ms; int ss, sy;
-          cin >> ms; scanf("%d,",&ss); cin >> sy;
-          string me; int es, ey;
-          cin >> me; scanf("%d,",&es); cin >> ey;
-
-          if (!(ms == mon[0] || ms == mon[1])) sy++;
-          if (me == mon[0] || (me == mon[1] && es != 29)) ey--;
+%int main(){
+%     int tc; cin >> tc;
+%     FOR(ctc,1,tc+1){
+%          string ms; int ss, sy;
+%          cin >> ms; scanf("%d,",&ss); cin >> sy;
+%          string me; int es, ey;
+%          cin >> me; scanf("%d,",&es); cin >> ey;
+%
+%          if (!(ms == mon[0] || ms == mon[1])) sy++;
+%          if (me == mon[0] || (me == mon[1] && es != 29)) ey--;
           
-          int l = 0;
-          // compute number of leap years
-          cout << "Case " << ctc << ": " << l << endl;
-     }
-}\end{minted}
-\end{frame}
+%          int l = 0;
+%          // compute number of leap years
+%          cout << "Case " << ctc << ": " << l << endl;
+%     }
+%}\end{minted}
+%\end{frame}
 
 
-\begin{frame}[fragile]{February 29: Solution}
-    \begin{minted}[fontsize=\scriptsize]{cpp}
-          // compute number of leap years
-          while (sy % 4000 && sy < ey){
-               l+=isleap(sy++);
-          }
-          if (sy < ey){
-               int eyb = ey - (ey % 4000);
-               while (sy != eyb){
-                    l += 24*4*10 + 10;
-                    sy+=4000;
-               }
-               while (sy != ey){
-                    l+=isleap(sy++);
-               }
-          }
-          if (sy == ey) l+=isleap(sy++);
-\end{minted}
-\end{frame}
+%\begin{frame}[fragile]{February 29: Solution}
+%    \begin{minted}[fontsize=\scriptsize]{cpp}
+%          // compute number of leap years
+%          while (sy % 4000 && sy < ey){
+%               l+=isleap(sy++);
+%          }
+%          if (sy < ey){
+%               int eyb = ey - (ey % 4000);
+%               while (sy != eyb){
+%                    l += 24*4*10 + 10;
+%                    sy+=4000;
+%               }
+%               while (sy != ey){
+%                    l+=isleap(sy++);
+%               }
+%          }
+%          if (sy == ey) l+=isleap(sy++);
+%\end{minted}
+%\end{frame}
 
 
 
 
-
-\begin{frame}[fragile]{STL data structures}
-  \bi
-    \item The STL has several generic container templates
-      \bi
-	\item \texttt{vector} - lists
-	\item \texttt{set}
-	\item \texttt{multiset} - collections of objects
-	\item \texttt{map} - associative memory
-	\item \texttt{queue}
-	\item \texttt{priority\_queue}
-      \ei
-    \item each takes a type parameter (maps take two) determining the content type of the container
-    \bi
-      \item \texttt{vector<int>} $\rightarrow$ \texttt{int[]}
-    \ei
-    \item most containers have iterators
-    \bi
-      \item \texttt{begin}, \texttt{end}
-      \item use \texttt{++} and \texttt{--} to iterate through the container
-      \item use \texttt{*} to access the value the iterator is pointing to
-      \item \texttt{find} returns an iterator
-    \ei
-    \item \texttt{count} is the "contains test"
-  \ei
-\end{frame}
-
-
-\begin{frame}[fragile]{STL data structures}
-
-\begin{minted}[fontsize=\scriptsize]{cpp}
-vector<int> list; list.clear();
-FOR(i,0,n) {
-  int a; cin >> a;
-  list.push_back(a);
-}
-sort(all(list));
-FORIT(i,list) cout << *i << endl;
-
-set<int> s;
-FOR(i,0,n) {
-  int a; cin >> a;
-  s.insert(a);
-}
-FORIT(i,s) cout << *i << endl;
-
-map<int,int> m; m.clear();
-FOR(i,0,n){
-  int x,y; cin >> x >> y;
-  m[y] = x;
-}
-FOR(i,0,r){
-  int z;  cout << m[z] << endl;
-}
-\end{minted}
-\end{frame}
 
 
 \begin{frame}{Problem: Hardwood Species}
@@ -1262,11 +1281,18 @@ int main(){
 
 
 
-\begin{frame}[fragile]{Exercises for today}
+\begin{frame}[fragile]{Exercises (now and later)}
     \bi
-      \item UVa 10646
-      \item UVa 11572
-      \item UVa 12527
+	  \item Do you know \url{http://sfbtrr62-cs01-n04.informatik.uni-ulm.de}?
+	  \item There are six (easy) problems covering several easy categories
+	  \bi
+		\item simulation
+		\item recursion
+		\item sorting
+		\item ad-hoc
+      \ei
+	  \item We will start with some of them now and leave the rest for homework.
+      \item Also try UVa 12439
     \ei
 \end{frame}
 \end{document}
