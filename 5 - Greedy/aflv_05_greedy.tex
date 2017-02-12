@@ -1,0 +1,381 @@
+\documentclass[12pt,t]{beamer}
+\usepackage{graphicx}
+\setbeameroption{hide notes}
+\setbeamertemplate{note page}[plain]
+
+% get rid of junk
+\usetheme{default}
+\beamertemplatenavigationsymbolsempty
+\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+
+% font
+\usepackage{fontspec}
+\setsansfont{TeX Gyre Heros}
+\setbeamerfont{note page}{family*=pplx,size=\footnotesize} % Palatino for notes
+% "TeX Gyre Heros can be used as a replacement for Helvetica"
+% In Unix, unzip the following into ~/.fonts
+% In Mac, unzip it, double-click the .otf files, and install using "FontBook"
+%   http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros/qhv2.004otf.zip
+
+% named colors
+\definecolor{offwhite}{RGB}{249,242,215}
+% \definecolor{foreground}{RGB}{255,255,255}
+\definecolor{foreground}{RGB}{0,0,0}
+% \definecolor{background}{RGB}{24,24,24}
+\definecolor{background}{RGB}{255,255,255}
+\definecolor{title}{RGB}{107,174,214}
+\definecolor{gray}{RGB}{100,100,100}
+\definecolor{subtitle}{RGB}{102,255,204}
+\definecolor{hilight}{RGB}{20,180,204}
+\definecolor{vhilight}{RGB}{255,111,207}
+\definecolor{lolight}{RGB}{155,155,155}
+%\definecolor{green}{RGB}{125,250,125}
+
+% use those colors
+\setbeamercolor{titlelike}{fg=title}
+\setbeamercolor{subtitle}{fg=subtitle}
+\setbeamercolor{institute}{fg=gray}
+\setbeamercolor{normal text}{fg=foreground,bg=background}
+\setbeamercolor{item}{fg=foreground} % color of bullets
+\setbeamercolor{subitem}{fg=gray}
+\setbeamercolor{itemize/enumerate subbody}{fg=gray}
+\setbeamertemplate{itemize subitem}{{\textendash}}
+\setbeamerfont{itemize/enumerate subbody}{size=\footnotesize}
+\setbeamerfont{itemize/enumerate subitem}{size=\footnotesize}
+
+% page number
+\setbeamertemplate{footline}{%
+    \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[20pt]{\color{gray}
+          \scriptsize\insertframenumber}}}\hspace*{5pt}}
+
+% add a bit of space at the top of the notes page
+\addtobeamertemplate{note page}{\setlength{\parskip}{12pt}}
+
+% a few macros
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\ig}{\includegraphics}
+\newcommand{\subt}[1]{{\footnotesize \color{subtitle} {#1}}}
+
+
+% title info
+\title{Greedy Algorithms}
+\author{Gregor Behnke}
+\institute{Institute of Artificial Intelligence\\ Ulm University}
+\date{\tiny based on Bjarki Ágúst Guðmundsson's and Tómas Ken Magnússon's\\Competitive Programming}
+% \date{\href{http://www.biostat.wisc.edu/~kbroman}{\tt \scriptsize biostat.wisc.edu/{\textasciitilde}kbroman}
+% \\[-4pt]
+% \href{http://github.com/kbroman}{\tt \scriptsize github.com/kbroman}
+% }
+
+% Tikz
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,matrix,calc}
+\pgfdeclarelayer{bg}    % declare background layer
+\pgfsetlayers{bg,main}
+
+% Minted
+\usepackage{minted}
+\usemintedstyle{tango}
+\newminted{cpp}{fontsize=\footnotesize}
+
+% Graph styles
+\tikzstyle{vertex}=[circle,fill=black!50,minimum size=15pt,inner sep=0pt, font=\small]
+\tikzstyle{selected vertex} = [vertex, thick, draw=vhilight, fill=vhilight!50]
+\tikzstyle{edge} = [draw,thick,-]
+\tikzstyle{dedge} = [draw,thick,->]
+\tikzstyle{weight} = [font=\scriptsize,pos=0.5]
+\tikzstyle{selected edge} = [draw,line width=2pt,-,red!50]
+\tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
+
+
+\begin{document}
+
+% title slide
+{
+    \setbeamertemplate{footline}{} % no page number here
+    \frame{
+        \titlepage
+    }
+}
+
+
+\begin{frame}{Today we're going to cover}
+    \vspace{40pt}
+    \bi
+        \item Greedy Algorithms
+        \item Matroids (Recap)
+    \ei
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SLIDE
+\begin{frame}{Coin changing}
+    \vspace{30pt}
+    \bi
+        \item We are given a set of coin types: $1$ct, $5$ct, $10$ct, $25$ct, $100$ct
+        \item Determine the minimum number $N$ of coins needed to pay out $X $ct!
+        \vspace{30pt}
+        \visible<2->{
+        \item Example: $X=157$ct
+        \item Coins: $1\times 100$ct, $2\times 25$ct, $1\times 5$ct, $2 \times 1$ct \quad $\Rightarrow$ \quad $N = 6$
+        \visible<3->{\item How do we determine $N$?}
+        }
+    \ei
+\end{frame}
+
+\begin{frame}{Coin changing}
+    \vspace{30pt}
+    \bi
+    	\item 1. Option: Complete Search (via Backtracking) \visible<2->{{\color{gray} -- way to slow}}
+    	\visible<3->{\item 2. Option: Dynamic Programming \visible<4->{{\color{gray} -- ok (will be covered next week)\visible<5->{, but what if $N=10^{20}$ and the coins sizes as well?}}}}
+    	\visible<6->{\item 3. Option Greedy!}
+    \ei
+\end{frame}
+
+\begin{frame}{Cashier's algorithm}
+    \vspace{30pt}
+    \bi
+    	\item While some money is left, pay it with the largest coin possible and repeat.
+    	\item<2-> $X=157$ct $\Rightarrow$ take $100$ct, $N = 1$
+    	\item<3-> $X=57$ct $\Rightarrow$ take $25$ct, $N = 2$
+    	\item<4-> $X=32$ct $\Rightarrow$ take $25$ct, $N = 3$
+    	\item<5-> $X=7$ct $\Rightarrow$ take $5$ct, $N = 4$
+    	\item<6-> $X=2$ct $\Rightarrow$ take $1$ct, $N = 5$
+    	\item<7-> $X=1$ct $\Rightarrow$ take $1$ct, $N = 6$
+    	\item<8-> $X=0$ct $\Rightarrow$ done, $N = 6$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Cashier's algorithm}
+\begin{minted}[fontsize=\scriptsize]{cpp}
+int coins[N];
+
+int minimumCoins(int X){
+    if (!X) return X;
+    int i = N-1;
+    while (coins[i] > X && i != -1) i--;
+    if (i == -1) assert(false);
+    return 1 + minimumCoins(X - coins[i]);
+}
+    \end{minted}
+    \vspace{10pt}
+    \visible<2->{This can be slow if $X$ is huge and coins are small!}
+    \vspace{10pt}
+   % \only<2->{
+   \pause \pause
+\begin{minted}[fontsize=\scriptsize]{cpp}
+int minimumCoins(int X){
+    if (!X) return X;
+    int i = N-1;
+    while (coins[i] > X && i != -1) i--;
+    if (i == -1) assert(false);
+    return coins[i] / X + minimumCoins(X % coins[i]);
+}
+    \end{minted}
+    %}
+    \vspace{10pt}
+    \visible<4->{Even better versions are possible (e.g. binary search over the coins).}
+\end{frame}
+
+
+\begin{frame}[fragile]{Cashier's algorithm}
+    \vspace{30pt}
+    \bi
+        \item Is the algorithm correct?
+        \item<2-> Sometimes ...
+        \item<3-> Consider the coins $1$ct, $10$ct, and $25$ct and $X = 40$ct.
+        \item<3-> The algorithm will compute $N=7$ ($1\times25$ct, $1\times10$ct, $5\times1$ct)
+        \item<3-> The correct answer is $N=4$ ($4\times10$ct)
+        \item<4-> What's the difference?
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Cashier's algorithm}
+    \vspace{10pt}
+    {\textbf{Theorem} The Cashier's algorithm is correct for $1$ct, $5$ct, $10$ct, $25$ct, $100$ct.}\\[\baselineskip]
+    {\color{hilight}Proof:}\\[\baselineskip]
+    \textit{Observations:} Each solution contains:
+    \begin{itemize}
+         \item at most four $1$ct coins (else replace with a $5$ct)
+         \item at most one $5$ct coins (else replace with a $10$ct)
+         \item either two $10$ct or one $5$ct and one $10$ct (else replace with one $25$ct or one $25$ct and one $5$ct)
+         \item at most three $25$ct coins (else replace with a $100$ct)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Cashier's algorithm}
+    \vspace{10pt}
+    {\color{hilight}Proof cont'}\\[\baselineskip]
+    \begin{tabular}{c|c}
+    max. coin & max possible value \\ \hline
+    1 & 4 \\
+    5 & 9 \\
+    10 & 24 \\
+    25 & 99 \\
+    100 & $\infty$
+    \end{tabular}
+    \flushleft \qed
+      \vspace{30pt}
+    \bi
+        \item<2-> The algorithm is correct for several sets of coins
+        	\bi
+        		\item<2-> $1$, $2$, $5$, $10$, $20$, $50$, \dots
+        		\item<2-> $1$, $5$, $10$, $50$, \dots
+        		\item<2-> Any subset of $\{n^k \mid k \in \mathbb N\}$ for fixed $n$
+        	\ei
+    \ei
+   
+\end{frame}
+
+
+\begin{frame}[fragile]{Matroids}
+    \vspace{0pt}
+    \bi
+        \item Interpret the problem as a more general search problem.
+        \item We are given a set of objects $M$ 
+%        \bi \item<2-> for CC a multiset of coin instances \ei
+        \item<2-> A potential solution is a subset $S \subseteq M$. No two solutions must be subsets of each other.
+ %       \bi \item<2-> for CC a solution is a set of coins equal to $X$ct \ei
+        \item<3-> Let $\mathcal U = \{A \mid A \subseteq B, \text{ and } B \text{ is a solution}\}$
+  %      \bi \item<2-> for CC all possibilities to payout any amount $\leq X$ct \ei
+        \item<4-> $(M,\mathcal U)$ is a Matroid iff
+        \[ \forall A,B \in \mathcal U: \quad |A| > |B| \Rightarrow \exists x \in A \setminus B: \quad B \cup \{x\} \in \mathcal U \]
+   %     \bi \item<2-> for CC al possibilities to payout any amount $\leq X$ct \ei
+        \item<5-> We are given a function $f : M \rightarrow \mathbb R ^+$ and are asked to find a solution with minimal $f(S)$
+        \item[$\Rightarrow$]<6-> Process $M$ in ascending order of $f$ and maintain a set $S$.
+        If an element $m$ can be added to $S$, i.e., if $S \cup \{m\} \in \mathcal U$, then do so.
+        \item<7-> This generates the minimal solution.
+        \item<8-> Applying it to CC is a {\color{vhilight}bit} complicated ...
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Matroids}
+	\vspace{30pt}
+	\bi
+		\item Proving Matroid property can be very hard
+		\item<2-> Instead show the ``greedy property''
+		\bi
+			\item<2-> For every greedy decision
+			\bi
+				\item<3-> Assume that you have an optimal solution for the current sub-problem
+				\item<4-> Show that it can be transformed into a solution including your greedy choice either with the same (constructive proof) or lower (contradiction) value.
+			\ei
+		\ei
+	\ei
+\end{frame}
+
+
+\begin{frame}[fragile]{Interval Scheduling}
+    \vspace{30pt}
+    \bi
+        \item We are given a set $I$ of intervals $[a_i,b_i]$ 
+        \bi \item e.g. a set of jobs to be executed at specific times \ei
+        \item<2-> Task: Find the maximum subset $S$ of $I$, s.t., no two intervals in $S$ intersect?
+        \bi \item<2-> e.g. find the maximum number of jobs that can be executed \ei
+	    \vspace{30pt}
+	    \item<3-> Sort intervals by $b_i$.
+	    \item<4-> Add intervals to the set of executable intervals
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Interval Scheduling}
+    \vspace{30pt}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+int maxIntervall(vector<pii> intervals){
+    vector<pii> v;
+    FORIT(i,intervals) v.push_back(make_pair(i->second, i->first));
+    sort(all(v));
+    int cl = -oo;
+    int c = 0;
+    FORIT(i,v)
+        if (i->second >= cl) c++, cl = i->first;
+    return c;
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Interval Scheduling}
+    \vspace{30pt}
+    {\color{hilight}Correctness:}
+    \bi
+        \item Let $S$ be a maximal set of intervals.
+        \item Since no two intervals intersect, there is a ``fist'' task in $S$.
+        \item This task cannot end before the one the greedy algorithm would select.
+        \item Thus we can replace the first task in $S$ with this one.
+    \ei
+    \flushleft\qed
+\end{frame}
+
+
+\begin{frame}[fragile]{Interval Partitioning}
+    \vspace{30pt}
+    \bi
+        \item We are given a set $I$ of intervals $[a_i,b_i]$
+        \item<2-> Task: Find the minimal $k$, s.t. I can be partitioned into $k$ set of non-intersecting intervals.
+	    \vspace{30pt}
+	    \item<3-> Sort intervals by $a_i$.
+	    \item<4-> Simulate, add intervals to the partition with the smallest end.
+	    If not possible increase $k$
+    \ei
+\end{frame}
+
+
+\begin{frame}[fragile]{Interval Scheduling}
+    \vspace{30pt}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+int minPartition(vector<pii> intervals){
+    if (!intervals.size()) return 0;
+    sort(all(intervals));
+
+    priority_queue<int> q; q.push(-oo);
+    FORIT(i,intervals){
+        if (-q.top() <= i->first) q.pop();
+        q.push(-i->second);
+    }
+    return q.size();
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Interval Partitioning}
+    \vspace{30pt}
+    {\color{hilight}Correctness:}
+    \bi
+    	\item Add interval to already existing partition
+    	\bi
+    		\item If there is a solution where we don't place the interval in the earliest ending partition, we can swap!
+    	\ei
+        \item Add a new partition
+        \bi
+	        \item Since all of the partitions end after the new interval starts, we have no other choice -- all these intervals start before the current one.
+        \ei
+    \ei
+    \flushleft\qed
+\end{frame}
+
+
+\begin{frame}[fragile]{Gale-Shapley}
+    \vspace{30pt}
+    \bi
+        \item Stable Marriage Problem:
+        \bi
+        	\item Given two sets of objects $A$ and $B$ of the same size.
+        	\item For every object we have a preference list of the objects in the other set.
+        	\item Determine a pairing, so that to two unpaired object $a$ and $b$ exists, that prefer each other over their current partners.
+        \ei
+       	\vspace{10pt}
+       	\item<2-> Essentially simulate.
+       	\item<2-> While there is an unmatched object in $A$, pair it with its preference in $B$ that will accept (being either unpaired or willing to ditch its partner).
+       	\item<2-> This algorithm will always terminate (in less than $\mathcal O(n^2)$) with a stable marriage
+       	\vspace{10pt}
+       	\item<3-> This was worth a Nobel Prize 
+    \ei
+\end{frame}
+
+
+
+
+
+
+\end{document}
