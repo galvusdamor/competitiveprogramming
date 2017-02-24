@@ -480,6 +480,106 @@ for (int i = 3; i < 1000; i++)
 
 
 
+% TODO: Coin change
+\begin{frame}{Coin change}
+    \vspace{20pt}
+
+    \bi
+\item Given an array of coin denominations $d_0$, $d_2$, \ldots, $d_{n-1}$,
+            and some amount $x$: What is minimum number of coins needed to
+            represent the value $x$?
+
+        %\item Remember the greedy algorithm for Coin change?
+        %\item It didn't always give the optimal solution, and sometimes it didn't even give a solution at all...
+
+        %\vspace{10pt}
+        %\item What about dynamic programming?
+    \ei
+\end{frame}
+
+\begin{frame}{Coin change}
+    \bi
+        \item First step: formulate the problem recursively
+        \vspace{20pt}
+\item Let $\mathrm{opt}(i,x)$ denote the minimum number of coins needed to represent the value $x$ if we're only allowed to use the coin denominations $d_0$, \ldots, $d_i$
+        \vspace{10pt}
+        \item Base case: $\mathrm{opt}(i,x) = \infty$ if $x < 0$
+        \item Base case: $\mathrm{opt}(i,0) = 0$
+        \item Base case: $\mathrm{opt}(-1,x) = \infty$
+        \vspace{10pt}
+\item $\mathrm{opt}(i,x) = \mathrm{min} \left\{
+	\begin{array}{l}
+        1 + \mathrm{opt}(i, x - d_i) \\
+        \mathrm{opt}(i-1, x)
+	\end{array}
+\right.$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Coin change}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int INF = 100000;
+int d[10];
+
+int opt(int i, int x) {
+    if (x < 0) return INF;
+    if (x == 0) return 0;
+    if (i == -1) return INF;
+
+    int res = INF;
+    res = min(res, 1 + opt(i, x - d[i]));
+    res = min(res, opt(i - 1, x));
+
+    return res;
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Coin change}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int INF = 100000;
+int d[10];
+int mem[10][10000];
+memset(mem, -1, sizeof(mem));
+
+int opt(int i, int x) {
+    if (x < 0) return INF;
+    if (x == 0) return 0;
+    if (i == -1) return INF;
+
+    if (mem[i][x] != -1) return mem[i][x];
+
+    int res = INF;
+    res = min(res, 1 + opt(i, x - d[i]));
+    res = min(res, opt(i - 1, x));
+
+    mem[i][x] = res;
+    return res;
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}{Coin change}
+    \vspace{30pt}
+    \bi
+        \item Time complexity?
+        \item Number of possible inputs are $n \times x$
+        \item Each input will be processed in $O(1)$ time, assuming recursive calls are constant
+        \item Total time complexity is $O(n\times x)$
+    \ei
+\end{frame}
+
+\begin{frame}{Coin change}
+    \bi
+        \vspace{30pt}
+        \item How do we know which coins the optimal solution used?
+        \item We can store backpointers, or some extra information, to trace backwards through the states
+        \item See example...
+    \ei
+\end{frame}
+
+
+
 % TODO: Maximum sum
 \begin{frame}{Maximum sum}
 
@@ -629,165 +729,147 @@ printf("%d\n", maximum);
     \ei
 \end{frame}
 
-% TODO: Coin change
-\begin{frame}{Coin change}
+
+
+\begin{frame}{2D Max Range Sum}
     \vspace{20pt}
-
     \bi
-\item Given an array of coin denominations $d_0$, $d_2$, \ldots, $d_{n-1}$,
-            and some amount $x$: What is minimum number of coins needed to
-            represent the value $x$?
-
-        %\item Remember the greedy algorithm for Coin change?
-        %\item It didn't always give the optimal solution, and sometimes it didn't even give a solution at all...
-
-        %\vspace{10pt}
-        %\item What about dynamic programming?
+      \item Extension of 1D Max Range Sum
+      \item Iterate over all lines $z$ as (potential) top-most line of the sub-matrix
+      \item Iterate over all lines $x$ as (potential) bottom-most line of the sub-matrix
+      \item We can now reduce to 1D Max Range Sum via
+	\[a[i] = \sum_{j = z}^x a[i][j]\]
+      \item Runtime \pause $\mathcal O(n^4)$ \pause
+      \item Clever computation of $a[i]$ gives $\mathcal O(n^3)$
     \ei
 \end{frame}
 
-\begin{frame}{Coin change}
+\begin{frame}[fragile]{2D Max Range Sum}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int array[101][101];
+int maxSum2D(int N){
+    int S = 0;
+    int pr[100];
+    FOR(z, 0, N){
+        FOR(i, 0, N) pr[i] = 0;
+        FOR(x, z, N){
+            int t = 0;
+            int s = -oo;
+            FOR(i, 0, N){
+                pr[i] = pr[i] + array[x][i];
+                t = t + pr[i];
+                if (t > s) s = t;
+                if (t < 0) t = 0;
+            }
+            if(s > S) S = s;
+        }
+    }
+    return S;
+}
+    \end{minted}
+\end{frame}
+
+
+
+\begin{frame}{Squares}
+    \vspace{20pt}
     \bi
-        \item First step: formulate the problem recursively
-        \vspace{20pt}
-\item Let $\mathrm{opt}(i,x)$ denote the minimum number of coins needed to represent the value $x$ if we're only allowed to use the coin denominations $d_0$, \ldots, $d_i$
-        \vspace{10pt}
-        \item Base case: $\mathrm{opt}(i,x) = \infty$ if $x < 0$
-        \item Base case: $\mathrm{opt}(i,0) = 0$
-        \item Base case: $\mathrm{opt}(-1,x) = \infty$
-        \vspace{10pt}
-\item $\mathrm{opt}(i,x) = \mathrm{min} \left\{
-	\begin{array}{l}
-        1 + \mathrm{opt}(i, x - d_i) \\
-        \mathrm{opt}(i-1, x)
-	\end{array}
+      \item Determine the smallest $n$, s.t. $N$ is the sum of $n$ squares
+      \item Use DP over $(i,j)$  -- number of squares necessary to achieve $i$ where the largest square is $j^2$.
+      \item Runtime \pause $\mathcal O(N\cdot\sqrt{N}^2) = \mathcal O(N^2)$ \pause
+      \item Do we really need $j$?
+      \item DP over $(i)$ number of squares necessary to achieve $i$ and 
+      \[
+    dp(i) = \min_{j = 0}^{\sqrt{i}} 1 + dp(i - j^2)
+      \]
+      \item Runtime \pause $\mathcal O(N\cdot\sqrt{N})$
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{Squares}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int dp[10001];
+
+dp[0] = 0;
+FOR(i,1,10001){
+    int x = 1;
+    dp[i] = oo;
+    while (x*x <= i) dp[i] = min(dp[i], dp[i-x*x]+1), x++;
+}
+    \end{minted}
+\end{frame}
+
+% TODO: Longest common subsequence
+\begin{frame}{Longest common subsequence}
+    \vspace{20pt}
+    \bi
+\item Given two strings (or arrays of integers) $a[0]$, \ldots, $a[n-1]$ and $b[0]$, \ldots, $b[m-1]$, find the length of the longest subsequence that they have in common.
+
+    \vspace{10pt}
+\item $a = $\texttt{"b\underline{an}an\underline{inn}"}
+\item $b = $\texttt{"k\underline{anin}a\underline{n}"}
+    \vspace{5pt}
+\item The longest common subsequence of $a$ and $b$, \texttt{"aninn"}, has length 5
+    \ei
+\end{frame}
+
+\begin{frame}{Longest common subsequence}
+    \vspace{20pt}
+    \bi
+\item Let $\mathrm{lcs}(i, j)$ be the length of the longest common subsequence of the strings $a[0]$, \ldots, $a[i]$ and $b[0]$, \ldots, $b[j]$
+
+    \vspace{10pt}
+\item Base case: $\mathrm{lcs}(-1, j) = 0$
+\item Base case: $\mathrm{lcs}(i, -1) = 0$
+    \vspace{10pt}
+\item $\mathrm{lcs}(i, j) = \mathrm{max} \left\{
+    \begin{array}{ll}
+        \mathrm{lcs}(i,j-1) & \\
+        \mathrm{lcs}(i-1,j) & \\
+        1 + \mathrm{lcs}(i-1,j-1) & \textrm{if } a[i] = b[j] \\
+    \end{array}
 \right.$
     \ei
 \end{frame}
 
-\begin{frame}[fragile]{Coin change}
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-int INF = 100000;
-int d[10];
-
-int opt(int i, int x) {
-    if (x < 0) return INF;
-    if (x == 0) return 0;
-    if (i == -1) return INF;
-
-    int res = INF;
-    res = min(res, 1 + opt(i, x - d[i]));
-    res = min(res, opt(i - 1, x));
-
-    return res;
-}
-    \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{Coin change}
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-int INF = 100000;
-int d[10];
-int mem[10][10000];
+\begin{frame}[fragile]{Longest common subsequence}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+string a = "bananinn",
+       b = "kaninan";
+int mem[1000][1000];
 memset(mem, -1, sizeof(mem));
 
-int opt(int i, int x) {
-    if (x < 0) return INF;
-    if (x == 0) return 0;
-    if (i == -1) return INF;
+int lcs(int i, int j) {
+    if (i == -1 || j == -1) {
+        return 0;
+    }
+    if (mem[i][j] != -1) {
+        return mem[i][j];
+    }
 
-    if (mem[i][x] != -1) return mem[i][x];
+    int res = 0;
+    res = max(res, lcs(i, j - 1));
+    res = max(res, lcs(i - 1, j));
 
-    int res = INF;
-    res = min(res, 1 + opt(i, x - d[i]));
-    res = min(res, opt(i - 1, x));
+    if (a[i] == b[j]) {
+        res = max(res, 1 + lcs(i - 1, j - 1));
+    }
 
-    mem[i][x] = res;
+    mem[i][j] = res;
     return res;
 }
     \end{minted}
 \end{frame}
 
-\begin{frame}{Coin change}
-    \vspace{30pt}
+\begin{frame}{Longest common subsequence}
+    \vspace{40pt}
     \bi
-        \item Time complexity?
-        \item Number of possible inputs are $n \times x$
-        \item Each input will be processed in $O(1)$ time, assuming recursive calls are constant
-        \item Total time complexity is $O(n\times x)$
+        \item Time complexity? \pause
+            \vspace{10pt}
+        \item There are $n\times m$ possible inputs
+        \item Each input is processed in $O(1)$, assuming recursive calls are $O(1)$
+        \item Total time complexity is $O(n\times m)$
     \ei
-\end{frame}
-
-\begin{frame}{Coin change}
-    \bi
-        \vspace{30pt}
-        \item How do we know which coins the optimal solution used?
-        \item We can store backpointers, or some extra information, to trace backwards through the states
-        \item See example...
-    \ei
-\end{frame}
-
-
-
-\begin{frame}{Wedding Shopping}
-    \vspace{20pt}
-    \bi
-    	\item Given a set of garments $G$ where each garment has a (integer) price $p_i$ and a type $t_i$.
-        \item We have to by one garment of each type and spend as much as possible, but not more than $M$.
-    \ei
-    \pause
-    An example ($M = \only<2-3>{20}\only<4>{\mathbf{17}}$ and $C = 3$)
-    \bi
-    	\item 1. type: 6 \only<2-3>{4}\only<4>{\textbf{4}} \only<2,4>{8}\only<3>{\textbf{8}}
-    	\item 2. type: 5 \only<2>{10}\only<3-4>{\textbf{10}}
-    	\item 3. type: \only<2,4>{1}\only<3>{\textbf{1}} 5 \only<2-3>{3}\only<4>{\textbf{3}} 5
-    \ei
-\end{frame}
-
-\begin{frame}{Wedding Shopping}
-    \vspace{20pt}
-    \bi[<+->]
-    	\item Let $max\_spent(i)$ be the max amount we can spend to buy the first $i$ garments
-    	\item $max\_spent(i) = $\\$\max_{g} max\_spent(i-1) + p_g$ and not $\geq M$
-    	\item \dots essentially greedy \only<4->{...  and not correct}
-    	\item<5-> add the amount of spend money as a dimension
-    	\item<5-> the DP-value is now a bool
-    	\item<5-> $spent(i,v) = \bigwedge_g spend(i-1,v-p_g)$
-    	\item<6->[$\Rightarrow$] similar to 0-1 Knapsack
-    \ei
-    \visible<4>{
-    $M = 10$ and $C = 3$
-    \bi
-    	\item 1. type: 1 2 10
-    	\item 2. type: 4
-    	\item 3. type: 4
-    \ei
-    }
-\end{frame}
-
-
-\begin{frame}[fragile]{Wedding Shopping}
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-vi garms[20];
-bool dp[21][201];
-
-FOR(i,0,m) dp[0][i] = false;
-dp[0][m] = true;
-	
-FOR(gt,1,c+1) FOR(a,0,m+1){
-    dp[gt][a] = false;
-    FORIT(g,garms[gt-1])
-        if (a + *g <= m && dp[gt-1][a+*g]) dp[gt][a] = true;
-}
-bool found = false;
-FOR(i,0,m+1) if (dp[c][i]) {
-    cout << m-i << endl;
-    found = true;
-    break;
-}
-if (!found) cout << "no solution" << endl;
-    \end{minted}
 \end{frame}
 
 \end{document}
-

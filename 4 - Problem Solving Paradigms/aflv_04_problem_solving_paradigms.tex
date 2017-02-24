@@ -206,14 +206,14 @@ do {
 \begin{frame}{Iterating through permutations}
     \vspace{40pt}
 
-    \bi
-        \item Even simpler in Python...
-        \vspace{20pt}
-        \item Remember that there are $n!$ permutations of length $n$, so usually you can only go through all permutations if $n \leq 11$
+		\bi
+        %\item Even simpler in Python...
+       \vspace{20pt}
+	   \item Remember that there are $n!$ permutations of length $n$, so usually you can only go through all permutations if $n \leq 11$
             \bi
                 \item Otherwise you need to find a more clever approach than complete search
             \ei
-            \vspace{20pt}
+           \vspace{20pt}
     \ei
 \end{frame}
 
@@ -243,7 +243,7 @@ for (int subset = 0; subset < (1 << n); subset++) {
     \vspace{40pt}
 
     \bi
-        \item Similar in Python
+       % \item Similar in Python
         \vspace{20pt}
         \item Remember that there are $2^n$ permutations of length $n$, so usually you can only go through all permutations if $n \leq 25$
             \bi
@@ -624,6 +624,7 @@ bool binary_search(const vector<int> &arr, int x) {
     \bi
         \item This might be the most well known application of binary search, but it's far from being the only application
         \item More generally, we have a predicate $p : \{0,\ldots,n-1\} \rightarrow \{T, F\}$ which has the property that if $p(i) = T$, then $p(j) = T$ for all $j > i$
+		\item Further we know that $p(0) = F$ and $p(n-1) = T$
         \item Our goal is to find the smallest index $j$ such that $p(j) = T$ as quickly as possible
     \ei
 
@@ -673,25 +674,25 @@ bool p(int i) {
 }
     \end{minted}
 
-    \vspace{20pt}
-    \bi
-        \item Later we'll see how to use this in other ways
-    \ei
+		% \vspace{20pt}
+    %\bi
+    %    \item Later we'll see how to use this in other ways
+    %\ei
 \end{frame}
 
 % TODO: Binary search over reals
 \begin{frame}[fragile]{Binary search over reals}
     \bi
         \item An even more general version of binary search is over the real numbers
-        \item We have a predicate $p : [lo,hi] \rightarrow \{T, F\}$ which has the property that if $p(i) = T$, then $p(j) = T$ for all $j > i$
+		\item We have a predicate $p : [lo,hi] \rightarrow \{T, F\}$ which has the property that if $p(i) = T$, then $p(j) = T$ for all $j > i$, also $p(lo)= F$ and $p(hi) = T$
         \item Our goal is to find the smallest real number $j$ such that $p(j) = T$ as quickly as possible
 
         \vspace{5pt}
-        \item Since we're working with real numbers (hypothetically), our $[lo,hi]$ can be halved infinitely many times without ever becoming a single real number
+        \item Since we're working with real numbers, our $[lo,hi]$ can be halved infinitely many times without ever becoming a single real number
         \item Instead it will suffice to find a real number $j'$ that is very close to the correct answer $j$, say not further than $EPS = 2^{-30}$ away
 
         \vspace{5pt}
-    \item We can do this in $O(\log(\frac{hi - lo}{EPS}))$ time in a similar way as when we were binary searching an array
+    \item We can do this in $O(\log(\frac{hi - lo}{EPS}) \times f)$ time in a similar way as when we were binary searching an array
     \ei
 \end{frame}
 
@@ -760,6 +761,26 @@ bool p(double x) {
         \vspace{5pt}
         \item $p(i)$ checks whether $i$ is a solution, then we simply apply binary search on $p$ to get the minimum or maximum solution
     \ei
+\end{frame}
+
+\begin{frame}{Ternary Search}
+		\vspace{10pt}
+		\bi
+%\item Variant of Binary Search, iff $p$ is true only on a single intervall and else false:
+%    \begin{center}
+%        \begin{tabular}{ccccccccccccccccccc}
+%				$i$ & $0$ & $\cdots$ & $j-1$ & \color{vhilight}{$j$} & $\cdots$ & \color{vhilight}{$k$} & $k+1$& $\cdots$ & $n-1$ \\
+%            \hline
+%				$p(i)$ & $F$ & $\cdots$ & $F$ & \color{vhilight}{$T$} & $\cdots$ & \color{vhilight}{$T$} & $F$ & $\cdots$ & $T$ \\
+%        \end{tabular}
+%    \end{center}
+%		\item We are looking for any
+			\item Variant of Binary Search when optimising a convex (or concave) function
+			\item Indstead of selecting one point in the middle, divide the current interval in three parts and exclude one of them.
+		\ei
+		\begin{center}
+				Insert Figure here
+		\end{center}
 \end{frame}
 
 % TODO: Example problem
