@@ -101,6 +101,13 @@
     }
 }
 
+\begin{frame}{todos}
+		\bi
+			\item add figure for 2D max sum
+			\item show 1-D $n^2$ coin change
+			\item redo slides
+		\ei
+\end{frame}
 
 \begin{frame}{Today we're going to cover}
     \vspace{40pt}
@@ -643,7 +650,7 @@ int opt(int i, int x) {
         \vspace{5pt}
     \item $\mathrm{max\_{}sum}(i) = \mathrm{max}(arr[i], arr[i] + \mathrm{max\_{}sum}(i - 1))$
         \vspace{15pt}
-        \item Then the answer is just $\mathrm{max}_{\ 0 \leq i < n}\ \{\ \mathrm{max\_{}sum}(i)\ \}$
+	\item Then the answer is just $\mathrm{max}\ \{0, \mathrm{max}_{\ 0 \leq i < n}\ \{\ \mathrm{max\_{}sum}(i)\ \}\}$
     \ei
 
 \end{frame}
