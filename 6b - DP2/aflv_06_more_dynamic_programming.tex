@@ -107,14 +107,72 @@
     \bi
         \item Dynamic Programming \pause - part II
         \item DP with internal componentes
-        \item DP over bitmarsks
+        \item DP over bitmarsks (for $\mathbb{NP}$ problems)
+    \ei
+\end{frame}
+
+
+\begin{frame}{Recap}
+    \vspace{40pt}
+    Which structures have we seen last week?
+    \bi
+        \item 
+        \item 
+        \item 
+        \item 
         \item 
     \ei
 \end{frame}
 
 
 \begin{frame}{01-Knapsack}
-	...
+	\bi
+		\item<1-> Given $N$ objects $(w_i,g_i)$ defined by a weight $w_i$ and a gain $g_i$.
+		\item<2-> For a given $W$, we have to determine the subset $S$ of these objects, s.t.
+		\bi
+			\item $\sum_{i \in S} w_i \leq W$
+			\item $\sum_{i \in S} g_i $ is maximal
+		\ei
+		\item<3-> There are a lot of variants, but all are $\mathbb{NP}$-complete.
+		\vspace{40pt}
+		\item<4-> Solve via DP over the summed weight
+		\bi
+			\item Note that this is technically exponential in $W$ $\dots$
+		\ei
+		\item<5-> The procedure is quite similar to Coin Change
+	\ei
+\end{frame}
+
+
+\begin{frame}{01-Knapsack}
+	\bi
+		\item Formulate recursively as $ks(i,w)$ --\\
+		maximum gain achievable with first $i$ objects and a weight limit of $w$
+	\ei
+	\begin{align*}
+		ks(0,w) &= 0\\
+		ks(i,w) &= ks(i-1,w) & \text{ if } w_i > w\\
+		ks(i,w) &= \max (ks(i-1,w), g_i + ks(i-1,w-w_i)) & \text{ if } w_i \leq w
+	\end{align*}
+\end{frame}
+
+\begin{frame}[fragile]{01-Knapsack}
+\begin{minted}[fontsize=\footnotesize]{cpp}
+int dp[MAXN+1][MAXW+1];
+
+int knapsack(vector<pii> objects, int W){
+    FOR(i,0,W+1) dp[0][i] = 0;
+    FOR(i,1,sz(objects)+1) FOR(j,0,W+1){
+        dp[i][j] = dp[i-1][j];
+        if (objects[i-1].frist <= j)
+            dp[i][j] = max(dp[i][j], objects[i-1].second +
+                           dp[i-1][j - objects[i-1].first]);
+    }
+    
+    return dp[sz(objects)][W];
+}
+\end{minted}
+\visible<2->{Runtime?}
 \end{frame}
 
 
@@ -180,8 +238,27 @@ if (!found) cout << "no solution" << endl;
 \end{frame}
 
 
-\begin{frame}{Bridges of Koelsberg}
-	UVA 1172
+\begin{frame}{Bridges of Kolsberg}
+	\bi
+		\item A river with $n$ cities on the north and $m$ on the south bank.
+		\item Each city has a trade value $v_i$ and a ``type'' $t_i$
+		\item You have to build brides between pairs of cities of the same type on both banks, s.t. no two bridges intersect.
+	\ei
+	\begin{center} Insert Figure here \end{center}
+\end{frame}
+
+
+\begin{frame}{Bridges of Kolsberg}
+	\bi
+		\item Do 2-dimensional DP
+		\item<2-> $bridge(i,j)$ - maximum value possible if all bridges start left of $i$ on the north bank, and end left of $j$ on the south bank.
+	\ei
+	
+	\begin{align*}
+		bridge(0,j) = &bridge(i,0) = 0\\
+		brdige(i,j) = &\mathrm{min} \{bridge(i,j-1), bridge(i-1,j),\\
+						&\hspace{1cm} v_i*v_j + bridge(i-1,j-1) \text{ if } t_i = t_j\}\\
+	\end{align*}
 \end{frame}
 
 
@@ -445,7 +522,19 @@ printf("%d\n", tsp(0, 1<<0));
 
 
 \begin{frame}{Traveling salesman with teleport}
-	GCPC 2015 - Journey to Greece
+	\bi
+		\item It is not untypical, that we have to adapt a known DP to accommodate for some change in the setting.
+		\item<2-> Consider TSP where you have the option to ``teleport'' from some node to some other, taking $s$ time, but you can use this teleport one once.
+		\vspace{10pt}
+		\item<3-> Introduce a new DP-Dimension: Whether we have used the teleport or not.
+		
+		\vspace{20pt}
+\item<4-> $\mathrm{tsp}(i, \textrm{all vertices},0) = c_{i,0}$
+\item<4-> $\mathrm{tsp}(i, S, 0) = \mathrm{min}_{\ j \not\in S\ } \{\ c_{i,j} + \mathrm{tsp}(j, S \cup \{j\},0)\ \}$
+\item<4-> $\mathrm{tsp}(i, \textrm{all vertices},1) = \mathrm{min}\{s, c_{i,0}\}$
+\item<4-> $\mathrm{tsp}(i, S, 1) = \mathrm{min}\{ \mathrm{min}_{\ j \not\in S\ } \{\ c_{i,j} + \mathrm{tsp}(j, S \cup \{j\},1)\ \}$\\
+\hspace{3.1cm} $\mathrm{min}_{\ j \not\in S\ } \{\ s + \mathrm{tsp}(j, S \cup \{j\},0)\ \} \}$
+	\ei
 \end{frame}
 
 \begin{frame}[fragile]{Traveling salesman problem}
