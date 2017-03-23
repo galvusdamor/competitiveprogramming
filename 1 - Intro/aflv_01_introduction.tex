@@ -6,7 +6,9 @@
 \begin{frame}{What is Competitive Programming?}
     \vspace{40pt}
     \bi
-		\item .. the art of solving complex, well-defined problems quickly within a given time-bound (both for coding and program runtime) 
+		\item .. the art of solving complex, well-defined algorithmical or mathematical problems quickly within a given time-bound (both for coding and program runtime) 
+
+		\vspace{20pt}
 		\pause
 		\item There are a \emph{lot} of Programming Competitions
 		\bi
@@ -22,28 +24,98 @@
 \end{frame}
 
 \begin{frame}{What is the ACM ICPC?}
-    \vspace{40pt}
-    \bi
-		\item Annual, multi-level programming contest for students
-		\item 
-	\ei
+\vspace{20pt}
+\bi
+\item Annual, multi-level programming contest for students
+\item Students participate in teams of 3 and share a single computer
+\item 5 hours and 10-12 programming problems
+\pause
+\vspace{20pt}
+\item The team with the most solved problems wins!
+\pause
+\vspace{20pt}
+\item Multi-level competition
+		\bi
+			\item GCPC (German Collegiate Programming contest) - June/July
+			\item NWERC (North-Western European Regional Contest) - End of November
+			\item World Finals - March - June
+		\ei
+\ei
 \end{frame}
 
-\begin{frame}{Why learn about Competitive Programming?}
-    \vspace{40pt}
+%\begin{frame}{What is the ACM ICPC?}
+%		\begin{center}
+%			\only<1>{\includegraphics[width = 0.95\textwidth]{images/hall.jpg}}
+%			\only<2>{\includegraphics[width = \textwidth]{images/team.jpg}}
+%			\only<3>{\includegraphics[width = \textwidth]{images/wf.jpg}}
+%			\only<4>{\includegraphics[width = 0.95\textwidth]{images/wc.jpg}}
+%			\only<5>{\includegraphics[width = \textwidth]{images/bjarne.jpg}}
+%		\end{center}
+%\end{frame}
+
+\begin{frame}{Why train Competitive Programming?}
     \bi
 		\item Learn about new algorithms.
 		\item Learn to tackle complex problems in a systematic way.
 		\item Learn to see patterns in problems.
+		\item Learn perseverance when facing (seemingly) impossible problem.
+		\item Learn to de-bug problems.
+		\item Learn to design algorithms that always work.
 
-		\pause
+		\pause \vspace{10pt}
+		\item To be a better (and faster) programmer!
+		\pause \vspace{10pt}
 		\item To succed at job interviews!
-		\pause
-		\item To win Programming Competitions!
+		\pause \vspace{10pt}
+		\item To win programming competitions!
 	\ei
 \end{frame}
         
-		perseverance
+% TODO: Goals
+\begin{frame}{Goal}
+
+    \vspace{30pt}
+
+    \bi
+        \item Given a problem, we want to
+            \bi
+                \item solve it efficiently
+                \item by using algorithms and data structures,
+                \item convert our solution into a program,
+                \item do it as quickly as possible (under pressure)
+                \item and do it correctly (without bugs)
+            \ei
+
+        \vspace{20pt}
+
+        %\item This course will exercise this process
+        \pause
+        \item \dots to perform well at GCPC and NWERC.
+    \ei
+\end{frame}
+
+% TODO: About the course
+\begin{frame}{How?}
+    \vspace{10pt}
+
+    \bi
+        \item Study common types of problems
+	    \item Show common applications of algorithms and data structures you already know 
+        \item Introduce other algorithms and data structures
+        \bi
+		  \item Have you heard about \texttt{map}, \texttt{set}, \texttt{priority\_queue} or \texttt{dequeue}?
+		  \item What about Fenwick-, Quad- and Suffix-Trees? 
+		  \item What about Push-Relable, Gift-Wrapping, 2-SAT?
+		  \item There is \underline{a lot} more
+        \ei
+        \item Go over some commonly used theory
+        \item Practice problem solving
+        \item Practice programming
+        \item More practice\pause, more practice\pause, more practice \dots
+    \ei
+\end{frame}
+
+		
 		
 	%	\item {\color{hilight}There's no such thing as a stupid question.}
     %    \item If you have questions: Interrupt and \underline{ask}!
@@ -63,7 +135,8 @@
 			ECTS & 6 \\
 			Mark & No exam\\
 				 & Marks will be determined according to \\
-				 & individual performance in the tutorial.
+				 & individual performance in the tutorial.\\
+				 Moodle & \url{moodle.uni-ulm.de/course/view.php?id=6870}
 		\end{tabular}
 \end{frame}
 
@@ -71,6 +144,7 @@
 		\bi
 			\item There will be a set of (usually) 6 programming problems each week.
 			\item They are available from Thursday 16:00 and must be handed in until Thursday 16:00 next week.
+			\item Team hand-ins are not allowed.
 			\item Problems are categorized into five difficulties
 			\item Solving a problem gives
 			\bi
@@ -95,15 +169,34 @@
 		\item You have to hand in your solutions to judging system.
 		\bi
 			\item Submissions will be judged immediately and automatically	
-			\item You only get points for a problem if the judge accepts your solution, i.e., if it is corrent on all inputs, does not crash and finished in time.
+			\item You only get points for a problem if the judge accepts your solution, i.e., if it is corrent on all inputs, does not crash and finishes in time.
 			\item There are no partial points
 			\item You can submit your solution as often as you like
-			\item Malicious attacks will be penalised
-			\item The Judge accepts C(++), Java, Python3, and Haskell
+			\item Malicious submissions and attacks will be penalised
+			\item The judge accepts C(++), Java, Python3, and Haskell
 		\ei
 		\item Juge URL \url{https://mandos.informatik.uni-ulm.de}
 		\item Login on the judge is your SIG-Pool account
 		\item All solutions will be checked for plagiarism using an automatic tool
+	\ei
+\end{frame}
+
+
+\begin{frame}{Technical Matters -- Problems}
+	\bi
+		\item The GCPC will take place on Saturday, July, 1\textsuperscript{st}, 11:00-16:00.
+		\item You can take part (and are encouraged to do so) to earn additional points.
+		\bi
+			\item You can take part in teams (up to three students)
+			\item You will be given a pre-coded set of algorithms (TCR)
+		\ei
+		\vspace{20pt}
+		\item On June, 15\textsuperscript{th}, we will do a rehersal instead of a regular tutorial
+		\bi
+			\item 16:00 - 19:00, later submissions will not be allowed
+			\item 6 problems and points as usual
+			\item no teams, but TCR
+		\ei
 	\ei
 \end{frame}
 
@@ -114,68 +207,40 @@
 
     \bi
         \item {\color{hilight}Competitive Programming - The New Lower Bound of Programming Contests} by Steven \& Felix Halim
-        \item First edition can be downloaded at
-        \item {\color{vhilight}https://sites.google.com/site/stevenhalim/}
-        \vspace{20pt}
-        \item We will loosely follow the third edition
+        \item First edition can be downloaded at \\
+        	\url{https://sites.google.com/site/stevenhalim/}
+		\item Third edition is available in the library
     \ei
 \end{frame}
 
 
-
-% TODO: Goals
-\begin{frame}{Goal}
-
-    \vspace{30pt}
-
-    \bi
-        \item Given a problem, we want to
-            \bi
-                \item solve it efficiently
-                \item by using algorithms and data structures,
-                \item convert our solution into a program,
-                \item do it as quickly as possible (under pressure)
-                \item and do it correctly (without bugs)
-            \ei
-
-        \vspace{20pt}
-
-        %\item This course will exercise this process
-        %\pause
-        \item \dots to perform well at GCPC and NWERC.
-    \ei
+\begin{frame}{Semester plan}
+	\begin{tabular}{l l}
+		20.4. & Introduction\\
+			27.4. & Simple Algorithms \\
+			04.5. & Datastructures \\
+			11.5. & Problem Solving Paradigms \\
+			18.5. & Greedy \\
+			23.5. & Dynamic Programming I \\
+			01.6. & Dynamic Programming II \\
+			08.6. & only tutorial\\
+			13.6. & Unweighted Graphs \\
+			22.6. & Practice Contest \\
+			29.6. & Weighted Graphs \\
+			01.7. & GCPC \\
+			06.7. & Geometry \\
+			13.7. & Mathematics \\
+			20.7. & Strings
+	\end{tabular}
 \end{frame}
 
-% TODO: About the course
-\begin{frame}{How?}
-    \vspace{10pt}
 
-    \bi
-        \item Study common types of problems
-        \item Show common applications of algorithms and data structures you already know from
-            \bi
-                \item FG and Algo
-                \item If you don't we'll talk about them (again)
-            \ei
-        \item Introduce other common algorithms and data structures
-        \bi
-	  \item Have you heard about \texttt{map}, \texttt{set}, \texttt{priority\_queue} or \texttt{dequeue}?
-	  \item What about Fenwick-, Quad- and Suffix-Trees? 
-	  \item There is \underline{a lot} more
-        \ei
-        \item Go over some commonly used theory
-        \item Practice problem solving
-        \item Practice programming
-        \item More practice\pause, more practice\pause, more practice \dots
-    \ei
-\end{frame}
 
 
 \begin{frame}{Programming Language}
     \vspace{10pt}
     \bi
         \item I'll use C++ (Java is only useful for its BigInteger/BigDecimal classes)
-        \item all out TCR-Code is in C++
         \item (usually) C++ solutions can be written faster
         \bi
 	  \item preprocessor
@@ -188,7 +253,7 @@
 	  \item neither complete
 	  \item nor correct (you'll see if you dive deeper into the language)
         \ei
-      \item only C, C++, Java, and Python are allowed
+      \item in the ICPC only C, C++, Java, and Python are allowed
     \ei
 \end{frame}
 
@@ -223,7 +288,6 @@ using namespace std;
 
 \begin{frame}[fragile]{C++ for Java Programmers}
     \bi
-        \vspace{20pt}
 
         \item Basic data types:
         \bi
@@ -722,6 +786,30 @@ int main() {
 \end{frame}
 
 \begin{frame}{Tip 2: Do Algorithm Analysis}
+\vspace{30pt}
+{
+		\small
+    \begin{center}
+    \begin{tabular}{c|c|c}
+        $n$ & Slowest Runtime & Example \\
+        \hline
+        $\leq 10$ & $O(n!), O(n^6)$ & Enumerating a permutation \\
+        $\leq 15$ & $O(2^n\times n^2)$ & DP TSP \\
+        $\leq 20$ & $O(2^n), O(n^5)$ & DP + bitmask technique \\
+        $\leq 50$ & $O(n^4)$ & DP with 3 dimensions + $O(n)$ loop\\
+        $\leq 10^2$ & $O(n^3)$ & Floyd Warshall's \\
+        $\leq 10^3$ & $O(n^2)$ & DP, Bubble/Selection/Insertion sort \\
+        $\leq 10^6$ & $O(n\log_2{n})$ & Merge sort, building a Segment tree \\
+        $\leq 10^7$ & $O(n)$ & everything else (greedy, ad hoc) \\
+		$\leq 10^{30}$ & $O(\log_2{n})$ & mathematical problems \\
+    \end{tabular}
+    \end{center}
+}
+
+\end{frame}
+
+
+\begin{frame}{Tip 2: Do Algorithm Analysis}
     \bi
         \item You should practice doing approximate mental calculations
         \item Rule of thumb: $2^{10} \approx 10^{3}$
@@ -731,30 +819,6 @@ int main() {
         \item Even if you don't manage to prove or disprove it, you will probably get a better understanding of the problem
         \vspace{20pt}
     \ei
-\end{frame}
-
-\begin{frame}{Tip 2: Do Algorithm Analysis}
-
-\vspace{50pt}
-
-{
-    \tiny
-    \begin{center}
-    \begin{tabular}{c|c|c}
-        $n$ & Slowest Accepted Algorithm & Example \\
-        \hline
-        $\leq 10$ & $O(n!), O(n^6)$ & Enumerating a permutation \\
-        $\leq 15$ & $O(2^n\times n^2)$ & DP TSP \\
-        $\leq 20$ & $O(2^n), O(n^5)$ & DP + bitmask technique \\
-        $\leq 50$ & $O(n^4)$ & DP with 3 dimensions + $O(n)$ loop\\
-        $\leq 10^2$ & $O(n^3)$ & Floyd Warshall's \\
-        $\leq 10^3$ & $O(n^2)$ & DP, Bubble/Selection/Insertion sort \\
-        $\leq 10^6$ & $O(n\log_2{n})$ & Merge sort, building a Segment tree \\
-        $\leq 10^7$ & $O(n), O(\log_2{n}), O(1)$ & everything else (greedy, ad hoc) \\
-    \end{tabular}
-    \end{center}
-}
-
 \end{frame}
 
 \begin{frame}{Tip 3: Master Programming Languages}
