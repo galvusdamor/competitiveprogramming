@@ -1,133 +1,112 @@
 \documentclass[12pt,t]{beamer}
-\usepackage{graphicx}
-\setbeameroption{hide notes}
-\setbeamertemplate{note page}[plain]
-
-% get rid of junk
-\usetheme{default}
-\beamertemplatenavigationsymbolsempty
-\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
-
-% font
-\usepackage{fontspec}
-\setsansfont{TeX Gyre Heros}
-\setbeamerfont{note page}{family*=pplx,size=\footnotesize} % Palatino for notes
-% "TeX Gyre Heros can be used as a replacement for Helvetica"
-% In Unix, unzip the following into ~/.fonts
-% In Mac, unzip it, double-click the .otf files, and install using "FontBook"
-%   http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros/qhv2.004otf.zip
-
-% named colors
-\definecolor{offwhite}{RGB}{249,242,215}
-% \definecolor{foreground}{RGB}{255,255,255}
-\definecolor{foreground}{RGB}{0,0,0}
-% \definecolor{background}{RGB}{24,24,24}
-\definecolor{background}{RGB}{255,255,255}
-\definecolor{title}{RGB}{107,174,214}
-\definecolor{gray}{RGB}{100,100,100}
-\definecolor{subtitle}{RGB}{102,255,204}
-\definecolor{hilight}{RGB}{20,180,204}
-\definecolor{vhilight}{RGB}{255,111,207}
-\definecolor{lolight}{RGB}{155,155,155}
-%\definecolor{green}{RGB}{125,250,125}
-
-% use those colors
-\setbeamercolor{titlelike}{fg=title}
-\setbeamercolor{subtitle}{fg=subtitle}
-\setbeamercolor{institute}{fg=gray}
-\setbeamercolor{normal text}{fg=foreground,bg=background}
-\setbeamercolor{item}{fg=foreground} % color of bullets
-\setbeamercolor{subitem}{fg=gray}
-\setbeamercolor{itemize/enumerate subbody}{fg=gray}
-\setbeamertemplate{itemize subitem}{{\textendash}}
-\setbeamerfont{itemize/enumerate subbody}{size=\footnotesize}
-\setbeamerfont{itemize/enumerate subitem}{size=\footnotesize}
-
-% page number
-\setbeamertemplate{footline}{%
-    \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[20pt]{\color{gray}
-          \scriptsize\insertframenumber}}}\hspace*{5pt}}
-
-% add a bit of space at the top of the notes page
-\addtobeamertemplate{note page}{\setlength{\parskip}{12pt}}
-
-\usepackage{pbox}
-
-% a few macros
-\newcommand{\bi}{\begin{itemize}}
-\newcommand{\ei}{\end{itemize}}
-\newcommand{\ig}{\includegraphics}
-\newcommand{\subt}[1]{{\footnotesize \color{subtitle} {#1}}}
-
-% title info
-\title{Introduction}
-% \subtitle{Theory, Representation, and Algorithms}
-\author{Gregor Behnke}
-\institute{Institute of Artificial Intelligence\\ Ulm University}
-\date{\tiny based on Bjarki Ágúst Guðmundsson's and Tómas Ken Magnússon's\\Competitive Programming}
-% \date{\href{http://www.biostat.wisc.edu/~kbroman}{\tt \scriptsize biostat.wisc.edu/{\textasciitilde}kbroman}
-% \\[-4pt]
-% \href{http://github.com/kbroman}{\tt \scriptsize github.com/kbroman}
-% }
-
-
-\setbeamertemplate{footline}[text line]{%
-  \parbox{\linewidth}{\vspace*{-8pt}Introduction \hfill \insertpagenumber}}
-\setbeamertemplate{navigation symbols}{}
-
-
-\newcommand{\specialcell}[2][c]{%
-  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
-
-% Tikz
-\usepackage{tikz}
-\usetikzlibrary{arrows,shapes}
-
-% Minted
-\usepackage{minted}
-\usemintedstyle{tango}
-\newminted{cpp}{fontsize=\footnotesize}
-
-% Graph styles
-\tikzstyle{vertex}=[circle,fill=black!50,minimum size=15pt,inner sep=0pt, font=\small]
-\tikzstyle{selected vertex} = [vertex, fill=red!24]
-\tikzstyle{edge} = [draw,thick,-]
-\tikzstyle{dedge} = [draw,thick,->]
-\tikzstyle{weight} = [font=\scriptsize,pos=0.5]
-\tikzstyle{selected edge} = [draw,line width=2pt,-,red!50]
-\tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
-
-
-\begin{document}
-
-% title slide
-{
-    \setbeamertemplate{footline}{} % no page number here
-    \frame{
-        \titlepage
-    }
-}
-
+\subtitle{1 -- Introduction}
+\input{../acmlecture.tex}
 
 % TODO: Welcome
-\begin{frame}{Welcome}
-
+\begin{frame}{What is Competitive Programming?}
     \vspace{40pt}
-
     \bi
-        \item A course in Competitive Programming based on a similar Lecture from Reykjavík University
+		\item .. the art of solving complex, well-defined problems quickly within a given time-bound (both for coding and program runtime) 
+		\pause
+		\item There are a \emph{lot} of Programming Competitions
+		\bi
+			\item Google Code Jam
+			\item Facebook Hacker Cup
+			\item IOI
+			\item HackerRank
+			\item TopCoder
+			\item ACM ICPC
 
-        \vspace{10pt}
-        \item This course comprises 12 (or more \dots) lectures
-        \vspace{10pt}
-
-        \item Each lecture is accompanied by a few practice problems
-        
-        \pause
-        \item {\color{hilight}There's no such thing as a stupid question.}
-        \item If you have questions: Interrupt and \underline{ask}!
+		\ei
     \ei
 \end{frame}
+
+\begin{frame}{What is the ACM ICPC?}
+    \vspace{40pt}
+    \bi
+		\item Annual, multi-level programming contest for students
+		\item 
+	\ei
+\end{frame}
+
+\begin{frame}{Why learn about Competitive Programming?}
+    \vspace{40pt}
+    \bi
+		\item Learn about new algorithms.
+		\item Learn to tackle complex problems in a systematic way.
+		\item Learn to see patterns in problems.
+
+		\pause
+		\item To succed at job interviews!
+		\pause
+		\item To win Programming Competitions!
+	\ei
+\end{frame}
+        
+		perseverance
+		
+	%	\item {\color{hilight}There's no such thing as a stupid question.}
+    %    \item If you have questions: Interrupt and \underline{ask}!
+
+\begin{frame}{Technical Matters}
+		\begin{tabular}{l l}
+			Lecture & Thur. 16:00 - 17:30 (O28/121)\\
+			Tutorial & Thur. 17:30 - 19:00 (Süd-Pool)\\
+					& no lecture on 8.6. and 22.6.\\
+			Changes & 25.5. moved to 23.5.\\
+					& 15.6. moved to 13.6.\\
+					& (both Tue., O27/429)\\
+			\\
+			Examiner & Prof. Dr. Susanne Biundo-Stephan\\
+				& (susanne.biundo@uni-ulm.de)\\
+			Instructor & Gregor Behnke (gregor.behnke@uni-ulm.de)\\
+			ECTS & 6 \\
+			Mark & No exam\\
+				 & Marks will be determined according to \\
+				 & individual performance in the tutorial.
+		\end{tabular}
+\end{frame}
+
+\begin{frame}{Technical Matters -- Tutorial}
+		\bi
+			\item There will be a set of (usually) 6 programming problems each week.
+			\item They are available from Thursday 16:00 and must be handed in until Thursday 16:00 next week.
+			\item Problems are categorized into five difficulties
+			\item Solving a problem gives
+			\bi
+				\item very easy - 2 points
+				\item easy - 3 points
+				\item medium - 4 points
+				\item hard - 5 points
+				\item very hard - 6 points
+			\ei
+			\item Marks are based on total points as follows
+			\bi
+				\item 4.0 -- $33,\overline{3}\%$ of the points
+				\item 1.0 -- $66,\overline{6}\%$ of the points
+				\item linear in between
+			\ei
+		\ei
+\end{frame}
+
+\begin{frame}{Technical Matters -- Problems}
+	\bi
+		\item All problem are ``competition-style'' problems, which ask to compute an output given a specified input.
+		\item You have to hand in your solutions to judging system.
+		\bi
+			\item Submissions will be judged immediately and automatically	
+			\item You only get points for a problem if the judge accepts your solution, i.e., if it is corrent on all inputs, does not crash and finished in time.
+			\item There are no partial points
+			\item You can submit your solution as often as you like
+			\item Malicious attacks will be penalised
+			\item The Judge accepts C(++), Java, Python3, and Haskell
+		\ei
+		\item Juge URL \url{https://mandos.informatik.uni-ulm.de}
+		\item Login on the judge is your SIG-Pool account
+		\item All solutions will be checked for plagiarism using an automatic tool
+	\ei
+\end{frame}
+
 
 % TODO: Book
 \begin{frame}{Course book}
