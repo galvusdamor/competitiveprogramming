@@ -1,152 +1,19 @@
 \documentclass[12pt,t]{beamer}
-\usepackage{graphicx}
-\setbeameroption{hide notes}
-\setbeamertemplate{note page}[plain]
+\subtitle{10 -- Geometry}
+\newcommand{\shorttitle}{Geometry}
+\input{../acmlecture.tex}
 
-% get rid of junk
-\usetheme{default}
-\beamertemplatenavigationsymbolsempty
-\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
-
-% font
-\usepackage{fontspec}
-\setsansfont{TeX Gyre Heros}
-\setbeamerfont{note page}{family*=pplx,size=\footnotesize} % Palatino for notes
-% "TeX Gyre Heros can be used as a replacement for Helvetica"
-% In Unix, unzip the following into ~/.fonts
-% In Mac, unzip it, double-click the .otf files, and install using "FontBook"
-%   http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros/qhv2.004otf.zip
-
-% named colors
-\definecolor{offwhite}{RGB}{249,242,215}
-% \definecolor{foreground}{RGB}{255,255,255}
-\definecolor{foreground}{RGB}{0,0,0}
-% \definecolor{background}{RGB}{24,24,24}
-\definecolor{background}{RGB}{255,255,255}
-\definecolor{title}{RGB}{107,174,214}
-\definecolor{gray}{RGB}{100,100,100}
-\definecolor{subtitle}{RGB}{102,255,204}
-\definecolor{hilight}{RGB}{20,180,204}
-\definecolor{vhilight}{RGB}{255,111,207}
-\definecolor{lolight}{RGB}{155,155,155}
-%\definecolor{green}{RGB}{125,250,125}
-
-% use those colors
-\setbeamercolor{titlelike}{fg=title}
-\setbeamercolor{subtitle}{fg=subtitle}
-\setbeamercolor{institute}{fg=gray}
-\setbeamercolor{normal text}{fg=foreground,bg=background}
-\setbeamercolor{item}{fg=foreground} % color of bullets
-\setbeamercolor{subitem}{fg=gray}
-\setbeamercolor{itemize/enumerate subbody}{fg=gray}
-\setbeamertemplate{itemize subitem}{{\textendash}}
-\setbeamerfont{itemize/enumerate subbody}{size=\footnotesize}
-\setbeamerfont{itemize/enumerate subitem}{size=\footnotesize}
-
-% settings for table of contents
-\setbeamercolor{section in toc}{fg=foreground,bg=background}
-\setbeamerfont{subsection in toc}{size=\footnotesize}
-\setbeamertemplate{section in toc}{{\scriptsize\leavevmode\raise1.35pt\hbox{$\blacktriangleright$}} \inserttocsection}
-%\setbeamertemplate{subsection in toc}{\quad{\tiny\leavevmode\raise1.5pt\hbox{$\blacktriangleright$}} \footnotesize\inserttocsubsection\\}
-\setbeamertemplate{subsection in toc}{\quad\quad\textendash\enspace\inserttocsubsection\\}
-
-% page number
-\setbeamertemplate{footline}{%
-    \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[20pt]{\color{gray}
-          \scriptsize\insertframenumber}}}\hspace*{5pt}}
-
-% add a bit of space at the top of the notes page
-\addtobeamertemplate{note page}{\setlength{\parskip}{12pt}}
-
-% add subsection as frame title when it is empty
-\makeatletter
-  \CheckCommand*\beamer@checkframetitle{%
-    \@ifnextchar\bgroup\beamer@inlineframetitle{}}
-  \renewcommand*\beamer@checkframetitle{%
-    \global\let\beamer@frametitle\relax\@ifnextchar%
-    \bgroup\beamer@inlineframetitle{}}
-\makeatother
-
-\addtobeamertemplate{frametitle}{
-  \ifx\insertframetitle\empty
-      \frametitle{\insertsubsectionhead}
-  \else
-  \fi
- }{}
-
-% a few macros
-\newcommand{\bi}{\begin{itemize}}
-\newcommand{\ei}{\end{itemize}}
-\newcommand{\ig}{\includegraphics}
-\newcommand{\subt}[1]{{\footnotesize \color{subtitle} {#1}}}
-
-
-% title info
-\title{Geometry}
-\author{Gregor Behnke}
-\institute{Institute of Artificial Intelligence\\ Ulm University}
-\date{\tiny based on Bjarki Ágúst Guðmundsson's and Tómas Ken Magnússon's\\Competitive Programming}
-% \date{\href{http://www.biostat.wisc.edu/~kbroman}{\tt \scriptsize biostat.wisc.edu/{\textasciitilde}kbroman}
-% \\[-4pt]
-% \href{http://github.com/kbroman}{\tt \scriptsize github.com/kbroman}
-% }
-
-
-
-% Tikz
-\usepackage{tikz}
-\usepackage{tkz-euclide}
-% \usepackage{intersections}
-\usetkzobj{all}
-\usetikzlibrary{arrows,shapes,angles,quotes,shapes, calc, decorations}
-
-% Minted
-\usepackage{minted}
-\usemintedstyle{tango}
-\newminted{cpp}{fontsize=\footnotesize}
-
-% Graph styles
-\tikzstyle{vertex}=[circle,fill=black!50,minimum size=15pt,inner sep=0pt, font=\small]
-\tikzstyle{selected vertex} = [vertex, fill=red!24]
-\tikzstyle{edge} = [draw,thick,-]
-\tikzstyle{dedge} = [draw,thick,->]
-\tikzstyle{weight} = [font=\scriptsize,pos=0.5]
-\tikzstyle{selected edge} = [draw,line width=2pt,-,red!50]
-\tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
-
-
-\begin{document}
-
-% title slide
-{
-    \setbeamertemplate{footline}{} % no page number here
-    \frame{
-        \titlepage
-    }
-}
-
-%\AtBeginSection[]
-%{
-  %\begin{frame}<beamer>{Geometry}
-    %\vspace{20pt}
-    %\tableofcontents[
-      %currentsection,
-      %hideallsubsections,
-      %%currentsubsection,
-      %%hideothersubsections,
-      %sectionstyle=show/shaded%,
-      %%subsectionstyle=show/shaded/hide
-    %]
-  %\end{frame}
-%}
 
 \begin{frame}<beamer>{Today we're going to cover}
     \vspace{40pt}
     %\tableofcontents[hideallsubsections]
     \bi
       \item Geometry
-      \item Computational geometry \pause
-      \item Only 2D-Geometry, 3D is similar just with one more dimension
+      \item Computational geometry
+	  \bi
+	      \item 2D-Geometry
+		  \item 3D (similar just with one more dimension)
+	  \ei
     \ei
 \end{frame}
 
@@ -187,7 +54,7 @@
         \item Points are represented by a pair of numbers, $(x,y)$.
         \onslide<3->
         \item Vectors are represented in the same way.
-        \item Thinking of points as vectors us to do many things.
+        \item Thinking of points as vectors is quite usefull.
       \ei
     \end{column}
   \end{columns}
@@ -303,6 +170,25 @@ struct pt{
 };
 double len(pt p) { return sqrt(double(p*p)); }
   \end{minted}
+\end{frame}
+
+\begin{frame}{Integer-safety}
+	\bi
+		\item Geometry(-operations) can be grouped into two groups
+		\bi
+			\item exact on integers
+			\item always needs floating-point calculations
+		\ei
+		\item<2-> Many Geometry problems require exact results
+		\bi
+			\item<3-> Testcases are designed to fail on floating-point solutions
+			\item<4-> ... remember \texttt{long double}?
+		\ei
+	\ei
+		\visible<3->{
+	\includegraphics[width = 0.35\textwidth]{figures/27-rotated-dfstree.png} \quad
+	\includegraphics[width = 0.45\textwidth]{figures/wf16_poly.png}
+		}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -467,9 +353,9 @@ typedef complex<double> point;
         \only<4->{
           \item The distance from $p$ to $\vec{u}$ is the distance from $p$ to $q$.
         }
-        \only<5->{
-          \item Unless $q$ is outside $\vec{u}$, then the closest point is either of the endpoints.
-        }
+%        \only<5->{
+%          \item Unless $q$ is outside $\vec{u}$, then the closest point is either of the endpoints.
+%        }
       \ei
     \end{column}
   \end{columns}
@@ -485,9 +371,22 @@ pt closestpt(pt a0, pt a1, pt p) {
     return a0+(d*(d*(p-a0))/(d*d));
 }
   \end{minted} 
-  \ \\ \pause
   \bi
- 	\item \textbf{Not} integer-safe
+	\item<2-> Is \texttt{closestpt(a,b,c)} always on $\overline{ab}$? \only<3->{\quad \textbf{No!}}
+	\ei
+		\begin{overprint}
+\onslide<4->
+				\begin{minted}{cpp}
+pt closestpt(pt a0, pt a1, pt p) {
+    if ((a1 - a0) * (p - a1) > 0) return a1;
+    if ((a0 - a1) * (p - a0) > 0) return a0;
+    pt d=a1-a0;
+    return a0+(d*(d*(p-a0))/(d*d));
+}
+		\end{minted}
+		\end{overprint}
+  \bi
+	\item<5-> \textbf{Not} integer-safe
   \ei
 \end{frame}
 \subsection{Cross product}
@@ -669,7 +568,7 @@ int ccw(pt p0, pt p1, pt p2) {
     return (d1-d2>eps)-(d2-d1>eps);
 }
   \end{minted} 
-  \ \\ \pause
+  \  \pause
   \bi
  	\item Integer-safe
   \ei
@@ -728,6 +627,7 @@ int ccw(pt p0, pt p1, pt p2) {
             &= \lvert(x_1 - x_0, y_1 - y_0)\rvert \\
             &= \texttt{len(x-y)}
           \end{align*}
+  \onslide<4-> \item \textbf{Not} Integer-safe
       \ei
     \end{column}
   \end{columns}
@@ -842,7 +742,7 @@ bool isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
     return 1+(!min(c1,c2) || !min(c3,c4));
 }
   \end{minted} 
-  \ \\ \pause \normalsize
+  \pause \normalsize
   \bi
  	\item Integer-safe
   \ei
@@ -919,7 +819,7 @@ bool isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
         \vspace{-10pt}
         \item Either way
           \begin{minted}{cpp}
-pair<point,point>
+pair<pt,pt>
           \end{minted}
       \ei
     \end{column}
@@ -927,44 +827,44 @@ pair<point,point>
 \end{frame}
 
 
-\begin{frame}
-  Very common task is to find the intersection of two lines or line segments.
-  \bi
-    \onslide<2->
-    \item Given a pair of points $(x_0, y_0)$, $(x_1, y_1)$, representing a
-      line we want to start by obtaining the form $Ax + By = C$.
-    \onslide<3->
-    \item We can do so by setting
-      \begin{align*}
-        A &= y_1 - y_0 \\
-        B &= x_0 - x_1 \\
-        C &= A\cdot x_0 + B\cdot y_1
-      \end{align*}
-    \onslide<4->
-    \vspace{-10pt}
-    \item If we have two lines given by such equations, we simply need to solve
-      for the two unknowns, $x$ and $y$.
-  \ei
-\end{frame}
-
-\begin{frame}
-  For two lines
-  \begin{align*}
-    A_0 x + B_0 y = C_0  \\
-    A_1 x + B_1 y = C_1
-  \end{align*}
-  The intersection point is
-  \begin{align*}
-      x &= \frac{(B_1 \cdot C_0 - B_0 \cdot C_1)}{D} \\
-      y &= \frac{(A_0 \cdot C_1 - A_1 \cdot C_0)}{D}
-  \end{align*}
-  Where
-  \[
-    D = A_0 \cdot B_1 - A_1 \cdot B_0
-  \]
-\end{frame}
-
 \begin{frame}[fragile]
+  Very common task is to find the intersection of two lines or line segments.
+%  \bi
+%    \onslide<2->
+%    \item Given a pair of points $(x_0, y_0)$, $(x_1, y_1)$, representing a
+%      line we want to start by obtaining the form $Ax + By = C$.
+%    \onslide<3->
+%    \item We can do so by setting
+%      \begin{align*}
+%        A &= y_1 - y_0 \\
+%        B &= x_0 - x_1 \\
+%        C &= A\cdot x_0 + B\cdot y_1
+%      \end{align*}
+%    \onslide<4->
+%    \vspace{-10pt}
+%    \item If we have two lines given by such equations, we simply need to solve
+%      for the two unknowns, $x$ and $y$.
+%  \ei
+%\end{frame}
+
+%\begin{frame}
+%  For two lines
+%  \begin{align*}
+%    A_0 x + B_0 y = C_0  \\
+%    A_1 x + B_1 y = C_1
+%  \end{align*}
+%  The intersection point is
+%  \begin{align*}
+%      x &= \frac{(B_1 \cdot C_0 - B_0 \cdot C_1)}{D} \\
+%      y &= \frac{(A_0 \cdot C_1 - A_1 \cdot C_0)}{D}
+%  \end{align*}
+%  Where
+%  \[
+%    D = A_0 \cdot B_1 - A_1 \cdot B_0
+%  \]
+%\end{frame}
+
+%\begin{frame}[fragile]
   \vspace{20pt}
   \begin{minted}{cpp}
 // (oo,0)=same, (oo,_)=parallel, (x,y)=point
