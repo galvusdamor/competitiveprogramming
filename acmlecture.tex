@@ -7,6 +7,11 @@
 \beamertemplatenavigationsymbolsempty
 \hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
 
+\usepackage{mathtools}
+\usepackage{colortbl}
+\usepackage{pgf}
+\usepackage{pgfkeys}
+
 % font
 \usepackage{fontspec}
 \setsansfont{TeX Gyre Heros}
@@ -79,6 +84,8 @@
 % a few macros
 \newcommand{\bi}{\begin{itemize}}
 \newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
 \newcommand{\ig}{\includegraphics}
 \newcommand{\subt}[1]{{\footnotesize \color{subtitle} {#1}}}
 
@@ -100,7 +107,7 @@
 % Tikz
 \usepackage{tikz}
 \usepackage{tkz-euclide}
-\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{arrows,shapes,fpu}
 % \usepackage{intersections}
 \usetkzobj{all}
 \usetikzlibrary{arrows,shapes,angles,quotes,shapes, calc, decorations,matrix}
@@ -113,11 +120,13 @@
 \usepackage{minted}
 \usemintedstyle{tango}
 \newminted{cpp}{fontsize=\footnotesize}
+\newminted{cppsmall}{fontsize=\scriptsize}
 
 % Graph styles
 \tikzstyle{vertex}=[circle,fill=black!50,minimum size=15pt,inner sep=0pt, font=\small]
 \tikzstyle{selected vertex} = [vertex, fill=red!24]
 \tikzstyle{selected2 vertex} = [vertex, fill=hilight!50, text=black]
+\tikzstyle{selected3 vertex} = [vertex, fill=lolight, text=black]
 \tikzstyle{vertex1} = [vertex, fill=red]
 \tikzstyle{vertex2} = [vertex, fill=blue]
 \tikzstyle{vertex3} = [vertex, fill=green, text=black]
@@ -128,8 +137,34 @@
 \tikzstyle{dedge} = [draw,thick,->]
 \tikzstyle{weight} = [font=\scriptsize,pos=0.5]
 \tikzstyle{selected edge} = [draw,line width=2pt,-,red!50]
+\tikzstyle{selected2 edge} = [draw,line width=2pt,-,hilight!50]
+\tikzstyle{selected3 edge} = [draw,line width=2pt,-,pink!50]
 \tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
 
+\def\hepta{\draw[foreground](A) -- (B) -- (C) -- (D) -- (E) -- (F) -- (G) -- cycle;}
+
+% Macro for drawing polygon diagonals. 
+% Example \slice{A/C,C/E,E/G,C/G}
+
+\newcommand{\slice}[1]{%
+    \hepta
+    \draw[foreground] \foreach \x/\y in {#1} {(\x)--(\y)};
+}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>{Mathematics}
+    \vspace{20pt}
+    \tableofcontents[
+      currentsection,
+      hideallsubsections,
+      %currentsubsection,
+      %hideothersubsections,
+      sectionstyle=show/shaded%,
+      %subsectionstyle=show/shaded/hide
+    ]
+  \end{frame}
+}
 
 \begin{document}
 
