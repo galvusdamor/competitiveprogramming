@@ -1,0 +1,144 @@
+\usepackage{graphicx}
+\setbeameroption{hide notes}
+\setbeamertemplate{note page}[plain]
+
+% get rid of junk
+\usetheme{default}
+\beamertemplatenavigationsymbolsempty
+\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+
+% font
+\usepackage{fontspec}
+\setsansfont{TeX Gyre Heros}
+\setbeamerfont{note page}{family*=pplx,size=\footnotesize} % Palatino for notes
+% "TeX Gyre Heros can be used as a replacement for Helvetica"
+% In Unix, unzip the following into ~/.fonts
+% In Mac, unzip it, double-click the .otf files, and install using "FontBook"
+%   http://www.gust.org.pl/projects/e-foundry/tex-gyre/heros/qhv2.004otf.zip
+
+% named colors
+\definecolor{offwhite}{RGB}{249,242,215}
+% \definecolor{foreground}{RGB}{255,255,255}
+\definecolor{foreground}{RGB}{0,0,0}
+% \definecolor{background}{RGB}{24,24,24}
+\definecolor{background}{RGB}{255,255,255}
+\definecolor{title}{RGB}{107,174,214}
+\definecolor{gray}{RGB}{100,100,100}
+\definecolor{subtitle}{RGB}{102,155,204}
+\definecolor{hilight}{RGB}{20,180,204}
+\definecolor{vhilight}{RGB}{255,111,207}
+\definecolor{lolight}{RGB}{155,155,155}
+%\definecolor{green}{RGB}{125,250,125}
+
+% use those colors
+\setbeamercolor{titlelike}{fg=title}
+\setbeamercolor{subtitle}{fg=subtitle}
+\setbeamercolor{institute}{fg=gray}
+\setbeamercolor{normal text}{fg=foreground,bg=background}
+\setbeamercolor{item}{fg=foreground} % color of bullets
+\setbeamercolor{subitem}{fg=gray}
+\setbeamercolor{itemize/enumerate subbody}{fg=gray}
+\setbeamertemplate{itemize subitem}{{\textendash}}
+\setbeamerfont{itemize/enumerate subbody}{size=\footnotesize}
+\setbeamerfont{itemize/enumerate subitem}{size=\footnotesize}
+
+% settings for table of contents
+\setbeamercolor{section in toc}{fg=foreground,bg=background}
+\setbeamerfont{subsection in toc}{size=\footnotesize}
+\setbeamertemplate{section in toc}{{\scriptsize\leavevmode\raise1.35pt\hbox{$\blacktriangleright$}} \inserttocsection}
+%\setbeamertemplate{subsection in toc}{\quad{\tiny\leavevmode\raise1.5pt\hbox{$\blacktriangleright$}} \footnotesize\inserttocsubsection\\}
+\setbeamertemplate{subsection in toc}{\quad\quad\textendash\enspace\inserttocsubsection\\}
+
+% page number
+\setbeamertemplate{footline}{%
+    \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[20pt]{\color{gray}
+          \scriptsize\insertframenumber}}}\hspace*{5pt}}
+
+% add a bit of space at the top of the notes page
+\addtobeamertemplate{note page}{\setlength{\parskip}{12pt}}
+
+% add subsection as frame title when it is empty
+\makeatletter
+  \CheckCommand*\beamer@checkframetitle{%
+    \@ifnextchar\bgroup\beamer@inlineframetitle{}}
+  \renewcommand*\beamer@checkframetitle{%
+    \global\let\beamer@frametitle\relax\@ifnextchar%
+    \bgroup\beamer@inlineframetitle{}}
+\makeatother
+
+\addtobeamertemplate{frametitle}{
+  \ifx\insertframetitle\empty
+      \frametitle{\insertsubsectionhead}
+  \else
+  \fi
+ }{}
+
+
+\usepackage{pbox}
+
+% a few macros
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\ig}{\includegraphics}
+\newcommand{\subt}[1]{{\footnotesize \color{subtitle} {#1}}}
+
+% title info
+\title{Kompetitives Programmieren}
+%\author{Gregor Behnke}
+\institute{Prof. Dr. Susanne Biundo-Stephan \\ Gregor Behnke \\ Institute of Artificial Intelligence\\ Ulm University}
+\date{\tiny based on Bjarki Ágúst Guðmundsson's and Tómas Ken Magnússon's\\Competitive Programming}
+
+
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-8pt}\shorttitle \hfill \insertframenumber/\inserttotalframenumber}}
+\setbeamertemplate{navigation symbols}{}
+
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+% Tikz
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usetikzlibrary{arrows,shapes}
+% \usepackage{intersections}
+\usetkzobj{all}
+\usetikzlibrary{arrows,shapes,angles,quotes,shapes, calc, decorations,matrix}
+\usepackage{forest}
+\pgfdeclarelayer{bg}    % declare background layer
+\pgfsetlayers{bg,main}
+
+
+% Minted
+\usepackage{minted}
+\usemintedstyle{tango}
+\newminted{cpp}{fontsize=\footnotesize}
+
+% Graph styles
+\tikzstyle{vertex}=[circle,fill=black!50,minimum size=15pt,inner sep=0pt, font=\small]
+\tikzstyle{selected vertex} = [vertex, fill=red!24]
+\tikzstyle{selected2 vertex} = [vertex, fill=hilight!50, text=black]
+\tikzstyle{vertex1} = [vertex, fill=red]
+\tikzstyle{vertex2} = [vertex, fill=blue]
+\tikzstyle{vertex3} = [vertex, fill=green, text=black]
+\tikzstyle{vertex4} = [vertex, fill=yellow, text=black]
+\tikzstyle{vertex5} = [vertex, fill=pink, text=black]
+\tikzstyle{vertex6} = [vertex, fill=purple]
+\tikzstyle{edge} = [draw,thick,-]
+\tikzstyle{dedge} = [draw,thick,->]
+\tikzstyle{weight} = [font=\scriptsize,pos=0.5]
+\tikzstyle{selected edge} = [draw,line width=2pt,-,red!50]
+\tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
+
+
+\begin{document}
+
+% title slide
+{
+    \setbeamertemplate{footline}{} % no page number here
+    \frame{
+        \titlepage
+    }
+}
+
+
