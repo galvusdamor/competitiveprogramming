@@ -12,6 +12,61 @@
     \ei
 \end{frame}
 
+\begin{frame}{Data structures you've seen before}
+    \vspace{5pt}
+    \bi
+\item Static arrays \onslide<2->{- {\color{vhilight}int arr[10]}}
+\item Dynamic arrays \onslide<2->{- {\color{vhilight}vector<int>}}
+\item Linked lists \onslide<2->{- {\color{vhilight}list<int>}}
+\item Stacks \onslide<2->{- {\color{vhilight}stack<int>}}
+\item Queues \onslide<2->{- {\color{vhilight}queue<int>}}
+\item Priority Queues \onslide<2->{- {\color{vhilight}priority\_{}queue<int>}}
+\item Sets \onslide<2->{- {\color{vhilight}set<int>}}
+\item Maps \onslide<2->{- {\color{vhilight}map<int, int>}}
+
+    \onslide<3->{
+        \vspace{15pt}
+        \item Usually it's best to use the standard library implementations
+                \bi
+                    \item Almost surely bug-free and fast
+                    \item We don't need to write any code
+                \ei
+        \item Sometimes we need our own implementation
+            \bi
+                \item When we want more flexibility
+                \item When we want to customize the data structure
+            \ei
+    }
+    \ei
+\end{frame}
+
+
+% \section{Data structures}
+% \tableofcontents
+
+\begin{frame}{Why do we need data structures?}
+    \bi
+        \vspace{25pt}
+
+        \item Sometimes our data needs to be organized in a way that allows one or more of
+            \bi
+                \item Efficient inserting
+                \item Efficient deleting
+                \item Efficient querying
+                \item Efficient updating
+            \ei
+        \item Sometimes we need a better way to represent our data
+            \bi
+                \item How do we represent graphs?
+                \item How do we represent small sets?
+                \item How do we represent \dots
+            \ei
+
+        \item Data structures help us achieve those things
+    \ei
+\end{frame}
+
+
 \begin{frame}{Augmenting Data Structures}
     \bi
         \item Sometimes we can store extra information in our data structures to gain more functionality
