@@ -147,7 +147,7 @@
         \item We have a small ($n\leq 30$) number of items
         \item We label them with integers in the range $0,1,\ldots,n-1$
         \item We can represent sets of these items as a 32-bit integer
-        \item The $i$th item is in the set represented by the integer $x$ if the $i$th bit in $x$ is $1$
+        \item The $i$th item is in the set represented by the integer $x$, if the $i$th bit in $x$ is $1$
         \item Example:
             \bi
                 \item We have the set $\{0,3,4\}$
@@ -243,8 +243,8 @@ binary_search(arr, 0, arr.size() - 1, x);
     \end{minted}
 
     \bi
-        \item $T(n) = T(n/2) + 1$
-        \item $O(\log n)$
+        %\item $T(n) = T(n/2) + 1$
+        \item<2-> $O(\log n)$
     \ei
 \end{frame}
 
@@ -307,13 +307,14 @@ while (lo < hi) {
         lo = m + 1;
     }
 }
+printf("lowest index is %d\n", hi);
 
-if (lo == hi && p(lo)) {
-    printf("lowest index is %d\n", lo);
-} else {
-    printf("no such index\n");
-}
     \end{minted}
+%if (lo == hi && p(lo)) {
+%    printf("lowest index is %d\n", lo);
+%} else {
+%    printf("no such index\n");
+%}
 \end{frame}
 
 \begin{frame}[fragile]{Binary search over integers}
@@ -335,7 +336,7 @@ bool p(int i) {
 % TODO: Binary search over reals
 \begin{frame}[fragile]{Binary search over reals}
     \bi
-        \item An even more general version of binary search is over the real numbers
+        \item An even more general version of binary search: over real numbers
 		\item We have a predicate $p : [lo,hi] \rightarrow \{T, F\}$ which has the property that if $p(i) = T$, then $p(j) = T$ for all $j > i$, also $p(lo)= F$ and $p(hi) = T$
         \item Our goal is to find the smallest real number $j$ such that $p(j) = T$ as quickly as possible
 
@@ -480,7 +481,7 @@ bool p(double x) {
 			\item<2->Problem: the runtime is $\mathcal O(n^2)$
 			\vspace{10pt}
 			\item<3-> We sort the list and use clever exclusion rules to only test $\mathcal O(n)$ pairs
-			\item<3-> Technique is called 2-Pointer Search and is (somehow) related to Sweeplin Techniques and Binary Search
+			\item<3-> Technique is called 2-Pointer Search and is (somehow) related to Sweepline Techniques and Binary Search
 		\ei
 \end{frame}
 

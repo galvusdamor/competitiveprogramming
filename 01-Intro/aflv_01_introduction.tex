@@ -1,4 +1,7 @@
-\documentclass[12pt,t]{beamer}
+\ifx \handoutstyle \undefined
+  \def\handoutstyle{} %alternativ: mitloesung
+\fi
+\documentclass[12pt,t,\handoutstyle]{beamer}
 \subtitle{01 -- Introduction}
 \newcommand{\shorttitle}{Introduction}
 \input{../acmlecture.tex}
@@ -37,7 +40,7 @@
 \vspace{20pt}
 \item Multi-level competition
 		\bi
-			\item GCPC (German Collegiate Programming contest) - June/July
+			\item GCPC (German Collegiate Programming Contest) - June/July
 			\item NWERC (North-Western European Regional Contest) - End of November
 			\item World Finals - between March and June
 		\ei
@@ -202,7 +205,7 @@
 			\item You will be given a pre-coded set of algorithms (TCR)
 		\ei
 		\vspace{20pt}
-		\item On June, 15\textsuperscript{th}, we will do a rehersal instead of a regular tutorial
+		\item On June, 22\textsuperscript{th}, we will do a rehersal instead of a regular tutorial
 		\bi
 			\item 16:00 - 19:00, later submissions will not be allowed
 			\item 6 problems and points as usual (but easier problems)
@@ -220,7 +223,8 @@
         \item {\color{hilight}Competitive Programming - The New Lower Bound of Programming Contests} by Steven \& Felix Halim
         \item First edition can be downloaded at \\
         	\url{https://sites.google.com/site/stevenhalim/}
-		\item Third edition is available in the library
+		\item Third edition is available in the library \\
+				\url{https://ulm.ibs-bw.de/aDISWeb/app?service=direct/0/Home/$DirectLink&sp=S127.0.0.1:23002&sp=SAKSWB-IdNr398882932}
     \ei
 \end{frame}
 
@@ -324,7 +328,7 @@ if (i % j) do_something();
 if (i = j) do_something();
         \end{minted}
         \ei
-\item These is also the keyword \texttt{auto}
+	\item There is also the keyword \texttt{auto}
     \ei
 \end{frame}
 
@@ -473,7 +477,6 @@ e.from = 0;
 e.to = 1;
 cout << e.weight << endl;
 	\end{minted}
-	\item Structs are classes where everything is public
 	
     \ei
 \end{frame}
@@ -677,6 +680,7 @@ p += 3;
 0\\
 8\\
 10000\\
+\ \\
 \end{minipage}
 \\
             \hline
@@ -996,6 +1000,7 @@ You will be given the salaries of these 3 employees working in the accounting de
 Case 1: 2000\\
 Case 2: 2500\\
 Case 3: 1500\\
+\ \\
 \end{minipage}
 \\
             \hline
@@ -1121,6 +1126,7 @@ good luck and have fun\\
 \ttfamily
 Case \#{}1: 29\\
 Case \#{}2: 41\\
+\ \\
 \end{minipage}
 \\
             \hline
@@ -1231,6 +1237,7 @@ Basswood 3.4483\\
 White Oak 10.3448\\
 Willow 3.4483\\
 Yellow Birch 3.4483\\
+\ \\
 \end{minipage}
 \\
             \hline
@@ -1324,6 +1331,11 @@ Case 1: 1\\
 Case 2: 0\\
 Case 3: 1\\
 Case 4: 3\\
+\ \\
+\ \\
+\ \\
+\ \\
+\ \\
 \end{minipage}
 \\
             \hline
