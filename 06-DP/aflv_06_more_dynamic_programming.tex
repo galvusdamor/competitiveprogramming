@@ -1,15 +1,10 @@
 \documentclass[12pt,t]{beamer}
 \subtitle{06 -- Dynamic Programming I}
 \newcommand{\shorttitle}{Dynamic Programming I}
+\usepackage{booktabs}
+\usepackage{mathtools}
+%\usepackage[table]{xcolor}
 \input{../acmlecture.tex}
-
-\begin{frame}{todos}
-		\bi
-			\item add figure for 2D max sum
-			\item show 1-D $n^2$ coin change
-			\item redo slides
-		\ei
-\end{frame}
 
 \begin{frame}{Today we're going to cover}
     \vspace{40pt}
@@ -427,13 +422,12 @@ for (int i = 3; i < 1000; i++)
 
 \begin{frame}[fragile]{Coin change}
     \begin{minted}[fontsize=\footnotesize]{cpp}
-int INF = 100000;
 int d[10];
 
 int opt(int i, int x) {
-    if (x < 0) return INF;
+    if (x < 0) return oo;
     if (x == 0) return 0;
-    if (i == -1) return INF;
+    if (i == -1) return oo;
 
     int res = INF;
     res = min(res, 1 + opt(i, x - d[i]));
@@ -446,15 +440,14 @@ int opt(int i, int x) {
 
 \begin{frame}[fragile]{Coin change}
     \begin{minted}[fontsize=\footnotesize]{cpp}
-int INF = 100000;
 int d[10];
 int mem[10][10000];
 memset(mem, -1, sizeof(mem));
 
 int opt(int i, int x) {
-    if (x < 0) return INF;
+    if (x < 0) return oo;
     if (x == 0) return 0;
-    if (i == -1) return INF;
+    if (i == -1) return oo;
 
     if (mem[i][x] != -1) return mem[i][x];
 
@@ -474,7 +467,7 @@ int opt(int i, int x) {
         \item Time complexity?
         \item Number of possible inputs are $n \times x$
         \item Each input will be processed in $O(1)$ time, assuming recursive calls are constant
-        \item Total time complexity is $O(n\times x)$
+        \item Total time complexity is $O(n^2)$
     \ei
 \end{frame}
 
@@ -483,10 +476,48 @@ int opt(int i, int x) {
         \vspace{30pt}
         \item How do we know which coins the optimal solution used?
         \item We can store backpointers, or some extra information, to trace backwards through the states
-        \item See example...
+        %\item See example...
     \ei
 \end{frame}
 
+
+\begin{frame}[fragile]{Coin change}
+    \bi
+        \vspace{30pt}
+        \item Is this the end?
+        \item<2-> Do we (really) need a 2D array?
+        \item<3-> Lets write the code for the bottom-up DP
+    \ei
+\end{frame}
+\begin{frame}[fragile]{Coin change}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int d[10]; int mem[10][10000];
+FOR(i,0,10) mem[i][0] = 0;
+
+FOR(i,1,10000) FOR(j,0,10) {
+    mem[j][i] = j ? mem[j-1][i] : oo;	
+    if (i - d[j] >= 0)
+        mem[j][i] = min(mem[j][i], mem[j][i-d[j]]);
+}
+    \end{minted}
+    \bi
+        \item<2-> Only \texttt{mem[i][9]} is actually relevant!
+        \item<3-> \texttt{mem[i][9]} $ = \min_{j=0}^9$ \texttt{mem[i][j]}
+        \item<4-> If we remove the first index, do we retain all minimum paths?
+    \ei
+\end{frame}
+\begin{frame}[fragile]{Coin change}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int d[10]; int mem[10000];
+mem[0] = 0;
+
+FOR(i,1,10000) {
+    mem[i] = oo;	
+    FOR(j,0,10) if (i - d[j] >= 0)
+        mem[i] = min(mem[i], mem[i-d[j]]);
+}
+\end{minted}
+\end{frame}
 
 
 % TODO: Maximum sum
@@ -653,6 +684,22 @@ printf("%d\n", maximum);
     \ei
 \end{frame}
 
+\begin{frame}{2D Max Range Sum}
+        \begin{center}
+        \begin{tabular}{r|c|c|c|c|c|c|c|}
+            \cmidrule{2-7}
+            \phantom{$\rightarrow$}&\phantom{mm}&\phantom{mm}&\phantom{mm}&\phantom{mm}&\phantom{mm}&\phantom{mm}\\ \cmidrule{2-7}
+            & & & & & & \\ \cmidrule{2-7}
+          \visible<2->{$\stackrel{z}{\Rightarrow}$} \visible<3-4>{$\stackrel{x}{\rightarrow}$} & \only<4->{\cellcolor{blue!100}} & \only<4->{\cellcolor{blue!66}} & \only<4->{\cellcolor{blue!33}} & \only<4->{\cellcolor{red!100}} & \only<4->{\cellcolor{red!66}} &\only<4->{\cellcolor{red!33}} \\ \cmidrule{2-7}
+           \visible<5-6>{$\stackrel{x}{\rightarrow}$} &\only<6->{\cellcolor{blue!100}} & \only<6->{\cellcolor{blue!66}} & \only<6->{\cellcolor{blue!33}} & \only<6->{\cellcolor{red!100}} & \only<6->{\cellcolor{red!66}} &\only<6->{\cellcolor{red!33}} \\ \cmidrule{2-7}
+           \visible<7-8>{$\stackrel{x}{\rightarrow}$} &\only<8->{\cellcolor{blue!100}} & \only<8->{\cellcolor{blue!66}} & \only<8->{\cellcolor{blue!33}} & \only<8->{\cellcolor{red!100}} & \only<8->{\cellcolor{red!66}} &\only<8->{\cellcolor{red!33}} \\ \cmidrule{2-7}
+           \visible<9-10>{$\stackrel{x}{\rightarrow}$} &\only<10->{\cellcolor{blue!100}} & \only<10->{\cellcolor{blue!66}} & \only<10->{\cellcolor{blue!33}} & \only<10->{\cellcolor{red!100}} & \only<10->{\cellcolor{red!66}} &\only<10->{\cellcolor{red!33}} \\ \cmidrule{2-7}
+           \visible<11-12>{$\stackrel{x}{\rightarrow}$} &\only<12->{\cellcolor{blue!100}} & \only<12->{\cellcolor{blue!66}} & \only<12->{\cellcolor{blue!33}} & \only<12->{\cellcolor{red!100}} & \only<12->{\cellcolor{red!66}} &\only<12->{\cellcolor{red!33}} \\ \cmidrule{2-7}
+           \visible<13-14>{$\stackrel{x}{\rightarrow}$} &\only<14->{\cellcolor{blue!100}} & \only<14->{\cellcolor{blue!66}} & \only<14->{\cellcolor{blue!33}} & \only<14->{\cellcolor{red!100}} & \only<14->{\cellcolor{red!66}} &\only<14->{\cellcolor{red!33}} \\ \cmidrule{2-7}
+        \end{tabular}
+        \end{center}
+\end{frame}
+
 \begin{frame}[fragile]{2D Max Range Sum}
     \begin{minted}[fontsize=\footnotesize]{cpp}
 int array[101][101];
@@ -662,8 +709,7 @@ int maxSum2D(int N){
     FOR(z, 0, N){
         FOR(i, 0, N) pr[i] = 0;
         FOR(x, z, N){
-            int t = 0;
-            int s = -oo;
+            int t = 0, s = -oo;
             FOR(i, 0, N){
                 pr[i] = pr[i] + array[x][i];
                 t = t + pr[i];
@@ -678,6 +724,45 @@ int maxSum2D(int N){
     \end{minted}
 \end{frame}
 
+
+\begin{frame}[fragile]{Coin change -- Revisited}
+    \bi
+        \vspace{10pt}
+        \item What if we want to count how many ways there are to pay out a certain amount?
+        \item<2-> We should not count $1ct,2ct$ and $2ct,1ct$ as different ways.
+        \item<3-> We are counting only \emph{sorted} ways to pay out!
+        \vspace{10pt}
+\item<4-> Let $\mathrm{opt}(i,x)$ denote the number of possibilities to represent the value $x$ if we're only allowed to use the coin denominations $d_0$, \ldots, $d_i$ \emph{and the last coin was $d_i$}
+        \vspace{10pt}
+        \item<5-> Base case: $\mathrm{opt}(i,x) = 0$ if $x < 0$
+        \item<5-> Base case: $\mathrm{opt}(i,0) = 1$
+        \item<5-> Base case: $\mathrm{opt}(-1,x) = 0$
+        \vspace{10pt}
+		\item<5-> $\mathrm{opt}(i,x) = \sum_{j=0}^i \mathrm{opt}(j, x - d_i)$
+    \ei
+\end{frame}
+\begin{frame}[fragile]{Coin change -- Revisited}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int d[10]; int mem[10][10000];
+int res[10000];
+FOR(i,1,10) mem[i][0] = 0;
+mem[0][0] = res[0] = 1;
+
+FOR(i,1,10000) {
+    FOR(j,0,10) {
+        mem[j][i] = 0;
+        if (d[j] > i) continue;
+        FOR(k,0,j+1)
+            mem[j][i] += mem[k][i - d[j]];
+    }
+    res[i] = 0;
+    FOR(j,0,10) res[i] += mem[j][i];
+}
+    \end{minted}
+    \bi
+        \item<2-> Here we can't get rid of the second dimension
+    \ei
+\end{frame}
 
 
 \begin{frame}{Squares}
