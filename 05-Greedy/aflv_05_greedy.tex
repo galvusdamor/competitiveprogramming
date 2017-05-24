@@ -34,7 +34,7 @@
     \bi
     	\item 1. Option: Complete Search (via Backtracking) \visible<2->{{\color{gray} -- way to slow}}
     	\visible<3->{\item 2. Option: Dynamic Programming \visible<4->{{\color{gray} -- ok (will be covered next week)\visible<5->{, but what if $N=10^{20}$ and the coins sizes as well?}}}}
-    	\visible<6->{\item 3. Option Greedy!}
+    	\visible<6->{\item 3. Option: Greedy!}
     \ei
 \end{frame}
 
@@ -75,7 +75,7 @@ int minimumCoins(int X){
     int i = N-1;
     while (coins[i] > X && i != -1) i--;
     if (i == -1) assert(false);
-    return coins[i] / X + minimumCoins(X % coins[i]);
+    return X / coins[i] + minimumCoins(X % coins[i]);
 }
     \end{minted}
     %}
@@ -164,7 +164,7 @@ int minimumCoins(int X){
 			\item<2-> For every greedy decision
 			\bi
 				\item<3-> Assume that you have an optimal solution for the current sub-problem
-				\item<4-> Show that it can be transformed into a solution including your greedy choice either with the same (constructive proof) or lower (contradiction) value.
+				\item<4-> Show that it can be transformed into a solution including your greedy choice either with the same (constructive proof) or higher (contradiction) value.
 			\ei
 		\ei
 	\ei
@@ -226,7 +226,7 @@ int maxIntervall(vector<pii> intervals){
 \end{frame}
 
 
-\begin{frame}[fragile]{Interval Scheduling}
+\begin{frame}[fragile]{Interval Partitioning}
     \vspace{30pt}
     \begin{minted}[fontsize=\scriptsize]{cpp}
 int minPartition(vector<pii> intervals){

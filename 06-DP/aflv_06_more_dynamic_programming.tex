@@ -765,34 +765,34 @@ FOR(i,1,10000) {
 \end{frame}
 
 
-\begin{frame}{Squares}
-    \vspace{20pt}
-    \bi
-      \item Determine the smallest $n$, s.t. $N$ is the sum of $n$ squares
-      \item Use DP over $(i,j)$  -- number of squares necessary to achieve $i$ where the largest square is $j^2$.
-      \item Runtime \pause $\mathcal O(N\cdot\sqrt{N}^2) = \mathcal O(N^2)$ \pause
-      \item Do we really need $j$?
-      \item DP over $(i)$ number of squares necessary to achieve $i$ and 
-      \[
-    dp(i) = \min_{j = 0}^{\sqrt{i}} 1 + dp(i - j^2)
-      \]
-      \item Runtime \pause $\mathcal O(N\cdot\sqrt{N})$
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{Squares}
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-int dp[10001];
-
-dp[0] = 0;
-FOR(i,1,10001){
-    int x = 1;
-    dp[i] = oo;
-    while (x*x <= i) dp[i] = min(dp[i], dp[i-x*x]+1), x++;
-}
-    \end{minted}
-\end{frame}
-
+%\begin{frame}{Squares}
+%    \vspace{20pt}
+%    \bi
+%      \item Determine the smallest $n$, s.t. $N$ is the sum of $n$ squares
+%      \item Use DP over $(i,j)$  -- number of squares necessary to achieve $i$ where the largest square is $j^2$.
+%      \item Runtime \pause $\mathcal O(N\cdot\sqrt{N}^2) = \mathcal O(N^2)$ \pause
+%      \item Do we really need $j$?
+%      \item DP over $(i)$ number of squares necessary to achieve $i$ and 
+%      \[
+%    dp(i) = \min_{j = 0}^{\sqrt{i}} 1 + dp(i - j^2)
+%      \]
+%      \item Runtime \pause $\mathcal O(N\cdot\sqrt{N})$
+%    \ei
+%\end{frame}
+%
+%\begin{frame}[fragile]{Squares}
+%    \begin{minted}[fontsize=\footnotesize]{cpp}
+%int dp[10001];
+%
+%dp[0] = 0;
+%FOR(i,1,10001){
+%    int x = 1;
+%    dp[i] = oo;
+%    while (x*x <= i) dp[i] = min(dp[i], dp[i-x*x]+1), x++;
+%}
+%    \end{minted}
+%\end{frame}
+%
 % TODO: Longest common subsequence
 \begin{frame}{Longest common subsequence}
     \vspace{20pt}
