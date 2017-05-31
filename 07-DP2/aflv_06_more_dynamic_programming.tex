@@ -14,18 +14,6 @@
 \end{frame}
 
 
-\begin{frame}{Recap}
-    \vspace{40pt}
-    Which structures have we seen last week?
-    \bi
-        \item 
-        \item 
-        \item 
-        \item 
-        \item 
-    \ei
-\end{frame}
-
 
 \begin{frame}{01-Knapsack}
 	\bi
@@ -325,19 +313,19 @@ printf("%d\n", mx);
     \vspace{20pt}
     \bi
       \item Can we do better? \pause - Yes
-      \item Store 
+      \item<3-> Store 
       \bi
-    \item $m[j]$ - index $k$ of the smallest $a[k]$, s.t. there is a LIS of length $j$ ending at $k$
-    \item $p[i]$ - the predecessor of $a[i]$ in the LIS ending at $a[i]$
+    \item<3-> $m[j]$ - index $k$ of the smallest $a[k]$, s.t. there is a LIS of length $j$ ending at $k$
+    \item<4-> $p[i]$ - the predecessor of $a[i]$ in the LIS ending at $a[i]$
       \ei
-      \item $a[m[0]],\dots,a[m[sz(m)]]$ is non-decreasing
-      \item Process the array in order
+      \item<5-> $a[m[0]],\dots,a[m[sz(m)]]$ is non-decreasing
+      \item<6-> Process the array in order
       \bi
-    \item If $a[i] > a[m[sz(m)]]$ we have a new longest LIS
-    \item Else search of the largest value (index: $j$) smaller than $a[i]$ in $a[m[\cdot]]$. We set replace $m[j] = i$
+    \item<6-> If $a[i] > a[m[sz(m)]]$ we have a new longest LIS
+    \item<6-> Else search of the largest value (index: $j$) smaller than $a[i]$ in $a[m[\cdot]]$. We set replace $m[j] = i$
       \ei
-      \item $m[\cdot]$ isn't actually necessary, but only the sequence of values $a[m[\cdot]]$
-      \item Runtime? \pause \dots{} Binary Search! $\rightarrow \mathcal O(n \log n)$
+      \item<7-> $m[\cdot]$ isn't actually necessary, but only the sequence of values $a[m[\cdot]]$
+	  \item<8-> Runtime? \visible<9->{\dots{} Binary Search!}\visible<10->{$\rightarrow \mathcal O(n \log n)$}
     \ei
 \end{frame}
 
@@ -367,7 +355,7 @@ vi LIS(vi A) {
 \begin{frame}{DP with probabilities}
 	\vspace{40pt}
     \bi
-        \item Many stochastic problems are in their core DP problems
+        \item Many stochastic problems are at their core DP problems
         \item They describe some transition system with probabilities ...
         \item<2-> ... and ask what the probability to reach a goal state is
         \item<3-> ... or ask how probable it is to reach a goal if you ``play'' optimally
@@ -379,17 +367,40 @@ vi LIS(vi A) {
 	\vspace{10pt}
     \bi
         \item We are given a memory game (with regular rules)
-        \item You are playing alone
-        \item<2-> If you play perfectly, how many truns do you need on average to uncover the hole memory
+        \item You are playing alone and play perfectly
+        \item<2-> How many truns do you need on average to finish
         \vspace{10pt}
         \item<3-> What are the DP dimensions?
         \item<4-> $h = $ How may cards are left
-        \item<5-> $k = $ How may cards we know
+		\item<5-> $k = $ How may cards we know (no pairs among them)
         \vspace{10pt}
-        \item<6-> $\mathrm{dp}(0,0) = 0$
-        \item<6-> $\mathrm{dp}(h,k) = 1 + \mathrm{dp}(h-2,k-2)$ \quad iff $k > \frac{h}{2}$
-        \item<6-> $\mathrm{dp}(h,k) = ...$ \quad iff $k > \frac{h}{2}$
+		\item Systematic analysis of situations!
     \ei
+\end{frame}
+
+\begin{frame}{DP with probabilities}
+	\bi
+		\item There are $h$ cards on the table and we know $k$.
+		\item Always take one of the unknown cards first.
+		\vspace{10pt}
+		\item 1. Card
+		\bi
+			\item Partner already seen $P=\frac{k}{h-k}$ \\
+					$\rightarrow$ take known second, $dp(h-2,k-1)$
+			\item Unknown Partner $P=\frac{h-2k}{h-k}$ \\
+					$\rightarrow$ take any second
+		\ei
+		\item 2. Card
+		\bi
+			\item Matches 1. Card $P=\frac{1}{h-k-1}$\\
+					$\rightarrow$ perfect!, $dp(h-2,k)$
+			\item Matches known Card $P=\frac{k}{h-k-1}$\\
+					$\rightarrow$ take them immediately in the next round, $dp(h-2,k+1)$
+			\item Does not match $P = \frac{h-2k-2}{h-k-1}$\\
+					$\rightarrow$ just go on, $dp(h,k+2)$
+		\ei
+		
+	\ei
 \end{frame}
 
 
@@ -511,6 +522,23 @@ printf("%d\n", tsp(0, 1<<0));
     \ig[scale=0.4]{travelling_salesman_problem.png}
     \end{center}
 \end{frame}
+
+\begin{frame}{Recap}
+    \vspace{10pt}
+    Which types of DP-indices are common in programming contests?
+    \bi
+		\item $(i)$ -- index on an array (1D Max Sum, LIS, 01-Knapsack, TSP)
+		\item $(i,j)$ -- indices on two arrays (Edit distance, LCS)
+		\item $(i,j)$ -- subarray of array (optimal matrix multiplication)
+		\item $(i,j)$ -- processed values and last selected (bitonic TSP)
+		\item $(i)$ -- vertex of a DAG (longest path)
+		\item $(s)$ -- state in a transition system (probabilistics)
+		\item $(s)$ -- target value (01-knapsack, subsetsum, coin change)
+		\item $(s)$ -- subset of a small set (TSP)
+    \ei
+\end{frame}
+		%\item $(i,j)$ -- two indices on the same array (Bitonic TSP)
+
 
 \end{document}
 
