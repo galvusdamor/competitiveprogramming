@@ -187,7 +187,7 @@ double len(pt p) { return sqrt(double(p*p)); }
 	\ei
 		\visible<3->{
 	\includegraphics[width = 0.35\textwidth]{figures/27-rotated-dfstree.png} \quad
-	\includegraphics[width = 0.45\textwidth]{figures/wf16_poly.png}
+	\includegraphics[width = 0.45\textwidth]{figures/wf16.png}
 		}
 \end{frame}
 
@@ -739,7 +739,7 @@ bool isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
             return 1+(a0.x!=a1.x || a0.y!=a1.y);
         return max(max(c1,c2),max(c3,c4));
     }
-    return 1+(!min(c1,c2) || !min(c3,c4));
+    return 1+(!c1 || !c2 || !c3 || !c4));
 }
   \end{minted} 
   \pause \normalsize
