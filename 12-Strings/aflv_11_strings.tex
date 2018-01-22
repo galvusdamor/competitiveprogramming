@@ -1150,7 +1150,7 @@ struct suffix_array {
         pair<int, int> nr;
         int p;
 
-        bool operator <(const entry &other) {
+        bool operator <(const entry &other) const {
             return nr < other.nr;
         }
     };

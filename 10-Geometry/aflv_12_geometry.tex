@@ -724,7 +724,7 @@ int isPointOnSegment(pt p, pt a0, pt a1) {
   \scriptsize
   \begin{minted}{cpp}
 // 0 = none, 1=on-end-point, 2=strict
-bool isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
+int isSegmentIntersect(pt a0, pt a1, pt b0, pt b1) {
     int c1=ccw(a0,a1,b0);
     int c2=ccw(a0,a1,b1);
     int c3=ccw(b0,b1,a0);

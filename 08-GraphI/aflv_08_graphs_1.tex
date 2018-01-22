@@ -325,7 +325,7 @@ adj[2].push_back(3);
                 \item Simple vs. non-simple
             \ei
         \item Many ways to represent graphs
-        \item Some special graphs (like trees) have special representations
+		\item Some special graphs (like trees) have special representations (e.g. root-edge)
         \item Most commonly used (general) representations:
             \begin{enumerate}
                 \item Adjacency list
@@ -880,7 +880,7 @@ adj[3].size() // 0
       \only<23->{\node[vertex,fill=title] (6) at (6) {6};}
 
       \only<23-25>{\node[vertex,fill=vhilight] (7) at (7) {7};}
-      \only<24-25>{\path[dedge,title] (7) -- (10)};
+      \only<24->{\path[dedge,title] (7) -- (10)};
 
       \only<26->{\node[vertex,fill=title] (7) at (7) {7};}
       \only<26>{\node[vertex,fill=vhilight] (10) at (10) {10};}
@@ -2129,7 +2129,7 @@ FOR(i,0,1000) if (side[u] == -1) {
         \item Finding a maximum matching in bipartite graphs is very common
       %  \item \textit{see example}
       %      \vspace{10pt}
-        \item Next time we'll see an efficient algorithm for finding the maximum matching in a bipartite graph
+        \item Next week we'll see an efficient algorithm for finding the maximum matching in a bipartite graph
         \item Remember that an efficient algorithm (runtime $\leq O(n^3)$) for finding maximum matchings in large general graphs is not known
     \ei
 \end{frame}
