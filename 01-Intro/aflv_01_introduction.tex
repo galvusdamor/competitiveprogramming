@@ -252,357 +252,6 @@
 
 
 
-\begin{frame}{Programming Language}
-    \vspace{10pt}
-    \bi
-        \item I'll use C++ (Java is only useful for its BigInteger/BigDecimal classes)
-        \item (usually) C++ solutions can be written faster
-        \bi
-	  \item preprocessor
-	  \item no classes
-	  \item easier syntax and operator overloading
-	  \item less restrictive (primitives in templates)
-        \ei
-        \item next: a short introduction to C++
-        \bi
-	  \item neither complete
-	  \item nor correct (you'll see if you dive deeper into the language)
-        \ei
-      \item in the ICPC only C, C++, Java, and Python are allowed
-    \ei
-\end{frame}
-
-
-\begin{frame}[fragile]{C++ for Java Programmers}
-    C++ looks like Java
-    \pause
-    \vspace{10pt}
-    \bi
-      \item Compiled, not interpreted
-      \item Programs start at the \texttt{main}
-	  \begin{minted}[fontsize=\scriptsize]{cpp}
-int main(int argc, char** argv)
-int main()
-	  \end{minted}
-      \item \texttt{include} $\approx$ \texttt{import}
-	  \begin{minted}[fontsize=\scriptsize]{cpp}
-#include <iostream>
-#include <set>
-#include <map>
-        \end{minted}
-        \item Packages are separated by \texttt{::}
-        \begin{minted}[fontsize=\scriptsize]{cpp}
-std::cin, std::map<int,int>, std::sort
-        \end{minted}
-        \item Everything is in \texttt{std}
-        \begin{minted}[fontsize=\scriptsize]{cpp}
-using namespace std;
-        \end{minted}
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{C++ for Java Programmers}
-    \bi
-
-        \item Basic data types:
-        \bi
-            \item \texttt{bool}: a boolean (\texttt{true}/\texttt{false})
-            \vspace{5pt}
-            \item \texttt{char}: an 8-bit signed integer (often used to represent characters with ASCII)
-            \item \texttt{short}: a 16-bit signed integer
-            \item \texttt{int}: a 32-bit signed integer
-            \item \texttt{long long}: a 64-bit signed integer
-			\item \texttt{\_\_int128\_t}: a 128-bit signed integer
-			\vspace{5pt}
-            \item \texttt{float}: a 32-bit floating-point number
-            \item \texttt{double}: a 64-bit floating-point number
-            \item \texttt{long double}: a 128-bit floating-point number
-        \ei
-        \item \texttt{bool} and numeric types are interchangeable
-        \bi
-	  \item \texttt{false} $\equiv$ \texttt{0}
-	  \item \texttt{true} $\equiv$ everything else
-      \begin{minted}[fontsize=\scriptsize]{cpp}
-while (1);
-if (i % j) do_something();
-if (i = j) do_something();
-        \end{minted}
-        \ei
-	\item There is also the keyword \texttt{auto}
-    \ei
-\end{frame}
-
-\begin{frame}{C++ for Java Programmers}
-
-    {\scriptsize
-        \begin{center}
-            \begin{tabular}{l|lll}
-                Type & Bytes & Min value & Max value \\
-                \hline
-                bool & 1 & & \\
-                char & 1 & -128 & 127 \\
-                short & 2 & -32768 & 32767 \\
-                int & 4 & -2148364748 & 2147483647 \\
-                long long & 8 & -9223372036854775808 & 9223372036854775807 \\
-                          & $n$ & $-2^{8n-1}$ & $2^{8n-1}-1$
-            \end{tabular}
-        \end{center}
-    }
-
-    {\scriptsize
-        \begin{center}
-            \begin{tabular}{l|lll}
-                Type & Bytes & Min value & Max value \\
-                \hline
-                unsigned char & 1 & 0 & 255 \\
-                unsigned short & 2 & 0 & 65535 \\
-                unsigned int & 4 & 0 & 4294967295 \\
-                unsigned long long & 8 & 0 & 18446744073709551615 \\
-                    & $n$ & $0$ & $2^{8n}-1$
-            \end{tabular}
-        \end{center}
-    }
-
-    {\scriptsize
-        \begin{center}
-            \begin{tabular}{l|llll}
-                Type & Bytes & Min value & Max value & Precision \\
-                \hline
-                float & 4 & $\approx -3.4\times 10^{-38}$ & $\approx 3.4\times 10^{-38}$ & $\approx 7$ digits \\
-                double & 8 & $\approx -1.7\times 10^{-308}$ & $\approx 1.7\times 10^{-308}$ & $\approx 14$ digits \\
-            \end{tabular}
-        \end{center}
-    }
-
-\end{frame}
-
-
-\begin{frame}[fragile]{C++ for Java Programmers}
-    \vspace{10pt}
-    \bi
-      \item Typedefs
-        \begin{minted}[fontsize=\scriptsize]{cpp}
-typedef long long ll;
-typedef vector<int> vi;
-        \end{minted}
-        
-       \item Defines
-        \begin{minted}[fontsize=\scriptsize]{cpp}
-#define all(c) (c).begin(), (c).end()
-#define FOR(i,a,b) for (int i = (a); i < (b); i++)
-
-vi a_list;
-sort(all(a_list));
-FOR(i,0,100) a_list.push_back(i*i);
-
-sort((a_list).begin(), (a_list).end())
-for (int i = (0); i < (100); i++) a_list.push_back(i*i);
-	\end{minted}       
-       \item \texttt{const} $\approx$ \texttt{final}
-        \begin{minted}[fontsize=\scriptsize]{cpp}
-const int oo = 0x3f3f3f3f;
-	\end{minted}       
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{C++ for Java Programmers}
-    \vspace{10pt}
-    \bi
-      \item Two types of input/output methods
-        \begin{minted}[fontsize=\scriptsize]{cpp}
-int x,y; double d;
-scanf("%d %f,%d",&x,&d,&y);
-printf("%d\n%f,%d\n",x,d,y);
-char c;
-cin >> x >> d >> c >> y;
-cout << x << endl << d << "," << y << endl;
-	\end{minted}  
-	\item Throws \underline{no} errors
-	\item Checking whether we have actually read something
-	\begin{minted}[fontsize=\scriptsize]{cpp}
-if (EOF == scanf("%d",&x)) return 0;
-cin >> x;
-if (cin.eof()) return 0;
-	\end{minted}
-	\item read $\rightarrow$ check
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{C++ for Java Programmers}
-    \vspace{10pt}
-    \bi
-      \item Arrays
-	\begin{minted}[fontsize=\scriptsize]{cpp}
-int array[500];
-array[7] = 2;
-	\end{minted}
-      \item No AIOOBE and ``anything is possible''
-	\begin{minted}[fontsize=\scriptsize]{cpp}
-array[600] = 6;
-array[-1] = 5;
-5[array] = 42;
-	\end{minted}
-	\item Initialisation
-	\begin{minted}[fontsize=\scriptsize]{cpp}
-int a; // no init
-double d; // no init
-int array[6]; // no init
-vector<int> v; // init
-map<int,int> m; // init
-	\end{minted}
-      \item Comma operator
-	\begin{minted}[fontsize=\scriptsize]{cpp}
-if (i < j) i++,count+=i;
-cin >> i,j;
-	\end{minted}
-	\ei
-\end{frame}
-
-
-\begin{frame}[fragile]{C++ for Java Programmers}
-    \vspace{10pt}
-    \bi
-      \item You don't need classes
-	  \item You can declare functions \emph{outside} of classes\\
-			  (e.g. \texttt{std::sort})
-      \item Structs are classes where everything is public
-      	\begin{minted}[fontsize=\scriptsize]{cpp}
-struct edge {
-  int from,to;
-  double weight;
-};
-
-edge e;
-e.from = 0;
-e.to = 1;
-cout << e.weight << endl;
-	\end{minted}
-	
-    \ei
-\end{frame}
-
-\begin{frame}[fragile]{STL data structures}
-  \bi
-    \item The STL has several generic container templates
-      \bi
-	\item \texttt{vector} - lists
-	\item \texttt{set}
-	\item \texttt{multiset} - collections of objects
-	\item \texttt{map} - associative memory
-	\item \texttt{queue}
-	\item \texttt{priority\_queue}
-      \ei
-    \item Each takes a type parameter (maps take two) determining the content type of the container
- \ei
-\end{frame}
-
-\begin{frame}[fragile]{Templates}
-  \bi
-  	\item Do you know that templates are?
-	\item<2-> Templates look like Generics in Java, but are completely different
-	\item<2-> If you have lists of \texttt{int}, of \texttt{long}, of \texttt{char}, and of lists of \texttt{int}, you may have to write the code four times ...
-	\item<2-> Templates are a way to abstract parameter types
-	\item<2-> You write your list code once for an unknown type \texttt{T}
-	\item<2-> If someone uses your lists, he has to tell the compiler the actual type \texttt{T}
-	\item<2-> You already know one very similar case: Arrays!
-	\item<2-> \texttt{int[]} $\rightarrow$ \texttt{vector<int>}
-	\item<2-> Array could be read as \texttt{[]<int>}
-  \ei
-\end{frame}
-
-\begin{frame}[fragile]{Templates and the STL}
-  \bi
-   \item The standard library is called\\
-		   Standard \textbf{Template} Library
-   \item It provides a lot of useful functions and container types, most of them similar to Java's containers
-   \item Function names \emph{can} be a bit unintuitive
-   \item Most containers have iterators to go through their elements
-    \bi
-      \item \texttt{begin}, \texttt{end}
-      \item use \texttt{++} and \texttt{--} to iterate through the container
-      \item use \texttt{*} to access the value the iterator is pointing to
-      \item \texttt{find} returns an iterator
-    \ei
-	\item \texttt{set}, \texttt{map}, and \texttt{multiset} are sorted (criterion can be provided)
-    \item \texttt{count} is the "contains test"
-  \ei
-\end{frame}
-
-
-
-\begin{frame}[fragile]{STL data structures}
-
-\begin{minted}[fontsize=\scriptsize]{cpp}
-vector<int> list; list.clear();
-FOR(i,0,n) {
-  int a; cin >> a;
-  list.push_back(a);
-}
-sort(all(list));
-FORIT(i,list) cout << *i << endl;
-
-set<int> s;
-FOR(i,0,n) {
-  int a; cin >> a;
-  s.insert(a);
-}
-FORIT(i,s) cout << *i << endl;
-
-map<int,int> m; m.clear();
-FOR(i,0,n){
-  int x,y; cin >> x >> y;
-  m[y] = x;
-}
-FOR(i,0,r){
-  int z;  cout << m[z] << endl;
-}
-\end{minted}
-\end{frame}
-
-
-\begin{frame}{What I have not talked about}
-		Pointers!
-		\bi
-\item<2-> Pointers are explicit representations of memory adresses
-\item<2-> Notation \texttt{int*} is an adress at which an \texttt{int} is stored.
-\item<2-> \texttt{int**} is an adress at which an adress of an \texttt{int} is stored.
-\item<2-> Pointers are the way of C(++) to handle dynamic memory and dynamic data structures
-		\vspace{30pt}
-\item<3-> Pointers can be \textbf{dangerous}
-\item<3-> We will use them rarely
-		\ei
-\end{frame}
-
-\begin{frame}[fragile]{Pointers}
-\begin{minted}[fontsize=\scriptsize]{cpp}
-int a = 5;
-int* p_a = &a;
-*p_a = 6; // changes a to 6
-a = *p_a + 4;
-a = (*p_a)++ + a;
-
-int* p = (int*) malloc(sizeof(int));
-*p = 4;
-free(p);
-
-struct tree {
-    tree *left, *right; int value; tree(){left = right = 0;}
-};
-tree t;
-t.left = (tree*) malloc(sizeof(tree));
-t->left.value = 3;
-
-int* array = (int*) calloc(10,sizeof(int));
-array[100001] = 3;
-array += 2;
-*p = 3;
-p += 3;
-*p = 1;
-
-\end{minted}
-\end{frame}
-
-
 {
     \setbeamertemplate{footline}{} % no page number here
     \frame{
@@ -1035,6 +684,384 @@ int main() {
 }
 \end{minted}
 \end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    A short introduction to C(++)
+%%%%%%%%%%%%%%%%%5
+
+\begin{frame}{Programming Language}
+	\bi
+		\item So far, programming was easy and we could have used any language!
+		\item Not all languages are suited for all problems
+		\bi
+			\item Time-critial operations in Java?
+			\item Operating System in Haskell?
+			\item GUI in Brainfuck?
+			\item Exact numerics in C++?
+			\item Banking software in Cobol?
+		\ei
+		\item A good programmer knows his tools!
+	\ei
+\end{frame}
+
+
+\begin{frame}{Programming Language}
+    \vspace{10pt}
+    \bi
+        \item I'll use C++ 
+		\bi
+			\item Java is useful for its BigInteger/BigDecimal classes
+			\item Python is useful for String manipulation
+		\ei
+        \item (usually) C++ solutions can be written faster
+        \bi
+	  \item preprocessor
+	  \item no classes
+	  \item easier syntax and operator overloading
+	  \item less restrictive (primitives in templates)
+        \ei
+        \item next: a short introduction to C++
+        \bi
+	  \item neither complete
+	  \item nor correct (you'll see if you dive deeper into the language)
+        \ei
+      \item in the ICPC only C, C++, Java, and Python are allowed
+    \ei
+\end{frame}
+
+
+\begin{frame}[fragile]{C++ for Java Programmers}
+    C++ looks like Java
+    \pause
+    \vspace{10pt}
+    \bi
+      \item Compiled, not interpreted
+      \item Programs start at the \texttt{main}
+	  \begin{minted}[fontsize=\scriptsize]{cpp}
+int main(int argc, char** argv)
+int main()
+	  \end{minted}
+      \item \texttt{include} $\approx$ \texttt{import}
+	  \begin{minted}[fontsize=\scriptsize]{cpp}
+#include <iostream>
+#include <set>
+#include <map>
+        \end{minted}
+        \item Packages are separated by \texttt{::}
+        \begin{minted}[fontsize=\scriptsize]{cpp}
+std::cin, std::map<int,int>, std::sort
+        \end{minted}
+        \item Everything is in \texttt{std}
+        \begin{minted}[fontsize=\scriptsize]{cpp}
+using namespace std;
+        \end{minted}
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{C++ for Java Programmers}
+    \bi
+
+        \item Basic data types:
+        \bi
+            \item \texttt{bool}: a boolean (\texttt{true}/\texttt{false})
+            \vspace{5pt}
+            \item \texttt{char}: an 8-bit signed integer (often used to represent characters with ASCII)
+            \item \texttt{short}: a 16-bit signed integer
+            \item \texttt{int}: a 32-bit signed integer
+            \item \texttt{long long}: a 64-bit signed integer
+			\item \texttt{\_\_int128\_t}: a 128-bit signed integer
+			\vspace{5pt}
+            \item \texttt{float}: a 32-bit floating-point number
+            \item \texttt{double}: a 64-bit floating-point number
+            \item \texttt{long double}: a 128-bit floating-point number
+        \ei
+        \item \texttt{bool} and numeric types are interchangeable
+        \bi
+	  \item \texttt{false} $\equiv$ \texttt{0}
+	  \item \texttt{true} $\equiv$ everything else
+      \begin{minted}[fontsize=\scriptsize]{cpp}
+while (1);
+if (i % j) do_something();
+if (i = j) do_something();
+        \end{minted}
+        \ei
+	\item There is also the keyword \texttt{auto}
+    \ei
+\end{frame}
+
+\begin{frame}{C++ for Java Programmers}
+
+    {\scriptsize
+        \begin{center}
+            \begin{tabular}{l|lll}
+                Type & Bytes & Min value & Max value \\
+                \hline
+                bool & 1 & & \\
+                char & 1 & -128 & 127 \\
+                short & 2 & -32768 & 32767 \\
+                int & 4 & -2148364748 & 2147483647 \\
+                long long & 8 & -9223372036854775808 & 9223372036854775807 \\
+                          & $n$ & $-2^{8n-1}$ & $2^{8n-1}-1$
+            \end{tabular}
+        \end{center}
+    }
+
+    {\scriptsize
+        \begin{center}
+            \begin{tabular}{l|lll}
+                Type & Bytes & Min value & Max value \\
+                \hline
+                unsigned char & 1 & 0 & 255 \\
+                unsigned short & 2 & 0 & 65535 \\
+                unsigned int & 4 & 0 & 4294967295 \\
+                unsigned long long & 8 & 0 & 18446744073709551615 \\
+                    & $n$ & $0$ & $2^{8n}-1$
+            \end{tabular}
+        \end{center}
+    }
+
+    {\scriptsize
+        \begin{center}
+            \begin{tabular}{l|llll}
+                Type & Bytes & Min value & Max value & Precision \\
+                \hline
+                float & 4 & $\approx -3.4\times 10^{-38}$ & $\approx 3.4\times 10^{-38}$ & $\approx 7$ digits \\
+                double & 8 & $\approx -1.7\times 10^{-308}$ & $\approx 1.7\times 10^{-308}$ & $\approx 14$ digits \\
+            \end{tabular}
+        \end{center}
+    }
+
+\end{frame}
+
+
+\begin{frame}[fragile]{C++ for Java Programmers}
+    \vspace{10pt}
+    \bi
+      \item Typedefs
+        \begin{minted}[fontsize=\scriptsize]{cpp}
+typedef long long ll;
+typedef vector<int> vi;
+        \end{minted}
+        
+       \item Defines
+        \begin{minted}[fontsize=\scriptsize]{cpp}
+#define all(c) (c).begin(), (c).end()
+#define FOR(i,a,b) for (int i = (a); i < (b); i++)
+
+vi a_list;
+sort(all(a_list));
+FOR(i,0,100) a_list.push_back(i*i);
+
+sort((a_list).begin(), (a_list).end())
+for (int i = (0); i < (100); i++) a_list.push_back(i*i);
+	\end{minted}       
+       \item \texttt{const} $\approx$ \texttt{final}
+        \begin{minted}[fontsize=\scriptsize]{cpp}
+const int oo = 0x3f3f3f3f;
+	\end{minted}       
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{C++ for Java Programmers}
+    \vspace{10pt}
+    \bi
+      \item Two types of input/output methods
+        \begin{minted}[fontsize=\scriptsize]{cpp}
+int x,y; double d;
+scanf("%d %f,%d",&x,&d,&y);
+printf("%d\n%f,%d\n",x,d,y);
+char c;
+cin >> x >> d >> c >> y;
+cout << x << endl << d << "," << y << endl;
+	\end{minted}  
+	\item Throws \underline{no} errors
+	\item Checking whether we have actually read something
+	\begin{minted}[fontsize=\scriptsize]{cpp}
+if (EOF == scanf("%d",&x)) return 0;
+cin >> x;
+if (cin.eof()) return 0;
+	\end{minted}
+	\item read $\rightarrow$ check
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{C++ for Java Programmers}
+    \vspace{10pt}
+    \bi
+      \item Arrays
+	\begin{minted}[fontsize=\scriptsize]{cpp}
+int array[500];
+array[7] = 2;
+	\end{minted}
+      \item No AIOOBE and ``anything is possible''
+	\begin{minted}[fontsize=\scriptsize]{cpp}
+array[600] = 6;
+array[-1] = 5;
+5[array] = 42;
+	\end{minted}
+	\item Initialisation
+	\begin{minted}[fontsize=\scriptsize]{cpp}
+int a; // no init
+double d; // no init
+int array[6]; // no init
+vector<int> v; // init
+map<int,int> m; // init
+	\end{minted}
+      \item Comma operator
+	\begin{minted}[fontsize=\scriptsize]{cpp}
+if (i < j) i++,count+=i;
+cin >> i,j;
+	\end{minted}
+	\ei
+\end{frame}
+
+
+\begin{frame}[fragile]{C++ for Java Programmers}
+    \vspace{10pt}
+    \bi
+      \item You don't need classes
+	  \item You can declare functions \emph{outside} of classes\\
+			  (e.g. \texttt{std::sort})
+      \item Structs are classes where everything is public
+      	\begin{minted}[fontsize=\scriptsize]{cpp}
+struct edge {
+  int from,to;
+  double weight;
+};
+
+edge e;
+e.from = 0;
+e.to = 1;
+cout << e.weight << endl;
+	\end{minted}
+	
+    \ei
+\end{frame}
+
+\begin{frame}[fragile]{STL data structures}
+  \bi
+    \item The STL has several generic container templates
+      \bi
+	\item \texttt{vector} - lists
+	\item \texttt{set}
+	\item \texttt{multiset} - collections of objects
+	\item \texttt{map} - associative memory
+	\item \texttt{queue}
+	\item \texttt{priority\_queue}
+      \ei
+    \item Each takes a type parameter (maps take two) determining the content type of the container
+ \ei
+\end{frame}
+
+\begin{frame}[fragile]{Templates}
+  \bi
+  	\item Do you know that templates are?
+	\item<2-> Templates look like Generics in Java, but are completely different
+	\item<2-> If you have lists of \texttt{int}, of \texttt{long}, of \texttt{char}, and of lists of \texttt{int}, you may have to write the code four times ...
+	\item<2-> Templates are a way to abstract parameter types
+	\item<2-> You write your list code once for an unknown type \texttt{T}
+	\item<2-> If someone uses your lists, he has to tell the compiler the actual type \texttt{T}
+	\item<2-> You already know one very similar case: Arrays!
+	\item<2-> \texttt{int[]} $\rightarrow$ \texttt{vector<int>}
+	\item<2-> Array could be read as \texttt{[]<int>}
+  \ei
+\end{frame}
+
+\begin{frame}[fragile]{Templates and the STL}
+  \bi
+   \item The standard library is called\\
+		   Standard \textbf{Template} Library
+   \item It provides a lot of useful functions and container types, most of them similar to Java's containers
+   \item Function names \emph{can} be a bit unintuitive
+   \item Most containers have iterators to go through their elements
+    \bi
+      \item \texttt{begin}, \texttt{end}
+      \item use \texttt{++} and \texttt{--} to iterate through the container
+      \item use \texttt{*} to access the value the iterator is pointing to
+      \item \texttt{find} returns an iterator
+    \ei
+	\item \texttt{set}, \texttt{map}, and \texttt{multiset} are sorted (criterion can be provided)
+    \item \texttt{count} is the "contains test"
+  \ei
+\end{frame}
+
+
+
+\begin{frame}[fragile]{STL data structures}
+
+\begin{minted}[fontsize=\scriptsize]{cpp}
+vector<int> list; list.clear();
+FOR(i,0,n) {
+  int a; cin >> a;
+  list.push_back(a);
+}
+sort(all(list));
+FORIT(i,list) cout << *i << endl;
+
+set<int> s;
+FOR(i,0,n) {
+  int a; cin >> a;
+  s.insert(a);
+}
+FORIT(i,s) cout << *i << endl;
+
+map<int,int> m; m.clear();
+FOR(i,0,n){
+  int x,y; cin >> x >> y;
+  m[y] = x;
+}
+FOR(i,0,r){
+  int z;  cout << m[z] << endl;
+}
+\end{minted}
+\end{frame}
+
+
+\begin{frame}{What I have not talked about}
+		Pointers!
+		\bi
+\item<2-> Pointers are explicit representations of memory adresses
+\item<2-> Notation \texttt{int*} is an adress at which an \texttt{int} is stored.
+\item<2-> \texttt{int**} is an adress at which an adress of an \texttt{int} is stored.
+\item<2-> Pointers are the way of C(++) to handle dynamic memory and dynamic data structures
+		\vspace{30pt}
+\item<3-> Pointers can be \textbf{dangerous}
+\item<3-> We will use them rarely
+		\ei
+\end{frame}
+
+\begin{frame}[fragile]{Pointers}
+\begin{minted}[fontsize=\scriptsize]{cpp}
+int a = 5;
+int* p_a = &a;
+*p_a = 6; // changes a to 6
+a = *p_a + 4;
+a = (*p_a)++ + a;
+
+int* p = (int*) malloc(sizeof(int));
+*p = 4;
+free(p);
+
+struct tree {
+    tree *left, *right; int value; tree(){left = right = 0;}
+};
+tree t;
+t.left = (tree*) malloc(sizeof(tree));
+t->left.value = 3;
+
+int* array = (int*) calloc(10,sizeof(int));
+array[100001] = 3;
+array += 2;
+*p = 3;
+p += 3;
+*p = 1;
+
+\end{minted}
+\end{frame}
+
+
 
 \begin{frame}{Problem: SMS Typing}
 
