@@ -5,6 +5,16 @@
 \subtitle{01 -- Introduction}
 \newcommand{\shorttitle}{Introduction}
 \input{../acmlecture.tex}
+	
+
+\begin{frame}{What is Competitive Programming?}
+	\vfill
+	\begin{center}
+		{\color{hilight}There's no such thing as a stupid question.}\\
+    	If you have questions: Interrupt and \underline{ask}!
+	\end{center}
+	\vfill
+\end{frame}
 
 % TODO: Welcome
 \begin{frame}{What is Competitive Programming?}
@@ -59,6 +69,7 @@
 			\only<8>{\includegraphics[width = \textwidth]{images/DSC01573.JPG}}
 			\only<9>{\includegraphics[width = \textwidth]{images/DSC02081.JPG}}
 			\only<10>{\includegraphics[width = \textwidth]{images/DSC02078.JPG}}
+			\only<11>{\includegraphics[width = \textwidth]{images/DSC02949.JPG}}
 		\end{center}
 \end{frame}
 
@@ -112,14 +123,14 @@
     \bi
         \item Study common types of problems
 	    \item Show common applications of algorithms and data structures you already know 
-        \item Introduce new algorithms and data structures
+        \item Introduce new algorithms, data structures, and common theory
         \bi
 		  \item Have you heard about \texttt{map}, \texttt{set}, \texttt{priority\_queue} or \texttt{dequeue}?
-		  \item What about Fenwick-Trees, Union Finds, Suffix Arras?
+		  \item What about Union Finds, Fenwick-Trees, Suffix Arrays?
 		  \item What about Push-Relable, Gift-Wrapping, 2-SAT?
+		  \item What about Pick's, Burnside?
 		  \item There is \underline{a lot} more
         \ei
-        \item Go over some commonly used theory
         \item Practice problem solving
         \item Practice programming
         \item<2-> More practice\pause\pause, more practice\pause, more practice \dots
@@ -128,17 +139,16 @@
 
 		
 		
-	%	\item {\color{hilight}There's no such thing as a stupid question.}
-    %    \item If you have questions: Interrupt and \underline{ask}!
 
 \begin{frame}{Technical Matters}
 		\begin{tabular}{l l}
 			Lecture & Thursdays 16:00 - 17:30 (O28/121)\\
 			Tutorial & Thursdays 17:30 - 19:00 (Süd-Pool)\\
-					& no lecture on 8.6. and 22.6.\\
-			Changes & 25.5. moved to 23.5.\\
-					& 15.6. moved to 13.6.\\
-					& (both Tuesday, O27/429)\\
+			Changes  & no lecture on 28.6., 12.7., and 19.7.\\
+					& additional lectures: 23.4. and 4.6.\\
+					& 10.5. moved to 7.5.\\
+					& 31.5. moved to 28.5.\\
+					& (all Monday, O27/429)\\
 			\\
 			Examiner & Prof. Dr. Susanne Biundo-Stephan\\
 				& (susanne.biundo@uni-ulm.de)\\
@@ -147,7 +157,7 @@
 			Mark & No exam\\
 				 & Marks will be determined according to \\
 				 & individual performance in the tutorial.\\
-				 Moodle & \url{moodle.uni-ulm.de/course/view.php?id=6870}
+				 Moodle & \url{moodle.uni-ulm.de/course/view.php?id=9354}
 		\end{tabular}
 \end{frame}
 
@@ -160,9 +170,9 @@
 			\item Solving a problem gives
 			\bi
 				\item very easy - 2 points
-				\item easy - 3 points ($\approx 2$ per week)
-				\item medium - 4 points ($\approx 2$ per week)
-				\item hard - 5 points ($\approx 2$ per week)
+				\item easy - 3 points ($\approx 2-3$ per week)
+				\item medium - 4 points ($\approx 3-2$ per week)
+				\item hard - 5 points ($\approx 1$ per week)
 				\item very hard - 6 points
 			\ei
 			\item Marks are based on total points as follows
@@ -186,30 +196,23 @@
 			\item There are no partial points
 			\item You can submit your solution as often as you like
 			\item Malicious submissions and attacks will be penalised
-			\item The judge accepts C(++), Java, Python3, and Haskell
+			\item The judge accepts C(++), Java, Python3, Haskell, Lua, and x86 assembler
 		\ei
 		\item Judge URL \url{https://mandos.informatik.uni-ulm.de}
-		\item Login on the judge is your SIG-Pool account
+		\item Login on the judge using your SIG-Pool account
 		\item All solutions will be checked for plagiarism using an automated checker after the hand-in deadline
 	\ei
 \end{frame}
 
 
-\begin{frame}{Technical Matters -- Problems}
+\begin{frame}{Technical Matters -- GCPC}
 	\bi
 		\item The GCPC will take place on \\
-				Saturday, July 1\textsuperscript{st}, 11:00-16:00.
+				Saturday, June 16\textsuperscript{th}, 11:00-16:00.
 		\item You can take part (and are encouraged to do so) to earn additional points.
 		\bi
 			\item You can take part in teams (up to three students)
 			\item You will be given a pre-coded set of algorithms (TCR)
-		\ei
-		\vspace{20pt}
-		\item On June, 22\textsuperscript{th}, we will do a rehersal instead of a regular tutorial
-		\bi
-			\item 16:00 - 19:00, later submissions will not be allowed
-			\item 6 problems and points as usual (but easier problems)
-			\item no teams, but TCR
 		\ei
 	\ei
 \end{frame}
@@ -231,21 +234,20 @@
 
 \begin{frame}{Semester schedule}
 	\begin{tabular}{l l}
-		20.4. & Introduction\\
-			27.4. & Simple Algorithms \\
-			04.5. & Datastructures \\
-			11.5. & Problem Solving Paradigms \\
-			18.5. & Greedy \\
-			23.5. & Dynamic Programming I \\
-			01.6. & Dynamic Programming II \\
-			08.6. & only tutorial\\
-			13.6. & Unweighted Graphs \\
-			22.6. & Practice Contest \\
-			29.6. & Weighted Graphs \\
-			01.7. & GCPC \\
-			06.7. & Geometry \\
-			13.7. & Mathematics \\
-			20.7. & Strings
+			19.4. & Introduction I\\
+			23.4. & Introduction II\\
+			26.4. & Simple Algorithms \\
+			03.5. & Datastructures \\
+			07.5. & Problem Solving Paradigms \\
+			17.5. & Greedy \\
+			24.5. & Dynamic Programming I \\
+			28.5. & Dynamic Programming II \\
+			04.6. & Strings\\
+			07.6. & Unweighted Graphs \\
+			14.6. & Weighted Graphs \\
+			16.6. & GCPC \\
+			21.6. & Geometry \\
+			05.7. & Mathematics
 	\end{tabular}
 \end{frame}
 
@@ -277,7 +279,7 @@
                 \item Output description
                 \item Example input/output
                 \item (sometimes) A time limit in seconds
-                \item (sometimes) A memory limit in bytes
+				\item (sometimes) A memory limit in (mega/mebi) bytes
             \ei
         \item You are asked to write a program that solves the problem for all valid inputs
         \item The program must not exceed time or memory limits
@@ -340,15 +342,14 @@
 
 \begin{frame}[fragile]{Example solution}
     \begin{minted}[fontsize=\scriptsize]{cpp}
-#include <iostream>
-#define FOR(i,a,b) for (int i = (a); i < (b); i++)
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     int T;
     cin >> T;
 
-    FOR(i,0,T) {
+    for (int i = 0; i < T; i++) {
         int A, B;
         cin >> A >> B;
 
@@ -377,15 +378,14 @@ int main() {
 \begin{frame}[fragile]{Example solution}
     \begin{minted}[fontsize=\scriptsize]{cpp}
 #include <iostream>
-typedef long long ll;
 using namespace std;
 
 int main() {
     int T;
     cin >> T;
 
-    while (tc--) {
-        ll A, B;
+    for (int i = 0; i < T; i++) {
+        long long A, B;
         cin >> A >> B;
 
         cout << A * B << endl;
@@ -414,6 +414,8 @@ int main() {
             \ei
 
         \item This is the only information you get.
+		\vspace{2cm}
+	\item<2-> It is important to learn to debug your own code without knowing the error!
     \ei
 \end{frame}
 
@@ -479,7 +481,7 @@ int main() {
         \item When solving a problem, our solution has to be fast enough and cannot use too much memory
         \item We also want our solution to be as simple as possible
         \vspace{5pt}
-        \item We can use Algorithm Analysis to determine if a solution will run within the time limit
+        \item We can use algorithm analysis to determine if a solution will run within the time limit
         \item Rule of thumb: $\approx 10^{6} - 10^7$ is acceptable
         \vspace{10pt}
         \item We want to sort $n \leq 10^{6}$ integers.
@@ -528,7 +530,8 @@ int main() {
         \vspace{10pt}
         \item Sometimes you have a solution that you're not sure is correct
         \item Try to prove it's correct!
-        \item Even if you don't manage to prove or disprove it, you will probably get a better understanding of the problem
+		\item<2-> Try to prive it is not!
+        \item<3-> Even if you don't manage to prove or disprove it, you will probably get a better understanding of the problem
         \vspace{20pt}
     \ei
 \end{frame}
@@ -566,123 +569,6 @@ int main() {
         \item Some of these online judges also hold contests frequently
         \item UVa, Codeforces, TopCoder, Kattis, ...
     \ei
-\end{frame}
-
-
-{
-    \setbeamertemplate{footline}{} % no page number here
-    \frame{
-        \vspace{60pt}
-        \begin{center}
-            {\huge\color{title}Ad Hoc problems}
-        \end{center}
-    }
-}
-
-\begin{frame}{Ad Hoc problems}
-    \vspace{30pt}
-    \bi
-        \item The simplest kind of problem
-        \item Just do what the problem description tells you
-        \item Straightforward or a simulation
-        \item Time limit is not an issue
-        \item Sometimes long and misleading problem descriptions
-        \item Sometimes tricky edge cases
-        \item Complex problems can be hard to implement
-    \ei
-\end{frame}
-
-\begin{frame}{Problem: Cost Cutting}
-
-{
-    \small
-    \vspace{20pt}
-Company XYZ has been badly hit by recession and is taking a lot of cost cutting measures. Some of these measures include giving up office space, going open source, reducing incentives, cutting on luxuries and issuing pink slips.
-
-\vspace{10pt}
-
-They have got three employees working in the accounting department and are going to lay-off two of them.
-After a series of meetings, they have decided to dislodge the person who gets the most salary and the one who gets the least. This is usually the general trend during crisis like this.
-You will be given the salaries of these 3 employees working in the accounting department. You have to find out the salary of the person who survives.
-}
-
-\end{frame}
-
-\begin{frame}{Problem: Cost Cutting}
-
-    \vspace{20pt}
-    {\footnotesize\color{title}Input}
-
-    {\small
-       The first line of input is an integer $T$ ($T<20$) that indicates the number of test cases. Each case consists of a line with 3 distinct positive integers. These 3 integers represent the salaries of the three employees. All these integers will be in the range $[1000, 10000]$.
-    }
-
-
-    \vspace{30pt}
-    {\footnotesize\color{title}Output}
-
-    {\small
-    For each case, output the case number followed by the salary of the person who survives.
-    }
-\end{frame}
-
-\begin{frame}{Problem: Cost Cutting}
-    \vspace{10pt}
-
-    \begin{center}
-        \begin{tabular}{|l|l|}
-            \hline
-            {\footnotesize Sample input} & {\footnotesize Sample output} \\
-            \hline
-            \begin{minipage}{100pt}
-\vspace{10pt}
-\ttfamily
-3\\
-1000 2000 3000\\
-3000 2500 1500\\
-1500 1200 1800\\
-            \end{minipage}
-&
-\begin{minipage}{100pt}
-\vspace{10pt}
-\ttfamily
-Case 1: 2000\\
-Case 2: 2500\\
-Case 3: 1500\\
-\ \\
-\end{minipage}
-\\
-            \hline
-        \end{tabular}
-    \end{center}
-\end{frame}
-
-
-\begin{frame}[fragile]{Solution: Cost Cutting}
-    \begin{minted}[fontsize=\scriptsize]{cpp}
-#include <cstdio>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int T;
-    scanf("%d", &T);
-
-    for (int t = 0; t < T; t++) {
-
-        int salary[3];
-        scanf("%d", &salary[0]);
-        scanf("%d", &salary[1]);
-        scanf("%d", &salary[2]);
-
-        sort(salary, salary + 3);
-
-        printf("Case %d: %d\n", t + 1, salary[1]);
-    }
-
-    return 0;
-}
-\end{minted}
 \end{frame}
 
 
@@ -725,9 +611,15 @@ int main() {
         \item next: a short introduction to C++
         \bi
 	  \item neither complete
-	  \item nor correct (you'll see if you dive deeper into the language)
+	  \item nor correct (you'll understand if you dive deeper into the language)
         \ei
-      \item in the ICPC only C, C++, Java, and Python are allowed
+		\item in the ICPC only C, C++, Java, Python, and (possibly) Kotlin are allowed
+		\item Our judge Accepts
+			\bi
+	\item C, C++, Java, Python 3
+	\item Haskell, Prolog, Lua
+	\item x86-Assembler
+			\ei
     \ei
 \end{frame}
 
@@ -738,7 +630,7 @@ int main() {
     \vspace{10pt}
     \bi
       \item Compiled, not interpreted
-      \item Programs start at the \texttt{main}
+      \item Programs start at \texttt{main}
 	  \begin{minted}[fontsize=\scriptsize]{cpp}
 int main(int argc, char** argv)
 int main()
@@ -748,6 +640,10 @@ int main()
 #include <iostream>
 #include <set>
 #include <map>
+        \end{minted}
+        \item Everything is in \texttt{bits/stdc++.h}
+        \begin{minted}[fontsize=\scriptsize]{cpp}
+#include <bits/stdc++.h>
         \end{minted}
         \item Packages are separated by \texttt{::}
         \begin{minted}[fontsize=\scriptsize]{cpp}
@@ -790,6 +686,49 @@ if (i = j) do_something();
 	\item There is also the keyword \texttt{auto}
     \ei
 \end{frame}
+
+\begin{frame}[fragile]{Example solution}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int T;
+    cin >> T;
+
+    for (int i = 0; i < T; i++) {
+        int A, B;
+        cin >> A >> B;
+
+        cout << A * B << endl;
+    }
+
+    return 0;
+}
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Example solution}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int T;
+    cin >> T;
+
+    while (T --> 0) {
+        int A, B;
+        cin >> A >> B;
+
+        cout << A * B << endl;
+    }
+
+    return 0;
+}
+\end{minted}
+\end{frame}
+
 
 \begin{frame}{C++ for Java Programmers}
 
@@ -960,7 +899,7 @@ cout << e.weight << endl;
   	\item Do you know that templates are?
 	\item<2-> Templates look like Generics in Java, but are completely different
 	\item<2-> If you have lists of \texttt{int}, of \texttt{long}, of \texttt{char}, and of lists of \texttt{int}, you may have to write the code four times ...
-	\item<2-> Templates are a way to abstract parameter types
+	\item<2-> Templates are a way to abstract from parameter types
 	\item<2-> You write your list code once for an unknown type \texttt{T}
 	\item<2-> If someone uses your lists, he has to tell the compiler the actual type \texttt{T}
 	\item<2-> You already know one very similar case: Arrays!
@@ -1058,6 +997,123 @@ array += 2;
 p += 3;
 *p = 1;
 
+\end{minted}
+\end{frame}
+
+
+{
+    \setbeamertemplate{footline}{} % no page number here
+    \frame{
+        \vspace{60pt}
+        \begin{center}
+            {\huge\color{title}Ad Hoc problems}
+        \end{center}
+    }
+}
+
+\begin{frame}{Ad Hoc problems}
+    \vspace{30pt}
+    \bi
+        \item The simplest kind of problem
+        \item Just do what the problem description tells you
+        \item Straightforward or a simulation
+        \item Time limit is not an issue
+        \item Sometimes long and misleading problem descriptions
+        \item Sometimes tricky edge cases
+        \item Complex problems can be hard to implement
+    \ei
+\end{frame}
+
+\begin{frame}{Problem: Cost Cutting}
+
+{
+    \small
+    \vspace{20pt}
+Company XYZ has been badly hit by recession and is taking a lot of cost cutting measures. Some of these measures include giving up office space, going open source, reducing incentives, cutting on luxuries and issuing pink slips.
+
+\vspace{10pt}
+
+They have got three employees working in the accounting department and are going to lay-off two of them.
+After a series of meetings, they have decided to dislodge the person who gets the most salary and the one who gets the least. This is usually the general trend during crisis like this.
+You will be given the salaries of these 3 employees working in the accounting department. You have to find out the salary of the person who survives.
+}
+
+\end{frame}
+
+\begin{frame}{Problem: Cost Cutting}
+
+    \vspace{20pt}
+    {\footnotesize\color{title}Input}
+
+    {\small
+       The first line of input is an integer $T$ ($T<20$) that indicates the number of test cases. Each case consists of a line with 3 distinct positive integers. These 3 integers represent the salaries of the three employees. All these integers will be in the range $[1000, 10000]$.
+    }
+
+
+    \vspace{30pt}
+    {\footnotesize\color{title}Output}
+
+    {\small
+    For each case, output the case number followed by the salary of the person who survives.
+    }
+\end{frame}
+
+\begin{frame}{Problem: Cost Cutting}
+    \vspace{10pt}
+
+    \begin{center}
+        \begin{tabular}{|l|l|}
+            \hline
+            {\footnotesize Sample input} & {\footnotesize Sample output} \\
+            \hline
+            \begin{minipage}{100pt}
+\vspace{10pt}
+\ttfamily
+3\\
+1000 2000 3000\\
+3000 2500 1500\\
+1500 1200 1800\\
+            \end{minipage}
+&
+\begin{minipage}{100pt}
+\vspace{10pt}
+\ttfamily
+Case 1: 2000\\
+Case 2: 2500\\
+Case 3: 1500\\
+\ \\
+\end{minipage}
+\\
+            \hline
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+
+\begin{frame}[fragile]{Solution: Cost Cutting}
+    \begin{minted}[fontsize=\scriptsize]{cpp}
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int T;
+    scanf("%d", &T);
+
+    for (int t = 0; t < T; t++) {
+
+        int salary[3];
+        scanf("%d", &salary[0]);
+        scanf("%d", &salary[1]);
+        scanf("%d", &salary[2]);
+
+        sort(salary, salary + 3);
+
+        printf("Case %d: %d\n", t + 1, salary[1]);
+    }
+
+    return 0;
+}
 \end{minted}
 \end{frame}
 
