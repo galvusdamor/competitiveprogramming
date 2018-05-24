@@ -67,66 +67,6 @@ int knapsack(vector<pii> objects, int W){
 
 
 
-\begin{frame}{Wedding Shopping}
-    \vspace{20pt}
-    \bi
-    	\item Given a set of garments $G$ where each garment has a (integer) price $p_i$ and a type $t_i$.
-        \item We have to by one garment of each type and spend as much as possible, but not more than $M$.
-    \ei
-    \pause
-    An example ($M = \only<2-3>{20}\only<4>{\mathbf{17}}$ and $C = 3$)
-    \bi
-    	\item 1. type: 6 \only<2-3>{4}\only<4>{\textbf{4}} \only<2,4>{8}\only<3>{\textbf{8}}
-    	\item 2. type: 5 \only<2>{10}\only<3-4>{\textbf{10}}
-    	\item 3. type: \only<2,4>{1}\only<3>{\textbf{1}} 5 \only<2-3>{3}\only<4>{\textbf{3}} 5
-    \ei
-\end{frame}
-
-\begin{frame}{Wedding Shopping}
-    %\vspace{10pt}
-    \bi[<+->]
-    	\item Let $max\_spent(i)$ be the max amount we can spend to buy the first $i$ garments
-    	\item $max\_spent(i) = $\\$\max_{g} max\_spent(i-1) + p_g$ and not $\geq M$
-    	\item \dots essentially greedy \only<4->{...  and not correct}
-    	\item<5-> add the amount of spend money as a dimension
-    	\item<5-> the DP-value is now a bool
-    	\item<5-> $spent(i,v) = \bigwedge_g spent(i-1,v-p_g)$
-    	\item<6->[$\Rightarrow$] similar to 0-1 Knapsack
-    \ei
-    \visible<4>{
-    $M = 10$ and $C = 3$
-    \bi
-    	\item 1. type: 1 2 10
-    	\item 2. type: 4
-    	\item 3. type: 4
-    \ei
-    }
-\end{frame}
-
-
-\begin{frame}[fragile]{Wedding Shopping}
-    \begin{minted}[fontsize=\footnotesize]{cpp}
-vi garms[20];
-bool dp[21][201];
-
-FOR(i,0,m) dp[0][i] = false;
-dp[0][m] = true;
-	
-FOR(gt,1,c+1) FOR(a,0,m+1){
-    dp[gt][a] = false;
-    FORIT(g,garms[gt-1])
-        if (a + *g <= m && dp[gt-1][a+*g]) dp[gt][a] = true;
-}
-bool found = false;
-FOR(i,0,m+1) if (dp[c][i]) {
-    cout << m-i << endl;
-    found = true;
-    break;
-}
-if (!found) cout << "no solution" << endl;
-    \end{minted}
-\end{frame}
-
 
 \begin{frame}{Bridges of Kolsberg}
 	\bi
