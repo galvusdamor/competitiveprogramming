@@ -1,18 +1,16 @@
 \documentclass[12pt,t]{beamer}
 \subtitle{8 -- Unweighted Graphs}
-\newcommand{\shorttitle}{Data Structures}
+\newcommand{\shorttitle}{Unweighted Graphs}
 \input{../acmlecture.tex}
 
 
 \begin{frame}{Today we're going to cover}
-    \vspace{10pt}
+    %\vspace{10pt}
     \bi
-        \item Graph basics
-        \item Graph representation (recap)
+        \item Graph basics and representation
         \item DFS and BFS
         \item Connected components
-        \item DFS tree
-        \item Bridges and Articulation
+        \item DFS tree, bridges, and Articulation
         \item Strongly connected components
         \item Topological sort
         \item Shortest paths in unweighted graphs
@@ -21,7 +19,10 @@
                 \item Trees
                 \item Directed acyclic graphs
                 \item Bipartite graphs
+                \item Block graphs and Cacti
+                \item Chordal graphs
             \ei
+        \item LCA in trees
     \ei
 \end{frame}
 
@@ -1459,8 +1460,11 @@ FOR(i,0,n) if (num[i] == -1)
   \end{figure}
  	\bi
 		\item Every graph can be viewed as a tree of 2-connected components, called \emph{Blocks}
-		\item A graph where every block is a clique is called a Blockgraph
-		\item A graph where every block is a circle is called a Cactusgraph
+		\item A graph where every block
+		\bi
+			\item is a clique is called a Blockgraph
+			\item is a circle is called a Cactusgraph
+		\ei
 	\ei
 \end{frame}
 
@@ -1514,8 +1518,7 @@ void scc(int u) {
 }
 
 FOR(i,0,1000) comp[i] = num[i] = -1;
-FOR(i,0,n) if (num[i] == -1)
-    scc(i);
+FOR(i,0,n) if (num[i] == -1) scc(i);
     \end{minted}
 \end{frame}
 
@@ -2147,13 +2150,13 @@ FOR(i,0,1000) if (side[u] == -1) {
 \begin{frame}{Trees}
     \vspace{20pt}
     \bi
-\item An undirected graph is a tree if it has no cycles
+		\item An undirected graph is a tree if it has no cycles
     \vspace{10pt}
-\item Easy to check if a graph is a tree by checking if there are any backward edges in the depth-first search tree (see previous lecture)
-\vspace{10pt}
-\item A connected tree with $n$ vertices has exactly $n-1$ edges
-\vspace{10pt}
-\item Between each pair of vertices $u,v$ in the tree, there exists exactly one simple path, which can be found with depth-first search (or breadth-first search)
+		\item Easy to check if a graph is a tree by checking if there are any backward edges in the depth-first search tree (see previous lecture)
+	\vspace{10pt}
+		\item A connected tree with $n$ vertices has exactly $n-1$ edges
+	\vspace{10pt}
+		\item Between each pair of vertices $u,v$ in the tree, there exists exactly one simple path, which can be found with depth-first search (or breadth-first search)
     \ei
 \end{frame}
 
@@ -2177,7 +2180,7 @@ FOR(i,0,1000) if (side[u] == -1) {
 \begin{frame}{Trees}
     \vspace{30pt}
     \bi
-        \item Trees are also well suited for dynamic programming, so many problems become simpler here because of that
+        \item Trees are also well suited for dynamic programming%, so many problems become simpler here because of that
         \item Base case: a leaf (only one connected edge)
         \item Recursive case: inner nodes (more then one connected edge)
     \ei
@@ -2188,9 +2191,9 @@ FOR(i,0,1000) if (side[u] == -1) {
     \bi
         \item A directed graph is a directed acyclic graph if it doesn't contain any cycles
     \vspace{10pt}
-\item Easy to check if a graph is a DAG by checking if there are any backward edges in the depth-first search tree (see previous lecture)
+	\item Easy to check if a graph is a DAG by checking if there are any backward edges in the depth-first search tree (see previous lecture)
     \vspace{10pt}
-\item Many problems are simple on DAGs, since it's easy to do dynamic programming over DAGs
+	\item Many problems are simple on DAGs, since it's easy to do dynamic programming over DAGs
         \bi
             \item counting number of simple paths from $u$ to $v$
             \item longest simple path from $u$ to $v$
@@ -2256,6 +2259,80 @@ FOR(i,0,1000) if (side[u] == -1) {
 	\item Chordal graphs have \emph{perfect elimination orders} $\langle v_1, \dots v_n \rangle$
 	\item In a peo for every $v_i$: the neighbours $v_j$ of $v_i$ with $j > i$ form a clique
 	\item Maximum Clique? Colouring?
+\ei
+\end{frame}
+
+
+
+\begin{frame}{Least Common Ancestor}
+     \bi
+		\item Given a tree and two nodes $a$ and $b$, find the lowest node in the tree that is an ancestor of both $a$ and $b$.
+     \ei
+  \begin{figure}
+    \begin{tikzpicture}[auto, swap,scale=0.8]
+      \node[vertex] (1) at ( 0, 0) {1};
+      \node[vertex] (2) at (-3,-2) {2};
+      \node[vertex] (3) at ( 0,-2) {3};
+      \node[vertex] (4) at ( 3,-2) {4};
+      \node[vertex] (5) at (-4,-4) {5};
+      \node[vertex] (6) at (-3,-4) {6};
+      \node[vertex] (7) at (-2,-4) {7};
+      \node[vertex] (8) at (0,-4) {8};
+      \node[vertex] (9) at (2,-4) {9};
+      \node[vertex] (10) at (4,-4) {10};
+
+
+      \path[edge,->] (1) -- (2);
+      \path[edge,->] (1) -- (3);
+      \path[edge,->] (1) -- (4);
+      \path[edge,->] (2) -- (5);
+      \path[edge,->] (2) -- (6);
+      \path[edge,->] (2) -- (7);
+      \path[edge,->] (3) -- (8);
+      \path[edge,->] (4) -- (9);
+      \path[edge,->] (4) -- (10);
+     \end{tikzpicture}
+  \end{figure}
+\bi
+	\item<2-> If done \textbf{once}: DFS/BFS in $\mathcal O(n)$
+	\item<3-> If done \textbf{multiple times}: ?
+\ei
+\end{frame}
+
+
+\begin{frame}{Least Common Ancestor}
+  \begin{figure}
+    \begin{tikzpicture}[auto, swap,scale=0.8]
+      \node[vertex] (1) at ( 0, 0) {1};
+      \node[vertex] (2) at (-3,-2) {2};
+      \node[vertex] (3) at ( 0,-2) {3};
+      \node[vertex] (4) at ( 3,-2) {4};
+      \node[vertex] (5) at (-4,-4) {5};
+      \node[vertex] (6) at (-3,-4) {6};
+      \node[vertex] (7) at (-2,-4) {7};
+      \node[vertex] (8) at (0,-4) {8};
+      \node[vertex] (9) at (2,-4) {9};
+      \node[vertex] (10) at (4,-4) {10};
+
+
+      \path[edge,->] (1) -- (2);
+      \path[edge,->] (1) -- (3);
+      \path[edge,->] (1) -- (4);
+      \path[edge,->] (2) -- (5);
+      \path[edge,->] (2) -- (6);
+      \path[edge,->] (2) -- (7);
+      \path[edge,->] (3) -- (8);
+      \path[edge,->] (4) -- (9);
+      \path[edge,->] (4) -- (10);
+     \end{tikzpicture}
+  \end{figure}
+\bi
+	\item<2-> Compute an Euler Tour in $\mathcal O(n)$. How long is it?
+\ei
+\begin{center}\visible<3->{1,2,5,2,6,2,7,2,1,3,8,3,1,4,9,4,10,4,1}\end{center}
+\bi
+	\item<3-> How does this help?
+	\item<4-> LCA is the smallest value between the first ocurrances of $a$ and $b$ in the sequence \visible<5->{ $\Rightarrow$ RMQ}
 \ei
 \end{frame}
 
