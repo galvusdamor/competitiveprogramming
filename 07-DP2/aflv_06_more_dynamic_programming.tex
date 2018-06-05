@@ -7,9 +7,9 @@
     \vspace{40pt}
     \bi
         \item Dynamic Programming \pause - part II
-        \item DP with (complex) internal componentes
+        \item DP with (complex) internal components
         \item DP for stochastic problems
-        \item DP over bitmarsks (for $\mathbb{NP}$ problems)
+        \item DP over bitmasks (for $\mathbb{NP}$ problems)
     \ei
 \end{frame}
 
@@ -20,7 +20,7 @@
 		\item<1-> Given $N$ objects $(w_i,g_i)$ defined by a weight $w_i$ and a gain $g_i$.
 		\item<2-> For a given $W$, we have to determine the subset $S$ of these objects, s.t.
 		\bi
-			\item $\sum_{i \in S} w_i \leq W$
+			\item $\sum_{i \in S} w_i = W$
 			\item $\sum_{i \in S} g_i $ is maximal
 		\ei
 		\item<3-> There are a lot of variants, but all are $\mathbb{NP}$-complete.
@@ -72,7 +72,7 @@ int knapsack(vector<pii> objects, int W){
 	\bi
 		\item A river with $n$ cities on the north and $m$ on the south bank.
 		\item Each city has a trade value $v_i$ and a ``type'' $t_i$
-		\item You have to build brides between pairs of cities of the same type on both banks, s.t. no two bridges intersect.
+		\item You have to build bridges between pairs of cities of the same type on both banks, s.t. no two bridges intersect.
 	\ei
 	\begin{center} 
 	\begin{tikzpicture}
@@ -130,8 +130,8 @@ int knapsack(vector<pii> objects, int W){
 	
 	\visible<7->{\begin{align*}
 		bridge(0,j) = &bridge(i,0) = 0\\
-		brdige(i,j) = &\mathrm{min} \{bridge(i,j-1), bridge(i-1,j),\\
-						&\hspace{1cm} v_i*v_j + bridge(i-1,j-1) \text{ if } t_i = t_j\}\\
+		bridge(i,j) = &\mathrm{max} \{bridge(i,j-1), bridge(i-1,j),\\
+						&\hspace{1cm} v_iv_j + bridge(i-1,j-1) \text{ if } t_i = t_j\}\\
 	\end{align*}}
 \end{frame}
 
@@ -299,7 +299,7 @@ vi LIS(vi A) {
         \item They describe some transition system with probabilities ...
         \item<2-> ... and ask what the probability to reach a goal state is
         \item<3-> ... or ask how probable it is to reach a goal if you ``play'' optimally
-        \item<4-> ... or ask to compute some expected value (when ``playing'' optimally)
+        \item<4-> ... or ask to compute some expectation value (when ``playing'' optimally)
     \ei
 \end{frame}
 
@@ -308,13 +308,13 @@ vi LIS(vi A) {
     \bi
         \item We are given a memory game (with regular rules)
         \item You are playing alone and play perfectly
-        \item<2-> How many truns do you need on average to finish
+        \item<2-> How many turns do you need on average to finish
         \vspace{10pt}
         \item<3-> What are the DP dimensions?
         \item<4-> $h = $ How many cards are left
 		\item<5-> $k = $ How many cards we know (no pairs among them)
         \vspace{10pt}
-		\item Systematic analysis of situations!
+		\item<6-> Systematic analysis of situations!
     \ei
 \end{frame}
 
@@ -349,7 +349,7 @@ vi LIS(vi A) {
     \vspace{40pt}
     \bi
         \item Remember the bitmask representation of subsets?
-        \item Each subset of $n$ elements are mapped to an integer in the range $0$, \ldots, $2^{n} - 1$
+        \item Each subset of $n$ elements is mapped to an integer in the range $0$, \ldots, $2^{n} - 1$
         \item This makes it easy to do dynamic programming over subsets
     \ei
 \end{frame}
@@ -441,8 +441,8 @@ printf("%d\n", tsp(0, 1<<0));
 
 \begin{frame}{Traveling salesman with teleport}
 	\bi
-		\item It is not untypical, that we have to adapt a known DP to accommodate for some change in the setting.
-		\item<2-> Consider TSP where you have the option to ``teleport'' from some node to some other, taking $s$ time, but you can use this teleport one once.
+		\item It is typical, that we have to adapt a known DP to accommodate for some change in the setting.
+		\item<2-> Consider TSP where you have the option to ``teleport'' from some node to some other, taking $s$ time, but you can use this teleport only once.
 		\vspace{10pt}
 		\item<3-> Introduce a new DP-Dimension: Whether we have used the teleport or not.
 		

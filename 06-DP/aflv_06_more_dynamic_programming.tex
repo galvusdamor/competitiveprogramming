@@ -78,7 +78,7 @@ value dp(problem P) {
     \ee
 \end{frame}
 
-\begin{frame}[fragile]{Top-Down dynamic programming}
+\begin{frame}[fragile]{Bottom-Up dynamic programming}
     \begin{minted}[fontsize=\footnotesize]{cpp}
 map<state, value> memory;
 
@@ -99,19 +99,19 @@ for (state S : ordering_of_ordinary_cases){
 
 \begin{frame}[fragile]{Top-Down vs Bottom-Up DP}
     \vspace{30pt}
-	\bi
-		\item Top-Down
-		\bi
-			\item is easier to understand (for beginners)
-			\item run-time efficient if not all states are necessary
-		\ei
-		\item Bottom-Up
-		\bi
-			\item more difficult to think about (for beginners)
-			\item run-time efficient if all states are necessary (no recursive function calls)
-			\item often shorter code
-		\ei
-	\ei
+    \bi
+        \item Top-Down
+        \bi
+            \item is easier to understand (for beginners)
+            \item run-time efficient if not all states are necessary
+        \ei
+        \item Bottom-Up
+        \bi
+            \item more difficult to think about (for beginners)
+            \item run-time efficient if all states are necessary (no recursive function calls)
+            \item often shorter code
+        \ei
+    \ei
 \end{frame}
 
 
@@ -286,10 +286,10 @@ int fibonacci(int n) {
 %             }
 %             }
 %             child{ node [vertex] {fib(8)}
-% 							child{ node [vertex] {49}}
-% 							% child{ node [vertex] {}}
+%                             child{ node [vertex] {49}}
+%                             % child{ node [vertex] {}}
 %             }
-% 		}
+%         }
 % ; 
 % \end{tikzpicture}
             \end{figure}
@@ -412,10 +412,10 @@ for (int i = 3; i < 1000; i++)
         \item Base case: $\mathrm{opt}(-1,x) = \infty$
         \vspace{10pt}
 \item $\mathrm{opt}(i,x) = \mathrm{min} \left\{
-	\begin{array}{l}
+    \begin{array}{l}
         1 + \mathrm{opt}(i, x - d_i) \\
         \mathrm{opt}(i-1, x)
-	\end{array}
+    \end{array}
 \right.$
     \ei
 \end{frame}
@@ -429,7 +429,7 @@ int opt(int i, int x) {
     if (x == 0) return 0;
     if (i == -1) return oo;
 
-    int res = INF;
+    int res = oo;
     res = min(res, 1 + opt(i, x - d[i]));
     res = min(res, opt(i - 1, x));
 
@@ -451,7 +451,7 @@ int opt(int i, int x) {
 
     if (mem[i][x] != -1) return mem[i][x];
 
-    int res = INF;
+    int res = oo;
     res = min(res, 1 + opt(i, x - d[i]));
     res = min(res, opt(i - 1, x));
 
@@ -491,18 +491,44 @@ int opt(int i, int x) {
 \end{frame}
 \begin{frame}[fragile]{Coin change}
     \begin{minted}[fontsize=\footnotesize]{cpp}
-int d[10]; int mem[10][10000];
-FOR(i,0,10) mem[i][0] = 0;
+int d[10];
+int mem[10000];
+memset(mem, -1, sizeof(mem));
 
-FOR(i,1,10000) FOR(j,0,10) {
-    mem[j][i] = j ? mem[j-1][i] : oo;	
-    if (i - d[j] >= 0)
-        mem[j][i] = min(mem[j][i], mem[j][i-d[j]]);
+int opt(int x) {
+    if (x < 0) return oo;
+    if (x == 0) return 0;
+
+    if (mem[x] != -1) return mem[x];
+
+    int res = oo;
+    FOR(i,0,10)
+        res = min(res, 1 + opt(x - d[i]));
+
+    mem[x] = res;
+    return res;
+}
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Coin change}
+    \begin{minted}[fontsize=\footnotesize]{cpp}
+int d[10]; int mem[10][10000];
+FOR(i,0,10) mem[x][0] = 0;
+
+FOR(x,1,10000) FOR(i,0,10) {
+    if (j == 0)
+        mem[i][x] = oo;
+    else 
+        mem[i][x] = mem[i-1][x];
+    
+    if (i - d[i] >= 0)
+        mem[i][x] = min(mem[i][x], 1 + mem[i][x-d[x]]);
 }
     \end{minted}
     \bi
-        \item<2-> Only \texttt{mem[i][9]} is actually relevant!
-        \item<3-> \texttt{mem[i][9]} $ = \min_{j=0}^9$ \texttt{mem[i][j]}
+        \item<2-> Only \texttt{mem[9][i]} is actually relevant!
+        \item<3-> \texttt{mem[9][i]} $ = \min_{j=0}^9$ \texttt{mem[j][i]}
         \item<4-> If we remove the first index, do we retain all minimum paths?
     \ei
 \end{frame}
@@ -512,9 +538,9 @@ int d[10]; int mem[10000];
 mem[0] = 0;
 
 FOR(i,1,10000) {
-    mem[i] = oo;	
+    mem[i] = oo;    
     FOR(j,0,10) if (i - d[j] >= 0)
-        mem[i] = min(mem[i], mem[i-d[j]]);
+        mem[i] = min(mem[i], 1 + mem[i-d[j]]);
 }
 \end{minted}
 \end{frame}
@@ -583,7 +609,7 @@ FOR(i,1,10000) {
         \vspace{5pt}
     \item $\mathrm{max\_{}sum}(i) = \mathrm{max}(arr[i], arr[i] + \mathrm{max\_{}sum}(i - 1))$
         \vspace{15pt}
-	\item Then the answer is just $\mathrm{max}\ \{0, \mathrm{max}_{\ 0 \leq i < n}\ \{\ \mathrm{max\_{}sum}(i)\ \}\}$
+    \item Then the answer is just $\mathrm{max}\ \{0, \mathrm{max}_{\ 0 \leq i < n}\ \{\ \mathrm{max\_{}sum}(i)\ \}\}$
     \ei
 
 \end{frame}
@@ -678,7 +704,7 @@ printf("%d\n", maximum);
       \item Iterate over all lines $z$ as (potential) top-most line of the sub-matrix
       \item Iterate over all lines $x$ as (potential) bottom-most line of the sub-matrix
       \item We can now reduce to 1D Max Range Sum via
-	\[a[i] = \sum_{j = z}^x a[i][j]\]
+    \[a[i] = \sum_{j = z}^x a[i][j]\]
       \item Runtime \pause $\mathcal O(n^4)$ \pause
       \item Clever computation of $a[i]$ gives $\mathcal O(n^3)$
     \ei
@@ -738,7 +764,7 @@ int maxSum2D(int N){
         \item<5-> Base case: $\mathrm{opt}(i,0) = 1$
         \item<5-> Base case: $\mathrm{opt}(-1,x) = 0$
         \vspace{10pt}
-		\item<5-> $\mathrm{opt}(i,x) = \sum_{j=0}^i \mathrm{opt}(j, x - d_i)$
+        \item<5-> $\mathrm{opt}(i,x) = \sum_{j=0}^i \mathrm{opt}(j, x - d_i)$
     \ei
 \end{frame}
 \begin{frame}[fragile]{Coin change -- Revisited}
@@ -870,35 +896,35 @@ int lcs(int i, int j) {
 \begin{frame}{Wedding Shopping}
     \vspace{20pt}
     \bi
-    	\item Given a set of garments $G$ where each garment has a (integer) price $p_i$ and a type $t_i$.
-        \item We have to by one garment of each type and spend as much as possible, but not more than $M$.
+        \item Given a set of garments $G$ where each garment has a (integer) price $p_i$ and a type $t_i$.
+        \item We have to buy one garment of each type and spend as much as possible, but not more than $M$.
     \ei
     \pause
     An example ($M = \only<2-3>{20}\only<4>{\mathbf{17}}$ and $C = 3$)
     \bi
-    	\item 1. type: 6 \only<2-3>{4}\only<4>{\textbf{4}} \only<2,4>{8}\only<3>{\textbf{8}}
-    	\item 2. type: 5 \only<2>{10}\only<3-4>{\textbf{10}}
-    	\item 3. type: \only<2,4>{1}\only<3>{\textbf{1}} 5 \only<2-3>{3}\only<4>{\textbf{3}} 5
+        \item 1. type: 6 \only<2-3>{4}\only<4>{\textbf{4}} \only<2,4>{8}\only<3>{\textbf{8}}
+        \item 2. type: 5 \only<2>{10}\only<3-4>{\textbf{10}}
+        \item 3. type: \only<2,4>{1}\only<3>{\textbf{1}} 5 \only<2-3>{3}\only<4>{\textbf{3}} 5
     \ei
 \end{frame}
 
 \begin{frame}{Wedding Shopping}
     %\vspace{10pt}
     \bi[<+->]
-    	\item Let $max\_spent(i)$ be the max amount we can spend to buy the first $i$ garments
-    	\item $max\_spent(i) = $\\$\max_{g} max\_spent(i-1) + p_g$ and not $\geq M$
-    	\item \dots essentially greedy \only<4->{...  and not correct}
-    	\item<5-> add the amount of spend money as a dimension
-    	\item<5-> the DP-value is now a bool
-    	\item<5-> $spent(i,v) = \bigwedge_g spent(i-1,v-p_g)$
-    	\item<6->[$\Rightarrow$] similar to 0-1 Knapsack
+        \item Let $max\_spent(i)$ be the max amount we can spend to buy the first $i$ garments
+        \item $max\_spent(i) = $\\$\max_{g} max\_spent(i-1) + p_g$ and not $\geq M$
+        \item \dots essentially greedy \only<4->{...  and not correct}
+        \item<5-> add the amount of spend money as a dimension
+        \item<5-> the DP-value is now a bool
+        \item<5-> $spent(i,v) = \bigvee_g spent(i-1,v-p_g)$
+        \item<6->[$\Rightarrow$] similar to 0-1 Knapsack
     \ei
     \visible<4>{
     $M = 10$ and $C = 3$
     \bi
-    	\item 1. type: 1 2 10
-    	\item 2. type: 4
-    	\item 3. type: 4
+        \item 1. type: 1 2 10
+        \item 2. type: 4
+        \item 3. type: 4
     \ei
     }
 \end{frame}
@@ -911,7 +937,7 @@ bool dp[21][201];
 
 FOR(i,0,m) dp[0][i] = false;
 dp[0][m] = true;
-	
+    
 FOR(gt,1,c+1) FOR(a,0,m+1){
     dp[gt][a] = false;
     FORIT(g,garms[gt-1])

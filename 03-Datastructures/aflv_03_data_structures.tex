@@ -1,6 +1,7 @@
 \documentclass[12pt,t]{beamer}
 \subtitle{03 -- Data Structures}
-\newcommand{\shorttitle}{Data Structures -- May the fourth be with you!}
+%\newcommand{\shorttitle}{Data Structures -- May the fourth be with you!}
+\newcommand{\shorttitle}{Data Structures}
 \input{../acmlecture.tex}
 
 \begin{frame}{Today we're going to cover}
@@ -1006,7 +1007,7 @@ int update(segment_tree *tree, int i, int val) {
             \node[vertex] (5) at (1.2,0.2) {7+0};
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             \node<-7>[vertex] (6) at (1.6,0.2) {3+0};
-            \node<8->[vertex] (6) at (1.6,0.2) {5+0};
+            \node<8->[vertex] (6) at (1.6,0.2) {3+2};
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             \node<1-2>[vertex] (7) at (-0.6,0.7) {1+0};
             \node<3->[vertex] (7) at (-0.6,0.7) {3+0};
@@ -1211,7 +1212,7 @@ int update(segment_tree *tree, int i, int val) {
       \end{pgfonlayer}
     \end{tikzpicture}
     \bi
-      \item $\mathrm{sum}(6) = $ \onslide<2->{\texttt{ft[4]}} \onslide<3->{$+$ \texttt{ft[6]}}
+      \item $\mathrm{sum}(6) = $ \onslide<2->{\texttt{ft[6]}} \onslide<3->{$+$ \texttt{ft[4]}}
       \item<4-> $\mathrm{sum}(x) = ft[x] + \mathrm{sum}(x - LSOne(x))$ 
       \item<4-> $\mathrm{sum}(0) = 0$ 
     \ei
