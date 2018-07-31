@@ -17,7 +17,7 @@
     \ei
 \end{frame}
 
-\section{Geometry}
+%\section{Geometry}
 \subsection{Points and vectors}
 
 \begin{frame}
@@ -186,8 +186,8 @@ double len(pt p) { return sqrt(double(p*p)); }
 		\ei
 	\ei
 		\visible<3->{
-	\includegraphics[width = 0.35\textwidth]{figures/27-rotated-dfstree.png} \quad
-	\includegraphics[width = 0.45\textwidth]{figures/wf16.png}
+	%\includegraphics[width = 0.35\textwidth]{figures/27-rotated-dfstree.png} \quad
+	%\includegraphics[width = 0.45\textwidth]{figures/wf16.png}
 		}
 \end{frame}
 
@@ -210,7 +210,7 @@ double len(pt p) { return sqrt(double(p*p)); }
   			0 &\text{für } x = 0, y = 0 \\
   		\end{cases}\]
   		\pause
-  	\item $\phi = \texttt{atan2}(x,y)$
+  	\item $\phi = \texttt{atan2}(y,x)$
   \ei
 \end{frame}
 
@@ -246,7 +246,7 @@ typedef complex<double> point;
     \item \mintinline{cpp}{double abs(p)} returns the absolute value of the complex number, the
       length of the vector.
     \onslide<5->
-    \item \mintinline{cpp}{double sin(p)}, \mintinline{cpp}{double cos(p)}, \mintinline{cpp}{double tan(p)}, trigonometric
+    \item \mintinline{cpp}{point sin(p)}, \mintinline{cpp}{point cos(p)}, \mintinline{cpp}{point tan(p)}, trigonometric
       functions.
   \ei
 \end{frame}
@@ -1014,7 +1014,7 @@ pair<point,double>
             \onslide<7->{
             \item We get
                 \[
-                a = \frac{r_A^2 - r_B^2 + d^2)}{2\cdot d}
+                a = \frac{r_A^2 - r_B^2 + d^2}{2\cdot d}
                 \]
                 \[
                 h^2 = r_A^2 - a^2
@@ -1681,7 +1681,7 @@ int isInside(pt p, vector<pt>& poly) {
   \end{minted}
   \ \\ \pause \normalsize
   \bi
-  	\item \textbf{Not} integer-safe
+  	\item integer-safe
   \ei
 \end{frame}
 
