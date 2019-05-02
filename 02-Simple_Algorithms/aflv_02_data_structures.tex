@@ -304,7 +304,7 @@ while (lo < hi) {
     if (p(m)) {
         hi = m;
     } else {
-        lo = m + 1;
+        lo = m;
     }
 }
 printf("lowest index is %d\n", hi);
@@ -338,7 +338,7 @@ bool p(int i) {
     \bi
         \item An even more general version of binary search: over real numbers
 		\item We have a predicate $p : [lo,hi] \rightarrow \{T, F\}$ which has the property that if $p(i) = T$, then $p(j) = T$ for all $j > i$, also $p(lo)= F$ and $p(hi) = T$
-        \item Our goal is to find the smallest real number $j$ such that $p(j) = T$ as quickly as possible
+        \item Our goal is to find the smallest real number $i$ such that $p(i) = T$ as quickly as possible
 
         \vspace{5pt}
         \item Since we're working with real numbers, our $[lo,hi]$ can be halved infinitely many times without ever becoming a single real number
