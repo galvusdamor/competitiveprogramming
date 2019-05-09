@@ -1,0 +1,4 @@
+#include<bits/stdc++.h>
+int main(int a, char * blub[]) {
+    for(double t, lastCov, tmp, n, m, houses[200000], cs = 1, x = (bool) (std::cin >> t), lo = 0, hi = 2000000, foo=0; ((lo = 0) || (foo = 0)|| 1) && (hi = 2000000) && cs <=t && ((std::cin >> n >> m) || true); cs++) while(!foo || ((hi - lo > 1e-7 ? 1 : (std::cout << std::fixed << std::setprecision(1) << hi << std::endl, 0)) && ((long long)(lastCov = -1e-10) | (long long)(tmp = 0) | 1))) for(int i=0; i<m ? 1: (foo?(tmp <= n ? (hi = (hi + lo) / 2): (lo = (hi + lo) / 2) ) : (qsort(houses, (int) m, sizeof(double), [](const void *a, const void *b){return *((const double*)a) < *((const double*)b) ? -1 : *((const double*)a) == *((const double*)b) ? 0 : 1;}), foo=1)) * 0; i++) if((!foo && (std::cin >> houses[i])), houses[i] > lastCov) lastCov = houses[i] + (hi + lo), tmp++; 
+}
