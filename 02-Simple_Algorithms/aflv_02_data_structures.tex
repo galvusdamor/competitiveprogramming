@@ -298,7 +298,7 @@ bool binary_search(const vector<int> &arr, int x) {
 int lo = 0,
     hi = n - 1;
 
-while (lo < hi) {
+while (lo + 1 < hi) {
     int m = (lo + hi) / 2;
 
     if (p(m)) {
