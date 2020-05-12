@@ -150,7 +150,7 @@ for (int subset = 0; subset < (1 << n); subset++) {
     \bi
        % \item Similar in Python
         \vspace{20pt}
-        \item Remember that there are $2^n$ permutations of length $n$, so usually you can only go through all permutations if $n \leq 25$
+        \item Remember that there are $2^n$ subsets of size $n$, so usually you can only go through all subsets if $n \leq 25$
             \bi
                 \item Otherwise you need to find a more clever approach than complete search
             \ei
@@ -431,15 +431,19 @@ void solve(int n) {
 \begin{frame}[fragile]{Divide and conquer: Time complexity}
     \bi
         \item But how do we solve such recurrences?
-        \item Usually simplest to use the Master theorem when applicable
+        \item Usually simplest to use the Master Theorem when applicable
             \bi
-                \item It gives a solution to a recurrence of the form $T(n) = aT(n/b) + f(n)$ in asymptotic terms
+                \item It gives an $\mathcal O$-solution to a recurrence of the form $T(n) = aT(n/b) + \Theta (n^k)$ in asymptotic terms
                 \item All of the divide and conquer algorithms mentioned so far have a recurrence of this form
+				\item Three cases:
+				\bi
+					\item $a < b^k$: $T(n) = \Theta (n^k)$
+					\item $a = b^k$: $T(n) = \Theta (n^k \log n)$
+					\item $a > b^k$: $T(n) = \Theta (n^{-\frac{\log{a}}{\log{b}}})$
+				\ei
             \ei
         \vspace{10pt}
         \item The Master theorem tells us that $T(n) = 2T(n/2) + n$ has asymptotic time complexity $O(n \log n)$
-        \vspace{10pt}
-        \item You don't need to know the Master theorem for this course, but still recommended as it's very useful
     \ei
 \end{frame}
 
