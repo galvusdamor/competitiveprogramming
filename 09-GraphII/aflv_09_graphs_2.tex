@@ -242,7 +242,7 @@ vector<edge> mst(int n, vector<edge> edges) {
         \item There are many known algorithms to find shortest paths
         \item Like breadth-first search, these algorithms usually find the shortest paths from a given start vertex to all other vertices
         \vspace{5pt}
-        \item Let's take a quick look at Dijkstra's algorithm, the Bellman-Ford algorithm and the Floyd-Warshall algorithm
+        \item Let's take a quick look at Dijkstra's algorithm, the Bellman-Ford algorithm, and the Floyd-Warshall algorithm
     \ei
 \end{frame}
 
@@ -620,10 +620,11 @@ void floyd_warshall(int n) {
        \bi
 	\item Only efficient with additions
 	\item E.g. use always use the shortest path from $s$ to $t$ $\rightarrow O(m^2n)$
-	\item There are better algorithms, like Push-Relable or Dinic
+	\item If all capacities are $1$ the runtime becomes $O(mn)$
 	\vspace{10pt}
-	\item If all capacities are $1$ the runtime for the shortest path version becomes $O(m\sqrt{n})$
-       \ei
+	\item There are better algorithms, like Push-Relable or Dinic
+	\item Dinic computes \emph{Blocking Flows} ($\approx$ all shortest paths from $s$ to $t$). For graphs with capacity $1$ and $\min\{deg^+(v),deg^-(v)\} \leq 1$ for all vertices $v$ its runtime is $\mathcal O(m \sqrt{n})$
+		\ei
 \end{frame}
 
 \begin{frame}{Modelling}
